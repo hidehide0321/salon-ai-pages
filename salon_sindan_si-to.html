@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>サロンの業務ムダ診断シート</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: system-ui, -apple-system, BlinkMacSystemFont, "Noto Sans JP", sans-serif; background: #f8f6f2; color: #4a4641; }
+    header { background: #fffdfa; border-bottom: 1px solid #e8e0d5; padding: 22px 18px; position: sticky; top: 0; z-index: 10; }
+    .wrap { max-width: 880px; margin: 0 auto; }
+    h1 { margin: 0; font-size: clamp(22px, 5vw, 34px); line-height: 1.45; color: #5a5246; }
+    .lead { margin: 10px 0 0; color: #736b60; line-height: 1.8; }
+    main { padding: 22px 18px 48px; }
+    section { background: #fffdfa; border: 1px solid #e8e0d5; border-radius: 18px; padding: 22px; margin: 18px 0; box-shadow: 0 12px 34px rgba(89, 75, 58, .06); }
+    h2 { margin: 0 0 16px; font-size: 20px; color: #5a5246; }
+    label { display: block; margin: 14px 0 7px; font-weight: 800; font-size: 14px; }
+    input, select, textarea { width: 100%; border: 1px solid #d4cdbe; border-radius: 12px; padding: 13px; font-size: 16px; background: #fff; }
+    textarea { min-height: 96px; resize: vertical; }
+    .choices { display: grid; gap: 10px; }
+    .choice { display: flex; gap: 10px; align-items: flex-start; border: 1px solid #e3dcce; border-radius: 12px; padding: 12px; background: #fff; line-height: 1.7; }
+    .choice input { width: 18px; height: 18px; margin-top: 4px; flex: 0 0 auto; }
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+    button { width: 100%; margin-top: 18px; border: 0; border-radius: 14px; background: #27c8c8; color: #fff; padding: 16px; font-weight: 900; font-size: 16px; cursor: pointer; }
+    .sub { background: #9eaa95; }
+    .result { display: none; border: 2px solid rgba(39, 200, 200, .35); }
+    .result h2 { color: #137f7f; }
+    .card { background: #fff; border: 1px solid #ebe7e0; border-radius: 14px; padding: 16px; margin-top: 12px; line-height: 1.9; }
+    .score { display: inline-flex; align-items: center; justify-content: center; width: 78px; height: 78px; border-radius: 50%; background: #eaf8f8; color: #137f7f; font-size: 28px; font-weight: 900; }
+    .actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+    a.button { display: inline-flex; align-items: center; justify-content: center; text-decoration: none; border-radius: 14px; background: #06c755; color: #fff; padding: 14px; font-weight: 900; }
+    @media (max-width: 720px) { .grid, .actions { grid-template-columns: 1fr; } section { padding: 18px; } }
+    @media print { header, .actions, button { display: none; } body { background: #fff; } section { box-shadow: none; } .result { display: block !important; } }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <h1>サロンの業務ムダ診断シート</h1>
+      <p class="lead">今のサロンワークを5分ほどで整理し、最初に整えるべきポイントを見える化します。</p>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <form id="diagnosis-form">
+      <section>
+        <h2>1. 基本情報</h2>
+        <div class="grid">
+          <div>
+            <label for="salon-name">サロン名</label>
+            <input id="salon-name" required placeholder="例：ココロ美容サロン">
+          </div>
+          <div>
+            <label for="owner-name">お名前</label>
+            <input id="owner-name" required placeholder="例：小室 秀治">
+          </div>
+        </div>
+        <label for="business-type">業種</label>
+        <select id="business-type">
+          <option>エステ・美容サロン</option>
+          <option>美容室</option>
+          <option>整体・リラクゼーション</option>
+          <option>ネイル・アイラッシュ</option>
+          <option>その他</option>
+        </select>
+      </section>
+
+      <section>
+        <h2>2. 今いちばん気になること</h2>
+        <div class="choices">
+          <label class="choice"><input type="checkbox" name="issue" value="新規集客に時間と費用がかかっている">新規集客に時間と費用がかかっている</label>
+          <label class="choice"><input type="checkbox" name="issue" value="リピートにつながる流れが弱い">リピートにつながる流れが弱い</label>
+          <label class="choice"><input type="checkbox" name="issue" value="LINEやSNSの文章作成が負担">LINEやSNSの文章作成が負担</label>
+          <label class="choice"><input type="checkbox" name="issue" value="予約対応やフォローが手作業で多い">予約対応やフォローが手作業で多い</label>
+          <label class="choice"><input type="checkbox" name="issue" value="オーナーだけが頑張る状態になっている">オーナーだけが頑張る状態になっている</label>
+        </div>
+        <label for="free-issue">具体的に困っていること</label>
+        <textarea id="free-issue" placeholder="例：施術後のお礼LINEや再来店案内を毎回考えるのが大変です。"></textarea>
+      </section>
+
+      <section>
+        <h2>3. 業務の負担</h2>
+        <div class="grid">
+          <div>
+            <label for="message-load">文章作成の負担</label>
+            <select id="message-load">
+              <option value="3">かなり負担</option>
+              <option value="2">少し負担</option>
+              <option value="1">あまり負担ではない</option>
+            </select>
+          </div>
+          <div>
+            <label for="follow-load">フォロー漏れの不安</label>
+            <select id="follow-load">
+              <option value="3">かなりある</option>
+              <option value="2">少しある</option>
+              <option value="1">あまりない</option>
+            </select>
+          </div>
+          <div>
+            <label for="ad-load">広告・媒体費の重さ</label>
+            <select id="ad-load">
+              <option value="3">かなり重い</option>
+              <option value="2">少し重い</option>
+              <option value="1">あまり重くない</option>
+            </select>
+          </div>
+          <div>
+            <label for="manual-load">手作業の多さ</label>
+            <select id="manual-load">
+              <option value="3">かなり多い</option>
+              <option value="2">少し多い</option>
+              <option value="1">少ない</option>
+            </select>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>4. これから整えたいこと</h2>
+        <div class="choices">
+          <label class="choice"><input type="checkbox" name="next" value="お礼メッセージをテンプレート化したい">お礼メッセージをテンプレート化したい</label>
+          <label class="choice"><input type="checkbox" name="next" value="LINEのステップ配信を作りたい">LINEのステップ配信を作りたい</label>
+          <label class="choice"><input type="checkbox" name="next" value="口コミ依頼の流れを整えたい">口コミ依頼の流れを整えたい</label>
+          <label class="choice"><input type="checkbox" name="next" value="個別相談で具体的に見直したい">個別相談で具体的に見直したい</label>
+        </div>
+        <button type="submit">診断結果を作成する</button>
+      </section>
+    </form>
+
+    <section id="result" class="result">
+      <h2>診断結果</h2>
+      <div class="card" id="result-body"></div>
+      <div class="actions">
+        <button type="button" class="sub" onclick="window.print()">印刷・PDF保存</button>
+        <a class="button" href="https://lin.ee/SHmdTyU">LINEへ戻る</a>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const form = document.getElementById('diagnosis-form');
+    const result = document.getElementById('result');
+    const resultBody = document.getElementById('result-body');
+
+    function checkedValues(name) {
+      return Array.from(document.querySelectorAll(`input[name="${name}"]:checked`)).map(el => el.value);
+    }
+
+    function escapeHtml(value) {
+      return String(value || '').replace(/[&<>"]/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[char]));
+    }
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const salonName = document.getElementById('salon-name').value.trim();
+      const ownerName = document.getElementById('owner-name').value.trim();
+      if (!salonName || !ownerName) {
+        alert('サロン名とお名前を入力してください。');
+        return;
+      }
+
+      const issues = checkedValues('issue');
+      const next = checkedValues('next');
+      const freeIssue = document.getElementById('free-issue').value.trim();
+      const score = Number(document.getElementById('message-load').value) + Number(document.getElementById('follow-load').value) + Number(document.getElementById('ad-load').value) + Number(document.getElementById('manual-load').value);
+      const level = score >= 10 ? '優先的に仕組み化したい状態' : score >= 7 ? '少しずつ整えると効果が出やすい状態' : '今の良い流れを保ちながら改善できる状態';
+      const firstAction = next[0] || 'お礼メッセージのテンプレート化';
+      const issueText = issues.length ? issues.join('、') : '大きな課題は未選択';
+      const freeText = freeIssue ? `<p><b>具体メモ：</b>${escapeHtml(freeIssue)}</p>` : '';
+
+      resultBody.innerHTML = `
+        <p><span class="score">${score}</span></p>
+        <p><b>${escapeHtml(ownerName)}さん、診断ありがとうございます。</b><br>${escapeHtml(salonName)}の現在地は、<b>${level}</b>です。</p>
+        <p><b>見えてきた主なテーマ：</b>${escapeHtml(issueText)}</p>
+        ${freeText}
+        <p><b>最初の一歩：</b>${escapeHtml(firstAction)}から始めるのがおすすめです。まずは毎回ゼロから文章を考える作業を減らし、お客様へのフォローを決まった流れにしていきましょう。</p>
+        <p><b>LINEステップ配信の例：</b><br>登録直後：お礼と診断シート案内<br>3日後：よくある悩みへのヒント<br>7日後：個別相談や改善提案の案内</p>
+        <p><b>メッセージ例：</b><br>本日はご来店ありがとうございました。今日のケアで整えた状態をキープするために、2〜3日は無理をせずゆっくりお過ごしくださいね。気になることがあれば、このLINEにそのままご相談ください。</p>
+        <p>焦らず、ひとつずつで大丈夫です。小さな仕組み化を重ねることで、サロンの魅力がもっと自然に届きやすくなります。</p>
+      `;
+      result.style.display = 'block';
+      result.scrollIntoView({ behavior: 'smooth' });
+    });
+  </script>
+</body>
+</html>
