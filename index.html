@@ -6,7 +6,7 @@
   <title>サロンの業務ムダ診断シート お申し込みフォーム</title>
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
   <style>
-    *{box-sizing:border-box}body{margin:0;min-height:100vh;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Noto Sans JP",sans-serif;background:#f8f6f2;color:#4a4641}main{min-height:100vh;display:grid;place-items:center;padding:28px 18px}.panel{width:min(100%,460px);background:#fffdfa;border:1px solid #e8e0d5;border-radius:18px;padding:24px;box-shadow:0 16px 40px rgba(89,75,58,.08)}.badge{display:inline-flex;padding:8px 14px;border-radius:999px;background:#dd9f9e;color:#3f3634;font-size:12px;font-weight:700}h1{margin:14px 0 8px;font-size:22px;line-height:1.55;color:#5a5246}.lead{margin:0 0 22px;color:#736b60;font-size:14px;line-height:1.8}label{display:block;margin:14px 0 6px;font-size:13px;font-weight:700}input,select{width:100%;border:1px solid #d4cdbe;border-radius:10px;padding:13px 12px;font-size:16px;background:#fff}.agree{display:flex;gap:10px;align-items:flex-start;margin-top:16px;padding:13px;background:#f3efe9;border:1px solid #e3dcce;border-radius:12px;font-size:13px;line-height:1.7}.agree input{width:18px;height:18px;margin-top:3px;flex:0 0 auto}button,.button{width:100%;border:0;border-radius:14px;padding:15px 16px;margin-top:18px;background:#27c8c8;color:#fff;font-size:15px;font-weight:800;text-align:center;text-decoration:none;cursor:pointer;display:inline-flex;justify-content:center;align-items:center}button:disabled{background:#b8b2aa;cursor:not-allowed}.line{background:#06c755}.error{display:none;margin-top:12px;border:1px solid #f3b5b5;background:#fff1f1;color:#9b2424;border-radius:10px;padding:11px 12px;font-size:13px;line-height:1.7}.note{background:#fff;border:1px solid #ebe7e0;border-radius:14px;padding:16px;white-space:pre-line;font-size:14px;text-align:left}.hidden{display:none}.center{text-align:center}.keyword{display:inline-block;margin:8px 0;padding:8px 22px;border-radius:12px;background:#eaf8f8;color:#137f7f;font-weight:900;font-size:22px;letter-spacing:.08em}.status{margin:0 0 12px;color:#8a8175;font-size:12px;text-align:center}
+    *{box-sizing:border-box}body{margin:0;min-height:100vh;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Noto Sans JP",sans-serif;background:#f8f6f2;color:#4a4641}main{min-height:100vh;display:grid;place-items:center;padding:28px 18px}.panel{width:min(100%,460px);background:#fffdfa;border:1px solid #e8e0d5;border-radius:18px;padding:24px;box-shadow:0 16px 40px rgba(89,75,58,.08)}.badge{display:inline-flex;padding:8px 14px;border-radius:999px;background:#dd9f9e;color:#3f3634;font-size:12px;font-weight:700}h1{margin:14px 0 8px;font-size:22px;line-height:1.55;color:#5a5246}.lead{margin:0 0 22px;color:#736b60;font-size:14px;line-height:1.8}label{display:block;margin:14px 0 6px;font-size:13px;font-weight:700}input,select{width:100%;border:1px solid #d4cdbe;border-radius:10px;padding:13px 12px;font-size:16px;background:#fff}.agree{display:flex;gap:10px;align-items:flex-start;margin-top:16px;padding:13px;background:#f3efe9;border:1px solid #e3dcce;border-radius:12px;font-size:13px;line-height:1.7}.agree input{width:18px;height:18px;margin-top:3px;flex:0 0 auto}button,.button{width:100%;border:0;border-radius:14px;padding:15px 16px;margin-top:18px;background:#27c8c8;color:#fff;font-size:15px;font-weight:800;text-align:center;text-decoration:none;cursor:pointer;display:inline-flex;justify-content:center;align-items:center}button:disabled{background:#b8b2aa;cursor:not-allowed}.line{background:#06c755}.error{display:none;margin-top:12px;border:1px solid #f3b5b5;background:#fff1f1;color:#9b2424;border-radius:10px;padding:11px 12px;font-size:13px;line-height:1.7}.note{background:#fff;border:1px solid #ebe7e0;border-radius:14px;padding:16px;white-space:pre-line;font-size:14px;text-align:left}.hidden{display:none}.center{text-align:center}.keyword{display:inline-block;margin:8px 0;padding:8px 22px;border-radius:12px;background:#eaf8f8;color:#137f7f;font-weight:900;font-size:22px;letter-spacing:.08em}
   </style>
 </head>
 <body>
@@ -14,7 +14,6 @@
     <section id="form-screen" class="panel">
       <div class="center"><span class="badge">LINE登録者限定</span></div>
       <h1>サロンの業務ムダ診断シート<br>お申し込みフォーム</h1>
-      <p id="liff-status" class="status">LINE連携を確認しています。</p>
       <p class="lead">入力後すぐに、診断シートの受け取り手順を表示します。</p>
       <form id="application-form">
         <label for="salon-name">サロン名、または企業名</label><input id="salon-name" type="text" placeholder="例：ココロ美容サロン" required>
@@ -49,16 +48,11 @@
     const form=document.getElementById('application-form');
     const submitButton=document.getElementById('submit-button');
     const errorBox=document.getElementById('form-error');
-    const statusBox=document.getElementById('liff-status');
     function showError(message){errorBox.textContent=message;errorBox.style.display='block'}
     function isValidEmail(value){return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim())}
     async function setupLiff(){
-      if(!window.liff){statusBox.textContent='通常ブラウザ表示中です。LINE内で開くと登録できます。';return}
-      try{
-        await liff.init({liffId:LIFF_ID});
-        if(liff.isLoggedIn()){lineProfile=await liff.getProfile();statusBox.textContent=`LINE連携済み：${lineProfile.displayName}さん`}
-        else{statusBox.textContent='フォームは確認できます。登録はLINE内のリンクから開いてください。'}
-      }catch(error){console.warn(error);statusBox.textContent='フォームは確認できます。登録はLINE内のリンクから開いてください。'}
+      if(!window.liff)return;
+      try{await liff.init({liffId:LIFF_ID});if(liff.isLoggedIn())lineProfile=await liff.getProfile()}catch(error){console.warn(error)}
     }
     form.addEventListener('submit',async(event)=>{
       event.preventDefault();errorBox.style.display='none';
