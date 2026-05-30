@@ -1795,22 +1795,15 @@ ${scoreDetails.join('\n')}
                 prompt: prompt
             }));
 
-            fetch(DIAGNOSIS_ENDPOINT, {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                body: JSON.stringify({
-                    request_type: 'diagnosis_submission',
-                    security_token: API_SECURITY_TOKEN,
-                    recipient_email: DIAGNOSIS_RECIPIENT_EMAIL,
-                    salon_name: sName,
-                    name: oName,
-                    email: registeredEmail,
-                    submitted_at: new Date().toISOString(),
-                    body: prompt
-                })
-            }).catch(function (error) {
-                console.error('診断シート回答のメール送信に失敗しました。', error);
+            submitDiagnosisAnswer({
+                request_type: 'diagnosis_submission',
+                security_token: API_SECURITY_TOKEN,
+                recipient_email: DIAGNOSIS_RECIPIENT_EMAIL,
+                salon_name: sName,
+                name: oName,
+                email: registeredEmail,
+                submitted_at: new Date().toISOString(),
+                body: prompt
             });
 
             document.getElementById('resultContent').innerHTML = `
@@ -1841,6 +1834,35 @@ ${scoreDetails.join('\n')}
             } catch (error) {
                 return '';
             }
+        }
+
+        function submitDiagnosisAnswer(payload) {
+            const iframeName = 'diagnosisSubmitFrame';
+            let iframe = document.querySelector(`iframe[name="${iframeName}"]`);
+            if (!iframe) {
+                iframe = document.createElement('iframe');
+                iframe.name = iframeName;
+                iframe.style.display = 'none';
+                document.body.appendChild(iframe);
+            }
+
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = DIAGNOSIS_ENDPOINT;
+            form.target = iframeName;
+            form.style.display = 'none';
+
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'payload';
+            input.value = JSON.stringify(payload);
+            form.appendChild(input);
+
+            document.body.appendChild(form);
+            form.submit();
+            setTimeout(function () {
+                form.remove();
+            }, 1000);
         }
 
         // 簡易Markdownパーサー
