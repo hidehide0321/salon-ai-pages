@@ -1,187 +1,1886 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>サロンの業務ムダ診断シート</title>
-  <style>
-    * { box-sizing: border-box; }
-    body { margin: 0; font-family: system-ui, -apple-system, BlinkMacSystemFont, "Noto Sans JP", sans-serif; background: #f8f6f2; color: #4a4641; }
-    header { background: #fffdfa; border-bottom: 1px solid #e8e0d5; padding: 22px 18px; position: sticky; top: 0; z-index: 10; }
-    .wrap { max-width: 880px; margin: 0 auto; }
-    h1 { margin: 0; font-size: clamp(22px, 5vw, 34px); line-height: 1.45; color: #5a5246; }
-    .lead { margin: 10px 0 0; color: #736b60; line-height: 1.8; }
-    main { padding: 22px 18px 48px; }
-    section { background: #fffdfa; border: 1px solid #e8e0d5; border-radius: 18px; padding: 22px; margin: 18px 0; box-shadow: 0 12px 34px rgba(89, 75, 58, .06); }
-    h2 { margin: 0 0 16px; font-size: 20px; color: #5a5246; }
-    label { display: block; margin: 14px 0 7px; font-weight: 800; font-size: 14px; }
-    input, select, textarea { width: 100%; border: 1px solid #d4cdbe; border-radius: 12px; padding: 13px; font-size: 16px; background: #fff; }
-    textarea { min-height: 96px; resize: vertical; }
-    .choices { display: grid; gap: 10px; }
-    .choice { display: flex; gap: 10px; align-items: flex-start; border: 1px solid #e3dcce; border-radius: 12px; padding: 12px; background: #fff; line-height: 1.7; }
-    .choice input { width: 18px; height: 18px; margin-top: 4px; flex: 0 0 auto; }
-    .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
-    button { width: 100%; margin-top: 18px; border: 0; border-radius: 14px; background: #27c8c8; color: #fff; padding: 16px; font-weight: 900; font-size: 16px; cursor: pointer; }
-    .sub { background: #9eaa95; }
-    .result { display: none; border: 2px solid rgba(39, 200, 200, .35); }
-    .result h2 { color: #137f7f; }
-    .card { background: #fff; border: 1px solid #ebe7e0; border-radius: 14px; padding: 16px; margin-top: 12px; line-height: 1.9; }
-    .score { display: inline-flex; align-items: center; justify-content: center; width: 78px; height: 78px; border-radius: 50%; background: #eaf8f8; color: #137f7f; font-size: 28px; font-weight: 900; }
-    .actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
-    a.button { display: inline-flex; align-items: center; justify-content: center; text-decoration: none; border-radius: 14px; background: #06c755; color: #fff; padding: 14px; font-weight: 900; }
-    @media (max-width: 720px) { .grid, .actions { grid-template-columns: 1fr; } section { padding: 18px; } }
-    @media print { header, .actions, button { display: none; } body { background: #fff; } section { box-shadow: none; } .result { display: block !important; } }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>サロン業務ムダ診断シート</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: M PLUS Rounded 1c & Quicksand -->
+    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            pantone: '#FDFBF7', // 温かみのある生成り
+                            cream: '#F9F6F0',   // カード背景など
+                            rose: '#E8A7A1',    // くすみローズ
+                            roselight: '#FDF2F0',
+                            sage: '#8FA89B',    // セージグリーン
+                            sagelight: '#EEF3F0',
+                            charcoal: '#4A3E3D', // 優しい文字用の焦げ茶
+                            gold: '#D4AF37',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['"M PLUS Rounded 1c"', 'sans-serif'],
+                        en: ['Quicksand', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #FAF6F0;
+            color: #4A3E3D;
+            -webkit-font-smoothing: antialiased;
+            /* スマホでのダブルタップズームを抑制して操作性を向上 */
+            touch-action: manipulation;
+        }
+        /* スムーズスクロール */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* スライダーの基本スタイル（PC/マウス環境では最初から動かせるように pointer-events: auto） */
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            background: #EADCDA;
+            height: 10px;
+            border-radius: 999px;
+            pointer-events: auto; /* マウス環境ではデフォルト操作可能 */
+            opacity: 1;
+            transition: opacity 0.2s ease, transform 0.2s ease;
+        }
+
+        /* スライダーのつまみ（PC/通常時：アクティブローズ） */
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: #E8A7A1;
+            border: 2px solid #FFF;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+            cursor: pointer;
+            transition: background 0.2s ease, transform 0.2s ease;
+        }
+        input[type="range"]::-moz-range-thumb {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: #E8A7A1;
+            border: 2px solid #FFF;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+            cursor: pointer;
+            transition: background 0.2s ease, transform 0.2s ease;
+        }
+
+        /* 📱 スマホなどのタッチデバイス用のロック表現調整 */
+        @media (hover: none) and (pointer: coarse) {
+            input[type="range"] {
+                pointer-events: none; /* スマホでは初期状態でタッチを完全にロック（ちょいタップ誤作動防止） */
+                opacity: 0.6;
+            }
+            input[type="range"]::-webkit-slider-thumb {
+                background: #D4C5C3; /* ロック中は目立たないアッシュグレー */
+            }
+            input[type="range"]::-moz-range-thumb {
+                background: #D4C5C3;
+            }
+            
+            /* ロック解除された時のスライダー表現 */
+            input[type="range"].unlocked {
+                pointer-events: auto !important; /* ロック解除時のみタップ・スライド可能にする */
+                opacity: 1 !important;
+                transform: scaleY(1.1);
+            }
+            input[type="range"].unlocked::-webkit-slider-thumb {
+                background: #E8A7A1 !important;
+                transform: scale(1.1);
+                box-shadow: 0 2px 8px rgba(232, 167, 161, 0.4);
+            }
+            input[type="range"].unlocked::-moz-range-thumb {
+                background: #E8A7A1 !important;
+                transform: scale(1.1);
+            }
+        }
+
+        /* 1秒長押し中（ぷるぷる・光るエフェクト） */
+        @keyframes pulseGlow {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(232, 167, 161, 0.3); }
+            50% { transform: scale(1.01); box-shadow: 0 0 10px 3px rgba(232, 167, 161, 0.5); }
+        }
+        @keyframes shakeTiny {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-2px); }
+            75% { transform: translateX(1px); }
+        }
+        .pressing-hold {
+            animation: shakeTiny 0.1s infinite, pulseGlow 0.5s ease-in-out infinite;
+            border-radius: 12px;
+            background-color: rgba(232, 167, 161, 0.05);
+        }
+        .slider-unlocked-glow {
+            box-shadow: 0 0 12px rgba(232, 167, 161, 0.5);
+            border-radius: 12px;
+            background-color: rgba(232, 167, 161, 0.05);
+            transition: all 0.2s ease;
+        }
+
+        /* 印刷時の設定 */
+        @media print {
+            body {
+                background: white;
+                color: black;
+            }
+            .no-print {
+                display: none !important;
+            }
+            .print-only {
+                display: block !important;
+            }
+            .card-shadow {
+                box-shadow: none !important;
+                border: 1px solid #ddd !important;
+            }
+        }
+    </style>
 </head>
-<body>
-  <header>
-    <div class="wrap">
-      <h1>サロンの業務ムダ診断シート</h1>
-      <p class="lead">今のサロンワークを5分ほどで整理し、最初に整えるべきポイントを見える化します。</p>
+<body class="min-h-screen flex flex-col font-sans pb-16 lg:pb-0">
+
+    <!-- スマホ専用：画面上部にふんわり追従する進捗ヘッダー -->
+    <div class="lg:hidden sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-brand-rose/20 shadow-sm px-4 py-3 flex items-center justify-between no-print">
+        <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-brand-rose animate-pulse"></span>
+            <span class="text-xs font-bold text-brand-charcoal">診断の進みぐあい</span>
+        </div>
+        <div class="flex items-center gap-3 flex-grow max-w-[180px] ml-4">
+            <div class="w-full bg-stone-100 rounded-full h-2.5 overflow-hidden">
+                <div id="mobileProgressBar" class="bg-brand-rose h-2.5 rounded-full transition-all duration-500" style="width: 0%"></div>
+            </div>
+            <span class="text-xs font-bold text-brand-rose whitespace-nowrap font-en" id="mobileProgressText">0%</span>
+        </div>
     </div>
-  </header>
 
-  <main class="wrap">
-    <form id="diagnosis-form">
-      <section>
-        <h2>1. 基本情報</h2>
-        <div class="grid">
-          <div>
-            <label for="salon-name">サロン名</label>
-            <input id="salon-name" required placeholder="例：ココロ美容サロン">
-          </div>
-          <div>
-            <label for="owner-name">お名前</label>
-            <input id="owner-name" required placeholder="例：小室 秀治">
-          </div>
+    <!-- ヘッダー -->
+    <header class="relative overflow-hidden bg-gradient-to-b from-brand-roselight to-brand-pantone border-b border-brand-rose/20 py-10 md:py-14 px-4 text-center">
+        <!-- ふんわりした背景装飾 -->
+        <div class="absolute -top-12 -left-12 w-48 h-48 rounded-full bg-brand-rose/10 blur-2xl"></div>
+        <div class="absolute -bottom-12 -right-12 w-64 h-64 rounded-full bg-brand-sage/10 blur-3xl"></div>
+        
+        <div class="max-w-4xl mx-auto relative z-10">
+            <!-- 有料集客サイト頼みに変更 -->
+            <span class="inline-block bg-brand-rose text-white text-[11px] md:text-sm font-bold tracking-wider px-4 py-1.5 rounded-full mb-3 shadow-sm">
+                有料集客サイト頼みから軽やかに脱却する
+            </span>
+            <!-- サロンのための業務ムダ診断シートにタイトル変更 -->
+            <h1 class="text-xl md:text-4xl font-bold text-brand-charcoal leading-snug tracking-tight mb-3">
+                サロンのための業務ムダ診断シート
+            </h1>
+            <!-- 「お茶を飲みながら」と「、」を削除 -->
+            <p class="text-xs md:text-base text-brand-charcoal/80 max-w-2xl mx-auto leading-relaxed px-2">
+                日々のサロンワーク、本当にお疲れ様です。このシートは、AIでスマートに整えられる業務と、大切なリピート（再来店）につながる改善ポイントを優しく見つけるためのものです。リラックスして振り返ってみてくださいね。
+            </p>
         </div>
-        <label for="business-type">業種</label>
-        <select id="business-type">
-          <option>エステ・美容サロン</option>
-          <option>美容室</option>
-          <option>整体・リラクゼーション</option>
-          <option>ネイル・アイラッシュ</option>
-          <option>その他</option>
-        </select>
-      </section>
+    </header>
 
-      <section>
-        <h2>2. 今いちばん気になること</h2>
-        <div class="choices">
-          <label class="choice"><input type="checkbox" name="issue" value="新規集客に時間と費用がかかっている">新規集客に時間と費用がかかっている</label>
-          <label class="choice"><input type="checkbox" name="issue" value="リピートにつながる流れが弱い">リピートにつながる流れが弱い</label>
-          <label class="choice"><input type="checkbox" name="issue" value="LINEやSNSの文章作成が負担">LINEやSNSの文章作成が負担</label>
-          <label class="choice"><input type="checkbox" name="issue" value="予約対応やフォローが手作業で多い">予約対応やフォローが手作業で多い</label>
-          <label class="choice"><input type="checkbox" name="issue" value="オーナーだけが頑張る状態になっている">オーナーだけが頑張る状態になっている</label>
+    <!-- メインコンテンツ -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 py-6 md:py-12 flex flex-col lg:flex-row gap-8">
+        
+        <!-- 左側：スクロール追従ナビゲーション (デスクトップのみ) -->
+        <aside class="hidden lg:block w-72 shrink-0">
+            <!-- 進捗ナビゲーション下のテキストはすべてカット済 -->
+            <div class="sticky top-6 bg-white rounded-2xl p-6 border border-brand-rose/20 shadow-sm space-y-6">
+                <div>
+                    <h3 class="font-bold text-brand-charcoal text-base flex items-center gap-2 mb-2">
+                        <i data-lucide="check-square" class="w-5 h-5 text-brand-rose"></i>
+                        診断の進みぐあい
+                    </h3>
+                    <div class="w-full bg-stone-100 rounded-full h-2.5 overflow-hidden">
+                        <div id="progressBar" class="bg-brand-rose h-2.5 rounded-full transition-all duration-500" style="width: 0%"></div>
+                    </div>
+                    <p class="text-xs text-right text-brand-charcoal/60 mt-1" id="progressText">0 / 13 項目 完了</p>
+                </div>
+
+                <nav class="space-y-1 max-h-[50vh] overflow-y-auto pr-1">
+                    <a href="#sec-1" class="nav-item flex items-center justify-between p-2 rounded-lg text-sm text-brand-charcoal/70 hover:bg-brand-roselight transition">
+                        <span>1. 基本情報</span><span class="nav-status-dot w-2.5 h-2.5 rounded-full bg-stone-200"></span>
+                    </a>
+                    <a href="#sec-2" class="nav-item flex items-center justify-between p-2 rounded-lg text-sm text-brand-charcoal/70 hover:bg-brand-roselight transition">
+                        <span>2. 売上分解チェック</span><span class="nav-status-dot w-2.5 h-2.5 rounded-full bg-stone-200"></span>
+                    </a>
+                    <a href="#sec-3" class="nav-item flex items-center justify-between p-2 rounded-lg text-sm text-brand-charcoal/70 hover:bg-brand-roselight transition">
+                        <span>3. 集客媒体の依存度</span><span class="nav-status-dot w-2.5 h-2.5 rounded-full bg-stone-200"></span>
+                    </a>
+                    <a href="#sec-4" class="nav-item flex items-center justify-between p-2 rounded-lg text-sm text-brand-charcoal/70 hover:bg-brand-roselight transition">
+                        <span>4. 日々の反復業務</span><span class="nav-status-dot w-2.5 h-2.5 rounded-full bg-stone-200"></span>
+                    </a>
+                    <a href="#sec-5" class="nav-item flex items-center justify-between p-2 rounded-lg text-sm text-brand-charcoal/70 hover:bg-brand-roselight transition">
+                        <span>5. 文章業務チェック</span><span class="nav-status-dot w-2.5 h-2.5 rounded-full bg-stone-200"></span>
+                    </a>
+                    <a href="#sec-6" class="nav-item flex items-center justify-between p-2 rounded-lg text-sm text-brand-charcoal/70 hover:bg-brand-roselight transition">
+                        <span>6. 顧客フォロー診断</span><span class="nav-status-dot w-2.5 h-2.5 rounded-full bg-stone-200"></span>
+                    </a>
+                    <a href="#sec-7" class="nav-item flex items-center justify-between p-2 rounded-lg text-sm text-brand-charcoal/70 hover:bg-brand-roselight transition">
+                        <span>7. 再来店導線チェック</span><span class="nav-status-dot w-2.5 h-2.5 rounded-full bg-stone-200"></span>
+                    </a>
+                    <a href="#sec-8" class="nav-item flex items-center justify-between p-2 rounded-lg text-sm text-brand-charcoal/70 hover:bg-brand-roselight transition">
+                        <span>8. 口コミ・紹介</span><span class="nav-status-dot w-2.5 h-2.5 rounded-full bg-stone-200"></span>
+                    </a>
+                    <a href="#sec-9" class="nav-item flex items-center justify-between p-2 rounded-lg text-sm text-brand-charcoal/70 hover:bg-brand-roselight transition">
+                        <span>9. 属人化チェック</span><span class="nav-status-dot w-2.5 h-2.5 rounded-full bg-stone-200"></span>
+                    </a>
+                    <a href="#sec-10" class="nav-item flex items-center justify-between p-2 rounded-lg text-sm text-brand-charcoal/70 hover:bg-brand-roselight transition">
+                        <span>10. AIで整えたい業務</span><span class="nav-status-dot w-2.5 h-2.5 rounded-full bg-stone-200"></span>
+                    </a>
+                    <a href="#sec-11" class="nav-item flex items-center justify-between p-2 rounded-lg text-sm text-brand-charcoal/70 hover:bg-brand-roselight transition">
+                        <span>11. 優先改善スコア</span><span class="nav-status-dot w-2.5 h-2.5 rounded-full bg-stone-200"></span>
+                    </a>
+                    <a href="#sec-12" class="nav-item flex items-center justify-between p-2 rounded-lg text-sm text-brand-charcoal/70 hover:bg-brand-roselight transition">
+                        <span>12. 診断結果のまとめ</span><span class="nav-status-dot w-2.5 h-2.5 rounded-full bg-stone-200"></span>
+                    </a>
+                    <a href="#sec-13" class="nav-item flex items-center justify-between p-2 rounded-lg text-sm text-brand-charcoal/70 hover:bg-brand-roselight transition">
+                        <span>13. 次の一歩</span><span class="nav-status-dot w-2.5 h-2.5 rounded-full bg-stone-200"></span>
+                    </a>
+                </nav>
+            </div>
+        </aside>
+
+        <!-- 右側・中央：診断シート本体フォーム -->
+        <form id="diagnosticForm" onsubmit="event.preventDefault();" class="flex-grow space-y-6 md:space-y-8 max-w-4xl">
+            
+            <!-- 1. 基本情報 -->
+            <section id="sec-1" class="bg-white rounded-2xl border border-brand-rose/10 p-5 md:p-8 shadow-sm scroll-mt-20 lg:scroll-mt-6 hover:shadow-md transition duration-300">
+                <div class="flex items-center gap-3 border-b border-brand-rose/10 pb-4 mb-5">
+                    <span class="flex items-center justify-center w-8 h-8 rounded-full bg-brand-rose text-white text-xs md:text-sm font-bold font-en">01</span>
+                    <h2 class="text-lg md:text-xl font-bold text-brand-charcoal">基本情報について教えてください</h2>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <div>
+                        <label class="block text-base font-bold text-brand-charcoal mb-2">サロン名 <span class="text-brand-rose text-sm">必須</span></label>
+                        <input type="text" id="salon_name" required placeholder="例: サロン・ド・フルール" class="w-full bg-brand-cream/50 focus:bg-white border border-stone-200 rounded-xl px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-brand-rose/30 focus:border-brand-rose transition">
+                    </div>
+                    <div>
+                        <label class="block text-base font-bold text-brand-charcoal mb-2">お名前 <span class="text-brand-rose text-sm">必須</span></label>
+                        <input type="text" id="owner_name" required placeholder="例: 山田 花子" class="w-full bg-brand-cream/50 focus:bg-white border border-stone-200 rounded-xl px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-brand-rose/30 focus:border-brand-rose transition">
+                    </div>
+                    <div>
+                        <label class="block text-base font-bold text-brand-charcoal mb-2">業種 (複数選択可)</label>
+                        <div class="space-y-2.5 mt-1">
+                            <label class="flex items-center gap-3.5 text-base cursor-pointer p-3.5 bg-brand-cream/30 border border-stone-200/60 rounded-xl hover:bg-brand-roselight hover:border-brand-rose/30 has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                                <input type="checkbox" name="industry" value="エステ" class="w-5.5 h-5.5 text-brand-rose border-stone-300 rounded focus:ring-brand-rose/30 shrink-0">
+                                <span>エステサロン</span>
+                            </label>
+                            <label class="flex items-center gap-3.5 text-base cursor-pointer p-3.5 bg-brand-cream/30 border border-stone-200/60 rounded-xl hover:bg-brand-roselight hover:border-brand-rose/30 has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                                <input type="checkbox" name="industry" value="リラク" class="w-5.5 h-5.5 text-brand-rose border-stone-300 rounded focus:ring-brand-rose/30 shrink-0">
+                                <span>リラクゼーション・マッサージ</span>
+                            </label>
+                            <label class="flex items-center gap-3.5 text-base cursor-pointer p-3.5 bg-brand-cream/30 border border-stone-200/60 rounded-xl hover:bg-brand-roselight hover:border-brand-rose/30 has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                                <input type="checkbox" name="industry" value="整体" class="w-5.5 h-5.5 text-brand-rose border-stone-300 rounded focus:ring-brand-rose/30 shrink-0">
+                                <span>整体院・カイロプラクティック</span>
+                            </label>
+                            <label class="flex items-center gap-3.5 text-base cursor-pointer p-3.5 bg-brand-cream/30 border border-stone-200/60 rounded-xl hover:bg-brand-roselight hover:border-brand-rose/30 has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                                <input type="checkbox" name="industry" value="美容室" class="w-5.5 h-5.5 text-brand-rose border-stone-300 rounded focus:ring-brand-rose/30 shrink-0">
+                                <span>美容室・アイラッシュ・ネイル</span>
+                            </label>
+                            <div class="flex items-center gap-2 p-2.5 bg-brand-cream/20 md:bg-transparent rounded-xl mt-1">
+                                <label class="flex items-center gap-2 text-base cursor-pointer shrink-0">
+                                    <input type="checkbox" name="industry" value="その他" id="industry_other_check" class="w-5.5 h-5.5 text-brand-rose border-stone-300 rounded focus:ring-brand-rose/30 shrink-0">
+                                    <span>その他:</span>
+                                </label>
+                                <input type="text" id="industry_other_text" placeholder="例: ネイル専門" class="w-full bg-white border border-stone-200 rounded-lg px-2 py-1.5 text-base focus:outline-none">
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-base font-bold text-brand-charcoal mb-2">運営体制</label>
+                        <div class="space-y-2.5 mt-1">
+                            <label class="flex items-center gap-3.5 text-base cursor-pointer p-3.5 bg-brand-cream/30 border border-stone-200/60 rounded-xl hover:bg-brand-roselight hover:border-brand-rose/30 has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                                <input type="radio" name="staff_scale" value="オーナー1人" class="w-5.5 h-5.5 text-brand-rose border-stone-300 focus:ring-brand-rose/30 shrink-0">
+                                <span>オーナー1人のプライベートサロン</span>
+                            </label>
+                            <label class="flex items-center gap-3.5 text-base cursor-pointer p-3.5 bg-brand-cream/30 border border-stone-200/60 rounded-xl hover:bg-brand-roselight hover:border-brand-rose/30 has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                                <input type="radio" name="staff_scale" value="スタッフ1〜2名" class="w-5.5 h-5.5 text-brand-rose border-stone-300 focus:ring-brand-rose/30 shrink-0">
+                                <span>スタッフ1〜2名</span>
+                            </label>
+                            <label class="flex items-center gap-3.5 text-base cursor-pointer p-3.5 bg-brand-cream/30 border border-stone-200/60 rounded-xl hover:bg-brand-roselight hover:border-brand-rose/30 has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                                <input type="radio" name="staff_scale" value="スタッフ3〜5名" class="w-5.5 h-5.5 text-brand-rose border-stone-300 focus:ring-brand-rose/30 shrink-0">
+                                <span>スタッフ3〜5名</span>
+                            </label>
+                            <label class="flex items-center gap-3.5 text-base cursor-pointer p-3.5 bg-brand-cream/30 border border-stone-200/60 rounded-xl hover:bg-brand-roselight hover:border-brand-rose/30 has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                                <input type="radio" name="staff_scale" value="スタッフ6名以上" class="w-5.5 h-5.5 text-brand-rose border-stone-300 focus:ring-brand-rose/30 shrink-0">
+                                <span>スタッフ6名以上</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-5">
+                    <label class="block text-base font-bold text-brand-charcoal mb-2">主な集客方法 (複数選択可)</label>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2.5">
+                        <label class="flex items-center gap-3.5 text-base cursor-pointer bg-brand-cream/40 p-3.5 border border-stone-200/50 rounded-xl hover:bg-brand-roselight hover:border-brand-rose/20 has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                            <input type="checkbox" name="marketing_channel" value="Hot Pepper Beauty" class="w-5.5 h-5.5 text-brand-rose rounded shrink-0">
+                            <span>Hot Pepper</span>
+                        </label>
+                        <label class="flex items-center gap-3.5 text-base cursor-pointer bg-brand-cream/40 p-3.5 border border-stone-200/50 rounded-xl hover:bg-brand-roselight hover:border-brand-rose/20 has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                            <input type="checkbox" name="marketing_channel" value="Instagram" class="w-5.5 h-5.5 text-brand-rose rounded shrink-0">
+                            <span>Instagram</span>
+                        </label>
+                        <label class="flex items-center gap-3.5 text-base cursor-pointer bg-brand-cream/40 p-3.5 border border-stone-200/50 rounded-xl hover:bg-brand-roselight hover:border-brand-rose/20 has-[:checked]:bg-brand-roselight_light has-[:checked]:border-brand-rose transition duration-200">
+                            <input type="checkbox" name="marketing_channel" value="Google検索" class="w-5.5 h-5.5 text-brand-rose rounded shrink-0">
+                            <span>Google検索</span>
+                        </label>
+                        <label class="flex items-center gap-3.5 text-base cursor-pointer bg-brand-cream/40 p-3.5 border border-stone-200/50 rounded-xl hover:bg-brand-roselight hover:border-brand-rose/20 has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                            <input type="checkbox" name="marketing_channel" value="Googleマップ" class="w-5.5 h-5.5 text-brand-rose rounded shrink-0">
+                            <span>Googleマップ</span>
+                        </label>
+                        <label class="flex items-center gap-3.5 text-base cursor-pointer bg-brand-cream/40 p-3.5 border border-stone-200/50 rounded-xl hover:bg-brand-roselight hover:border-brand-rose/20 has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                            <input type="checkbox" name="marketing_channel" value="紹介" class="w-5.5 h-5.5 text-brand-rose rounded shrink-0">
+                            <span>お客様のご紹介</span>
+                        </label>
+                        <label class="flex items-center gap-3.5 text-base cursor-pointer bg-brand-cream/40 p-3.5 border border-stone-200/50 rounded-xl hover:bg-brand-roselight hover:border-brand-rose/20 has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                            <input type="checkbox" name="marketing_channel" value="LINE" class="w-5.5 h-5.5 text-brand-rose rounded shrink-0">
+                            <span>公式LINE</span>
+                        </label>
+                        <label class="flex items-center gap-3.5 text-base cursor-pointer bg-brand-cream/40 p-3.5 border border-stone-200/50 rounded-xl hover:bg-brand-roselight hover:border-brand-rose/20 has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                            <input type="checkbox" name="marketing_channel" value="チラシ" class="w-5.5 h-5.5 text-brand-rose rounded shrink-0">
+                            <span>チラシ・看板</span>
+                        </label>
+                        <label class="flex items-center gap-3.5 text-base cursor-pointer bg-brand-cream/40 p-3.5 border border-stone-200/50 rounded-xl hover:bg-brand-roselight hover:border-brand-rose/20 has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                            <input type="checkbox" name="marketing_channel" value="その他" class="w-5.5 h-5.5 text-brand-rose rounded shrink-0">
+                            <span>その他</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="mt-5">
+                    <label class="block text-base font-bold text-brand-charcoal mb-2">現在、経営やサロンワークで「いちばん困っていること」は何ですか？</label>
+                    <textarea id="biggest_issue" rows="3" placeholder="例: 毎月のHot Pepper掲載料の元を取るために新規集客ばかりに追われ、肝心のリピート対策や丁寧なフォローに時間が回せない。" class="w-full bg-brand-cream/50 focus:bg-white border border-stone-200 rounded-xl px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-brand-rose/30 focus:border-brand-rose transition"></textarea>
+                </div>
+            </section>
+
+            <!-- 2. 売上分解チェック -->
+            <section id="sec-2" class="bg-white rounded-2xl border border-brand-rose/10 p-5 md:p-8 shadow-sm scroll-mt-20 lg:scroll-mt-6 hover:shadow-md transition duration-300">
+                <div class="flex items-center gap-3 border-b border-brand-rose/10 pb-4 mb-4">
+                    <span class="flex items-center justify-center w-8 h-8 rounded-full bg-brand-rose text-white text-xs md:text-sm font-bold font-en">02</span>
+                    <h2 class="text-lg md:text-xl font-bold text-brand-charcoal">売上の分解チェック</h2>
+                </div>
+                <div class="text-base text-brand-charcoal font-medium bg-brand-sagelight/95 border border-brand-sage/20 p-4 rounded-xl mb-4 md:mb-6 leading-relaxed shadow-inner">
+                    <div class="flex gap-2 items-start">
+                        <i data-lucide="help-circle" class="w-5 h-5 text-brand-sage shrink-0 mt-0.5"></i>
+                        <span>売上は<b>「客数」「客単価」「来店頻度（リピート）」</b>の掛け算で決まります。特にリピートに関する今の感覚に一番近いものを選んでくださいね。</span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                    <div class="bg-brand-cream/20 p-4 rounded-xl border border-stone-100">
+                        <label class="block text-base font-bold text-brand-charcoal mb-3 flex items-center gap-2">
+                            <span class="w-1.5 h-3.5 bg-brand-rose rounded-full"></span>新規集客について
+                        </label>
+                        <div class="space-y-2.5">
+                            <label class="flex items-center gap-3.5 text-base cursor-pointer p-3.5 bg-brand-cream/30 border border-stone-200/60 rounded-xl hover:bg-brand-roselight hover:border-brand-rose/30 has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                                <input type="radio" name="new_customer_status" value="十分できている" class="w-5.5 h-5.5 text-brand-rose focus:ring-brand-rose/30 shrink-0">
+                                <span>十分できている</span>
+                            </label>
+                            <label class="flex items-center gap-3.5 text-base cursor-pointer p-3.5 bg-brand-cream/30 border border-stone-200/60 rounded-xl hover:bg-brand-roselight hover:border-brand-rose/30 has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                                <input type="radio" name="new_customer_status" value="まあまあできている" class="w-5.5 h-5.5 text-brand-rose focus:ring-brand-rose/30 shrink-0">
+                                <span>まあまあできている</span>
+                            </label>
+                            <label class="flex items-center gap-3.5 text-base cursor-pointer p-3.5 bg-brand-cream/30 border border-stone-200/60 rounded-xl hover:bg-brand-roselight hover:border-brand-rose/30 has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                                <input type="radio" name="new_customer_status" value="不安定です" class="w-5.5 h-5.5 text-brand-rose focus:ring-brand-rose/30 shrink-0">
+                                <span>不安定で波がある</span>
+                            </label>
+                            <label class="flex items-center gap-3.5 text-base cursor-pointer p-3.5 bg-brand-cream/30 border border-stone-200/60 rounded-xl hover:bg-brand-roselight hover:border-brand-rose/30 has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                                <input type="radio" name="new_customer_status" value="かなり困っています" class="w-5.5 h-5.5 text-brand-rose focus:ring-brand-rose/30 shrink-0">
+                                <span>かなり困っている</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="bg-brand-cream/20 p-4 rounded-xl border border-stone-100">
+                        <label class="block text-base font-bold text-brand-charcoal mb-3 flex items-center gap-2">
+                            <span class="w-1.5 h-3.5 bg-brand-rose rounded-full"></span>リピート（固定化）について
+                        </label>
+                        <div class="space-y-2.5">
+                            <label class="flex items-center gap-3.5 text-base cursor-pointer p-3.5 bg-brand-cream/30 border border-stone-200/60 rounded-xl hover:bg-brand-roselight hover:border-brand-rose/30 has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                                <input type="radio" name="repeat_status" value="十分できている" class="w-5.5 h-5.5 text-brand-rose focus:ring-brand-rose/30 shrink-0">
+                                <span>十分できている</span>
+                            </label>
+                            <label class="flex items-center gap-3.5 text-base cursor-pointer p-3.5 bg-brand-cream/30 border border-stone-200/60 rounded-xl hover:bg-brand-roselight hover:border-brand-rose/30 has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                                <input type="radio" name="repeat_status" value="まあまあできている" class="w-5.5 h-5.5 text-brand-rose focus:ring-brand-rose/30 shrink-0">
+                                <span>まあまあできている</span>
+                            </label>
+                            <label class="flex items-center gap-3.5 text-base cursor-pointer p-3.5 bg-brand-cream/30 border border-stone-200/60 rounded-xl hover:bg-brand-roselight hover:border-brand-rose/30 has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                                <input type="radio" name="repeat_status" value="もっと改善したいです" class="w-5.5 h-5.5 text-brand-rose focus:ring-brand-rose/30 shrink-0">
+                                <span>もっと改善していきたい</span>
+                            </label>
+                            <label class="flex items-center gap-3.5 text-base cursor-pointer p-3.5 bg-brand-cream/30 border border-stone-200/60 rounded-xl hover:bg-brand-roselight hover:border-brand-rose/30 has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                                <input type="radio" name="repeat_status" value="かなり弱いです" class="w-5.5 h-5.5 text-brand-rose focus:ring-brand-rose/30 shrink-0">
+                                <span>かなり弱い（リピートしない）</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="bg-brand-cream/20 p-4 rounded-xl border border-stone-100">
+                        <label class="block text-base font-bold text-brand-charcoal mb-3 flex items-center gap-2">
+                            <span class="w-1.5 h-3.5 bg-brand-rose rounded-full"></span>来店頻度について
+                        </label>
+                        <div class="space-y-2.5">
+                            <label class="flex items-center gap-3.5 text-base cursor-pointer p-3.5 bg-brand-cream/30 border border-stone-200/60 rounded-xl hover:bg-brand-roselight hover:border-brand-rose/30 has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                                <input type="radio" name="frequency_status" value="理想に近いです" class="w-5.5 h-5.5 text-brand-rose focus:ring-brand-rose/30 shrink-0">
+                                <span>理想のペースで来ている</span>
+                            </label>
+                            <label class="flex items-center gap-3.5 text-base cursor-pointer p-3.5 bg-brand-cream/30 border border-stone-200/60 rounded-xl hover:bg-brand-roselight hover:border-brand-rose/30 font-medium has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                                <input type="radio" name="frequency_status" value="少し間隔が空きます" class="w-5.5 h-5.5 text-brand-rose focus:ring-brand-rose/30 shrink-0">
+                                <span>少し予定より間隔が空きがち</span>
+                            </label>
+                            <label class="flex items-center gap-3.5 text-base cursor-pointer p-3.5 bg-brand-cream/30 border border-stone-200/60 rounded-xl hover:bg-brand-roselight hover:border-brand-rose/30 has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                                <input type="radio" name="frequency_status" value="かなり間隔が空きます" class="w-5.5 h-5.5 text-brand-rose focus:ring-brand-rose/30 shrink-0">
+                                <span>かなり空いてしまう</span>
+                            </label>
+                            <label class="flex items-center gap-3.5 text-base cursor-pointer p-3.5 bg-brand-cream/30 border border-stone-200/60 rounded-xl hover:bg-brand-roselight hover:border-brand-rose/30 has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                                <input type="radio" name="frequency_status" value="把握できていません" class="w-5.5 h-5.5 text-brand-rose focus:ring-brand-rose/30 shrink-0">
+                                <span>正確に把握できていない</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="bg-brand-cream/20 p-4 rounded-xl border border-stone-100">
+                        <label class="block text-base font-bold text-brand-charcoal mb-3 flex items-center gap-2">
+                            <span class="w-1.5 h-3.5 bg-brand-rose rounded-full"></span>客単価について
+                        </label>
+                        <div class="space-y-2.5">
+                            <label class="flex items-center gap-3.5 text-base cursor-pointer p-3.5 bg-brand-cream/30 border border-stone-200/60 rounded-xl hover:bg-brand-roselight hover:border-brand-rose/30 has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                                <input type="radio" name="price_status" value="満足しています" class="w-5.5 h-5.5 text-brand-rose focus:ring-brand-rose/30 shrink-0">
+                                <span>満足している</span>
+                            </label>
+                            <label class="flex items-center gap-3.5 text-base cursor-pointer p-3.5 bg-brand-cream/30 border border-stone-200/60 rounded-xl hover:bg-brand-roselight hover:border-brand-rose/30 has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                                <input type="radio" name="price_status" value="少し上げたいです" class="w-5.5 h-5.5 text-brand-rose focus:ring-brand-rose/30 shrink-0">
+                                <span>もう少し上げたい</span>
+                            </label>
+                            <label class="flex items-center gap-3.5 text-base cursor-pointer p-3.5 bg-brand-cream/30 border border-stone-200/60 rounded-xl hover:bg-brand-roselight hover:border-brand-rose/30 has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                                <input type="radio" name="price_status" value="上げたいが方法がわかりません" class="w-5.5 h-5.5 text-brand-rose focus:ring-brand-rose/30 shrink-0">
+                                <span>上げたいが方法がわからない</span>
+                            </label>
+                            <label class="flex items-center gap-3.5 text-base cursor-pointer p-3.5 bg-brand-cream/30 border border-stone-200/60 rounded-xl hover:bg-brand-roselight hover:border-brand-rose/30 has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                                <input type="radio" name="price_status" value="あまり考えられていません" class="w-5.5 h-5.5 text-brand-rose focus:ring-brand-rose/30 shrink-0">
+                                <span>あまり深く考えられていない</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3. 集客媒体への依存度チェック -->
+            <section id="sec-3" class="bg-white rounded-2xl border border-brand-rose/10 p-5 md:p-8 shadow-sm scroll-mt-20 lg:scroll-mt-6 hover:shadow-md transition duration-300">
+                <div class="flex items-center gap-3 border-b border-brand-rose/10 pb-4 mb-5">
+                    <span class="flex items-center justify-center w-8 h-8 rounded-full bg-brand-rose text-white text-xs md:text-sm font-bold font-en">03</span>
+                    <h2 class="text-lg md:text-xl font-bold text-brand-charcoal">集客媒体への依存度チェック</h2>
+                </div>
+
+                <div class="space-y-3 mb-5">
+                    <p class="text-base font-bold text-brand-charcoal mb-2">当てはまるものすべてにチェックしてください</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <label class="flex items-start gap-3.5 text-base cursor-pointer p-4 bg-brand-cream/20 border border-stone-100 rounded-xl hover:bg-brand-roselight has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                            <input type="checkbox" name="dependence_check" value="Hot Pepper Beautyなどの媒体費が重い" class="mt-0.5 w-5.5 h-5.5 text-brand-rose rounded shrink-0">
+                            <span>Hot Pepper Beauty等の掲載費（媒体費）が重いと感じる</span>
+                        </label>
+                        <label class="flex items-start gap-3.5 text-base cursor-pointer p-4 bg-brand-cream/20 border border-stone-100 rounded-xl hover:bg-brand-roselight has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                            <input type="checkbox" name="dependence_check" value="思ったほど集客できていない" class="mt-0.5 w-5.5 h-5.5 text-brand-rose rounded shrink-0">
+                            <span>媒体に載せているが、思うように新規が来ない</span>
+                        </label>
+                        <label class="flex items-start gap-3.5 text-base cursor-pointer p-4 bg-brand-cream/20 border border-stone-100 rounded-xl hover:bg-brand-roselight has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                            <input type="checkbox" name="dependence_check" value="新規は入るがリピートしない" class="mt-0.5 w-5.5 h-5.5 text-brand-rose rounded shrink-0">
+                            <span>新規予約は入るが、リピートに繋がりにくい</span>
+                        </label>
+                        <label class="flex items-start gap-3.5 text-base cursor-pointer p-4 bg-brand-cream/20 border border-stone-100 rounded-xl hover:bg-brand-roselight has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                            <input type="checkbox" name="dependence_check" value="媒体以外の集客が弱い" class="mt-0.5 w-5.5 h-5.5 text-brand-rose rounded shrink-0">
+                            <span>ポータルサイト以外の自社集客導線が弱い</span>
+                        </label>
+                        <label class="flex items-start gap-3.5 text-base cursor-pointer p-4 bg-brand-cream/20 border border-stone-100 rounded-xl hover:bg-brand-roselight has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                            <input type="checkbox" name="dependence_check" value="顧客リストを活用できていない" class="mt-0.5 w-5.5 h-5.5 text-brand-rose rounded shrink-0">
+                            <span>LINEやメルマガなど、独自の顧客リストを活かせていない</span>
+                        </label>
+                        <label class="flex items-start gap-3.5 text-base cursor-pointer p-4 bg-brand-cream/20 border border-stone-100 rounded-xl hover:bg-brand-roselight has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                            <input type="checkbox" name="dependence_check" value="Instagramが予約に繋がらない" class="mt-0.5 w-5.5 h-5.5 text-brand-rose rounded shrink-0">
+                            <span>Instagramは更新しているが、予約導線になっていない</span>
+                        </label>
+                        <label class="flex items-start gap-3.5 text-base cursor-pointer p-4 bg-brand-cream/20 border border-stone-100 rounded-xl hover:bg-brand-roselight has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                            <input type="checkbox" name="dependence_check" value="Googleマップ対策が不十分" class="mt-0.5 w-5.5 h-5.5 text-brand-rose rounded shrink-0">
+                            <span>Google口コミやMEO（マップ対策）がよくわからない</span>
+                        </label>
+                        <label class="flex items-start gap-3.5 text-base cursor-pointer p-4 bg-brand-cream/20 border border-stone-100 rounded-xl hover:bg-brand-roselight has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                            <input type="checkbox" name="dependence_check" value="紹介の仕組みがない" class="mt-0.5 w-5.5 h-5.5 text-brand-rose rounded shrink-0">
+                            <span>ご紹介が自然に増える仕組み（紹介カードや案内）がない</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <div>
+                        <label class="block text-base font-bold text-brand-charcoal mb-2">いま一番依存している集客方法</label>
+                        <input type="text" id="main_marketing_dependence" placeholder="例: Hot Pepper Beauty" class="w-full bg-brand-cream/50 focus:bg-white border border-stone-200 rounded-xl px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-brand-rose/30">
+                    </div>
+                    <div>
+                        <label class="block text-base font-bold text-brand-charcoal mb-2">広告費（媒体費）に対して感じていること</label>
+                        <input type="text" id="ad_cost_feeling" placeholder="例: 最低限の掲載費でも毎月重く、辞めたいが依存から抜け出せず不安" class="w-full bg-brand-cream/50 focus:bg-white border border-stone-200 rounded-xl px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-brand-rose/30">
+                    </div>
+                </div>
+            </section>
+
+            <!-- 4. 日々の反復業務チェック -->
+            <section id="sec-4" class="bg-white rounded-2xl border border-brand-rose/10 p-5 md:p-8 shadow-sm scroll-mt-20 lg:scroll-mt-6 hover:shadow-md transition duration-300">
+                <div class="flex items-center gap-3 border-b border-brand-rose/10 pb-4 mb-5">
+                    <span class="flex items-center justify-center w-8 h-8 rounded-full bg-brand-rose text-white text-xs md:text-sm font-bold font-en">04</span>
+                    <h2 class="text-lg md:text-xl font-bold text-brand-charcoal">日々の反復業務チェック</h2>
+                </div>
+
+                <p class="text-base font-bold text-brand-charcoal mb-3">毎日、または毎週繰り返し行っている業務（すべてチェック）</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 mb-5">
+                    <label class="flex items-center gap-3.5 text-base cursor-pointer p-3.5 bg-brand-cream/10 border border-stone-200/50 rounded-xl hover:bg-brand-roselight has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200"><input type="checkbox" name="routine_work" value="予約確認の返信" class="w-5.5 h-5.5 text-brand-rose rounded shrink-0"><span>予約確認・確定の返信</span></label>
+                    <label class="flex items-center gap-3.5 text-base cursor-pointer p-3.5 bg-brand-cream/10 border border-stone-200/50 rounded-xl hover:bg-brand-roselight has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200"><input type="checkbox" name="routine_work" value="日程変更・キャンセル対応" class="w-5.5 h-5.5 text-brand-rose rounded shrink-0"><span>日程変更やキャンセル対応</span></label>
+                    <label class="flex items-center gap-3.5 text-base cursor-pointer p-3.5 bg-brand-cream/10 border border-stone-200/50 rounded-xl hover:bg-brand-roselight has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200"><input type="checkbox" name="routine_work" value="来店前の事前案内" class="w-5.5 h-5.5 text-brand-rose rounded shrink-0"><span>来店前の事前案内メッセージ</span></label>
+                    <label class="flex items-center gap-3.5 text-base cursor-pointer p-3.5 bg-brand-cream/10 border border-stone-200/50 rounded-xl hover:bg-brand-roselight has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200"><input type="checkbox" name="routine_work" value="初回来店者への説明" class="w-5.5 h-5.5 text-brand-rose rounded shrink-0"><span>初回来店時のカウンセリング説明</span></label>
+                    <label class="flex items-center gap-3.5 text-base cursor-pointer p-3.5 bg-brand-cream/10 border border-stone-200/50 rounded-xl hover:bg-brand-roselight has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200"><input type="checkbox" name="routine_work" value="施術後のお礼メッセージ" class="w-5.5 h-5.5 text-brand-rose rounded shrink-0"><span>施術直後のお礼メッセージ</span></label>
+                    <label class="flex items-center gap-3.5 text-base cursor-pointer p-3.5 bg-brand-cream/10 border border-stone-200/50 rounded-xl hover:bg-brand-roselight has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200"><input type="checkbox" name="routine_work" value="再来店フォロー" class="w-5.5 h-5.5 text-brand-rose rounded shrink-0"><span>数週間〜数ヶ月後の再来店フォロー</span></label>
+                    <label class="flex items-center gap-3.5 text-base cursor-pointer p-3.5 bg-brand-cream/10 border border-stone-200/50 rounded-xl hover:bg-brand-roselight has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200"><input type="checkbox" name="routine_work" value="口コミ依頼" class="w-5.5 h-5.5 text-brand-rose rounded shrink-0"><span>口コミのお願い・返信</span></label>
+                    <label class="flex items-center gap-3.5 text-base cursor-pointer p-3.5 bg-brand-cream/10 border border-stone-200/50 rounded-xl hover:bg-brand-roselight has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200"><input type="checkbox" name="routine_work" value="Instagram通常投稿" class="w-5.5 h-5.5 text-brand-rose rounded shrink-0"><span>Instagram投稿 of 作成</span></label>
+                    <label class="flex items-center gap-3.5 text-base cursor-pointer p-3.5 bg-brand-cream/10 border border-stone-200/50 rounded-xl hover:bg-brand-roselight has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200"><input type="checkbox" name="routine_work" value="Instagramストーリーズ" class="w-5.5 h-5.5 text-brand-rose rounded shrink-0"><span>ストーリーズの発信</span></label>
+                    <label class="flex items-center gap-3.5 text-base cursor-pointer p-3.5 bg-brand-cream/10 border border-stone-200/50 rounded-xl hover:bg-brand-roselight has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200"><input type="checkbox" name="routine_work" value="LINE配信の作成" class="w-5.5 h-5.5 text-brand-rose rounded shrink-0"><span>LINE全体一斉配信の作成</span></label>
+                    <label class="flex items-center gap-3.5 text-base cursor-pointer p-3.5 bg-brand-cream/10 border border-stone-200/50 rounded-xl hover:bg-brand-roselight has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200"><input type="checkbox" name="routine_work" value="ブログ・お知らせ作成" class="w-5.5 h-5.5 text-brand-rose rounded shrink-0"><span>ブログやサイトのお知らせ作成</span></label>
+                    <label class="flex items-center gap-3.5 text-base cursor-pointer p-3.5 bg-brand-cream/10 border border-stone-200/50 rounded-xl hover:bg-brand-roselight has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200"><input type="checkbox" name="routine_work" value="予約台帳や顧客カルテ整理" class="w-5.5 h-5.5 text-brand-rose rounded shrink-0"><span>予約台帳や顧客情報のカルテ整理</span></label>
+                    <label class="flex items-center gap-3.5 text-base cursor-pointer p-3.5 bg-brand-cream/10 border border-stone-200/50 rounded-xl hover:bg-brand-roselight has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200"><input type="checkbox" name="routine_work" value="スタッフへの引継ぎ・共有" class="w-5.5 h-5.5 text-brand-rose rounded shrink-0"><span>スタッフへの引継ぎ、売上共有</span></label>
+                    <label class="flex items-center gap-3.5 text-base cursor-pointer p-3.5 bg-brand-cream/10 border border-stone-200/50 rounded-xl hover:bg-brand-roselight has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200"><input type="checkbox" name="routine_work" value="よくある質問の対応" class="w-5.5 h-5.5 text-brand-rose rounded shrink-0"><span>よくある質問への個別返信</span></label>
+                    <div class="col-span-1 sm:col-span-2 md:col-span-3 flex items-center gap-2 mt-2 p-1">
+                        <label class="flex items-center gap-2 text-base cursor-pointer shrink-0">
+                            <input type="checkbox" name="routine_work" value="その他" class="w-5.5 h-5.5 text-brand-rose rounded shrink-0">
+                            <span>その他:</span>
+                        </label>
+                        <input type="text" id="routine_work_other_text" placeholder="ここに具体的に書いてください" class="w-full bg-brand-cream/50 focus:bg-white border border-stone-200 rounded-lg px-3 py-2 text-base focus:outline-none">
+                    </div>
+                </div>
+
+                <div class="bg-brand-cream/25 p-4 rounded-xl border border-stone-200/50">
+                    <label class="block text-base font-bold text-brand-charcoal mb-3">この中で「いちばん面倒（手間）」だと感じる業務を3つ教えてください</label>
+                    <div class="space-y-3">
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs bg-brand-rose text-white w-5 h-5 rounded-full flex items-center justify-center font-en shrink-0">1</span>
+                            <input type="text" id="annoying_work_1" placeholder="例: 施術後の丁寧なお礼メッセージ（全員手書きが大変）" class="w-full bg-white border border-stone-200 rounded-lg px-3 py-2 text-base focus:outline-none focus:ring-1 focus:ring-brand-rose/50">
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs bg-brand-rose text-white w-5 h-5 rounded-full flex items-center justify-center font-en shrink-0">2</span>
+                            <input type="text" id="annoying_work_2" placeholder="例: Instagram of 文章作成（1時間以上かかる）" class="w-full bg-white border border-stone-200 rounded-lg px-3 py-2 text-base focus:outline-none focus:ring-1 focus:ring-brand-rose/50">
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs bg-brand-rose text-white w-5 h-5 rounded-full flex items-center justify-center font-en shrink-0">3</span>
+                            <input type="text" id="annoying_work_3" placeholder="例: しばらくお休みしているお客様へのLINEメッセージ" class="w-full bg-white border border-stone-200 rounded-lg px-3 py-2 text-base focus:outline-none focus:ring-1 focus:ring-brand-rose/50">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 5. 文章業務チェック -->
+            <section id="sec-5" class="bg-white rounded-2xl border border-brand-rose/10 p-5 md:p-8 shadow-sm scroll-mt-20 lg:scroll-mt-6 hover:shadow-md transition duration-300">
+                <div class="flex items-center gap-3 border-b border-brand-rose/10 pb-4 mb-5">
+                    <span class="flex items-center justify-center w-8 h-8 rounded-full bg-brand-rose text-white text-xs md:text-sm font-bold font-en">05</span>
+                    <h2 class="text-lg md:text-xl font-bold text-brand-charcoal">文章作成チェック (AIとの相性バツグン！)</h2>
+                </div>
+                <!-- 「小規模」をカットし「サロンでは〜」に修正 -->
+                <div class="text-base text-brand-charcoal font-medium bg-brand-sagelight/90 border border-brand-rose/10 p-4 rounded-xl mb-4 leading-relaxed shadow-inner">
+                    <div class="flex gap-2 items-start">
+                        <i data-lucide="help-circle" class="w-5 h-5 text-brand-sage shrink-0 mt-0.5"></i>
+                        <span>サロンでは、毎回文章を「ゼロから考えて書いている」ことが実はとても多いです。ここはAIが一番得意なところです。</span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <div>
+                        <label class="block text-base font-bold text-brand-charcoal mb-3">毎回（または都度）作成している文章</label>
+                        <!-- 問い5：すべてホバー時に色がふんわり変わり、タップしやすく、選択時にピンクに美しく染まる大統一カード型に変更 -->
+                        <div class="space-y-2.5 max-h-72 overflow-y-auto pr-2">
+                            <label class="flex items-center gap-3.5 text-base cursor-pointer p-3.5 bg-brand-cream/30 border border-stone-200/60 rounded-xl hover:bg-brand-roselight hover:border-brand-rose/30 has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                                <input type="checkbox" name="writing_work" value="予約返信文" class="w-5.5 h-5.5 text-brand-rose rounded shrink-0">
+                                <span>予約確定・日程確認 of 文章</span>
+                            </label>
+                            <label class="flex items-center gap-3.5 text-base cursor-pointer p-3.5 bg-brand-cream/30 border border-stone-200/60 rounded-xl hover:bg-brand-roselight hover:border-brand-rose/30 has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                                <input type="checkbox" name="writing_work" value="来店前案内文" class="w-5.5 h-5.5 text-brand-rose rounded shrink-0">
+                                <span>ご来店直前の道案内や確認</span>
+                            </label>
+                            <label class="flex items-center gap-3.5 text-base cursor-pointer p-3.5 bg-brand-cream/30 border border-stone-200/60 rounded-xl hover:bg-brand-roselight hover:border-brand-rose/30 has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                                <input type="checkbox" name="writing_work" value="カウンセリング案内" class="w-5.5 h-5.5 text-brand-rose rounded shrink-0">
+                                <span>新規の方への事前説明</span>
+                            </label>
+                            <label class="flex items-center gap-3.5 text-base cursor-pointer p-3.5 bg-brand-cream/30 border border-stone-200/60 rounded-xl hover:bg-brand-roselight hover:border-brand-rose/30 has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                                <input type="checkbox" name="writing_work" value="施術後お礼文" class="w-5.5 h-5.5 text-brand-rose rounded shrink-0">
+                                <span>施術直後のお礼メッセージ</span>
+                            </label>
+                            <label class="flex items-center gap-3.5 text-base cursor-pointer p-3.5 bg-brand-cream/30 border border-stone-200/60 rounded-xl hover:bg-brand-roselight hover:border-brand-rose/30 has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                                <input type="checkbox" name="writing_work" value="再来店フォロー文" class="w-5.5 h-5.5 text-brand-rose rounded shrink-0">
+                                <span>「そろそろいかがですか」の案内</span>
+                            </label>
+                            <label class="flex items-center gap-3.5 text-base cursor-pointer p-3.5 bg-brand-cream/30 border border-stone-200/60 rounded-xl hover:bg-brand-roselight hover:border-brand-rose/30 has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                                <input type="checkbox" name="writing_work" value="口コミ依頼文" class="w-5.5 h-5.5 text-brand-rose rounded shrink-0">
+                                <span>口コミを優しく促す文章</span>
+                            </label>
+                            <label class="flex items-center gap-3.5 text-base cursor-pointer p-3.5 bg-brand-cream/30 border border-stone-200/60 rounded-xl hover:bg-brand-roselight hover:border-brand-rose/30 has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                                <input type="checkbox" name="writing_work" value="キャンペーン案内" class="w-5.5 h-5.5 text-brand-rose rounded shrink-0">
+                                <span>イベントや季節のメニュー案内</span>
+                            </label>
+                            <label class="flex items-center gap-3.5 text-base cursor-pointer p-3.5 bg-brand-cream/30 border border-stone-200/60 rounded-xl hover:bg-brand-roselight hover:border-brand-rose/30 has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                                <input type="checkbox" name="writing_work" value="LINE配信文" class="w-5.5 h-5.5 text-brand-rose rounded shrink-0">
+                                <span>公式LINEの一斉配信原稿</span>
+                            </label>
+                            <label class="flex items-center gap-3.5 text-base cursor-pointer p-3.5 bg-brand-cream/30 border border-stone-200/60 rounded-xl hover:bg-brand-roselight hover:border-brand-rose/30 has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                                <input type="checkbox" name="writing_work" value="Instagram投稿文" class="w-5.5 h-5.5 text-brand-rose rounded shrink-0">
+                                <span>Instagramの本文テキスト</span>
+                            </label>
+                            <label class="flex items-center gap-3.5 text-base cursor-pointer p-3.5 bg-brand-cream/30 border border-stone-200/60 rounded-xl hover:bg-brand-roselight hover:border-brand-rose/30 has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                                <input type="checkbox" name="writing_work" value="メニュー説明文" class="w-5.5 h-5.5 text-brand-rose rounded shrink-0">
+                                <span>メニュー説明</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="bg-brand-cream/20 p-4 rounded-xl border border-stone-100 flex flex-col justify-between">
+                        <div>
+                            <label class="block text-base font-bold text-brand-charcoal mb-3">文章を書くとき、何に困っていますか？</label>
+                            <div class="space-y-2.5">
+                                <label class="flex items-center gap-3.5 text-base cursor-pointer p-3.5 bg-white border border-stone-200/60 rounded-xl hover:bg-brand-roselight hover:border-brand-rose/30 has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                                    <input type="checkbox" name="writing_issue" value="毎回考えるのに時間がかかる" class="w-5.5 h-5.5 text-brand-rose rounded shrink-0">
+                                    <span>毎回考えるのに時間がかかる</span>
+                                </label>
+                                <label class="flex items-center gap-3.5 text-base cursor-pointer p-3.5 bg-white border border-stone-200/60 rounded-xl hover:bg-brand-roselight hover:border-brand-rose/30 has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                                    <input type="checkbox" name="writing_issue" value="品質がバラつく" class="w-5.5 h-5.5 text-brand-rose rounded shrink-0">
+                                    <span>スタッフによって質が変わる</span>
+                                </label>
+                                <label class="flex items-center gap-3.5 text-base cursor-pointer p-3.5 bg-white border border-stone-200/60 rounded-xl hover:bg-brand-roselight hover:border-brand-rose/30 has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                                    <input type="checkbox" name="writing_issue" value="売り込み感が出てしまう" class="w-5.5 h-5.5 text-brand-rose rounded shrink-0">
+                                    <span>売り込みっぽくなりそうで気後れする</span>
+                                </label>
+                                <label class="flex items-center gap-3.5 text-base cursor-pointer p-3.5 bg-white border border-stone-200/60 rounded-xl hover:bg-brand-roselight hover:border-brand-rose/30 has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                                    <input type="checkbox" name="writing_issue" value="長くなりすぎる" class="w-5.5 h-5.5 text-brand-rose rounded shrink-0">
+                                    <span>丁寧に書きたくて長くなりすぎる</span>
+                                </label>
+                                <label class="flex items-center gap-3.5 text-base cursor-pointer p-3.5 bg-white border border-stone-200/60 rounded-xl hover:bg-brand-roselight hover:border-brand-rose/30 has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                                    <input type="checkbox" name="writing_issue" value="何を書けばいいかわからなくなる" class="w-5.5 h-5.5 text-brand-rose rounded shrink-0">
+                                    <span>何を書くべきか悩んでしまう</span>
+                                </label>
+                                <label class="flex items-center gap-3.5 text-base cursor-pointer p-3.5 bg-white border border-stone-200/60 rounded-xl hover:bg-brand-roselight hover:border-brand-rose/30 has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                                    <input type="checkbox" name="writing_issue" value="後回しになりがち" class="w-5.5 h-5.5 text-brand-rose rounded shrink-0">
+                                    <span>面倒でついつい後回しにしてしまう</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 6. 顧客フォロー診断 -->
+            <section id="sec-6" class="bg-white rounded-2xl border border-brand-rose/10 p-5 md:p-8 shadow-sm scroll-mt-20 lg:scroll-mt-6 hover:shadow-md transition duration-300">
+                <div class="flex items-center gap-3 border-b border-brand-rose/10 pb-4 mb-5">
+                    <span class="flex items-center justify-center w-8 h-8 rounded-full bg-brand-rose text-white text-xs md:text-sm font-bold font-en">06</span>
+                    <h2 class="text-lg md:text-xl font-bold text-brand-charcoal">顧客フォロー診断</h2>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <div>
+                        <label class="block text-base font-bold text-brand-charcoal mb-3">現在できているおもてなし・フォロー</label>
+                        <!-- 問い6：すべてホバー時に色がふんわり変わり、タップしやすく、選択時にピンクに美しく染まる大統一カード型に変更 -->
+                        <div class="space-y-2.5">
+                            <label class="flex items-start gap-3.5 text-base cursor-pointer p-3.5 bg-brand-cream/30 border border-stone-200/60 rounded-xl hover:bg-brand-roselight hover:border-brand-rose/30 has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                                <input type="checkbox" name="follow_done" value="来店前案内" class="mt-0.5 w-5.5 h-5.5 text-brand-rose rounded shrink-0">
+                                <span>ご来店の前日までに案内を送る</span>
+                            </label>
+                            <label class="flex items-start gap-3.5 text-base cursor-pointer p-3.5 bg-brand-cream/30 border border-stone-200/60 rounded-xl hover:bg-brand-roselight hover:border-brand-rose/30 has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                                <input type="checkbox" name="follow_done" value="初回来店後お礼" class="mt-0.5 w-5.5 h-5.5 text-brand-rose rounded shrink-0">
+                                <span>初回来店後にお礼メッセージを送る</span>
+                            </label>
+                            <label class="flex items-start gap-3.5 text-base cursor-pointer p-3.5 bg-brand-cream/30 border border-stone-200/60 rounded-xl hover:bg-brand-roselight hover:border-brand-rose/30 has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                                <input type="checkbox" name="follow_done" value="数日後状態確認" class="mt-0.5 w-5.5 h-5.5 text-brand-rose rounded shrink-0">
+                                <span>施術後、数日以内にお伺いを送る</span>
+                            </label>
+                            <label class="flex items-start gap-3.5 text-base cursor-pointer p-3.5 bg-brand-cream/30 border border-stone-200/60 rounded-xl hover:bg-brand-roselight hover:border-brand-rose/30 has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                                <input type="checkbox" name="follow_done" value="次回目安提示" class="mt-0.5 w-5.5 h-5.5 text-brand-rose rounded shrink-0">
+                                <span>次回はいつ頃来るのがベストか伝えている</span>
+                            </label>
+                            <label class="flex items-start gap-3.5 text-base cursor-pointer p-3.5 bg-brand-cream/30 border border-stone-200/60 rounded-xl hover:bg-brand-roselight hover:border-brand-rose/30 has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                                <input type="checkbox" name="follow_done" value="再来店メッセージ" class="mt-0.5 w-5.5 h-5.5 text-brand-rose rounded shrink-0">
+                                <span>再来店を促す自然なご案内ができている</span>
+                            </label>
+                            <label class="flex items-start gap-3.5 text-base cursor-pointer p-3.5 bg-brand-cream/30 border border-stone-200/60 rounded-xl hover:bg-brand-roselight hover:border-brand-rose/30 has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                                <input type="checkbox" name="follow_done" value="口コミ依頼" class="mt-0.5 w-5.5 h-5.5 text-brand-rose rounded shrink-0">
+                                <span>口コミのお願いを送っている</span>
+                            </label>
+                            <label class="flex items-start gap-3.5 text-base cursor-pointer p-3.5 bg-brand-cream/30 border border-stone-200/60 rounded-xl hover:bg-brand-roselight hover:border-brand-rose/30 has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                                <input type="checkbox" name="follow_done" value="休眠顧客連絡" class="mt-0.5 w-5.5 h-5.5 text-brand-rose rounded shrink-0">
+                                <span>休眠客（数ヶ月未定）にお伺いメッセージを送る</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="bg-brand-cream/20 p-4 rounded-xl border border-stone-100 font-sans">
+                        <label class="block text-base font-bold text-brand-charcoal mb-3">どうしても「フォロー漏れ」が起きがちな場面</label>
+                        <div class="space-y-2.5">
+                            <label class="flex items-center gap-3.5 text-base cursor-pointer p-3.5 bg-white border border-stone-200/60 rounded-xl hover:bg-brand-roselight hover:border-brand-rose/30 has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                                <input type="checkbox" name="follow_miss_scene" value="初回来店後" class="w-5.5 h-5.5 text-brand-rose rounded shrink-0">
+                                <span>初回来店後（その後お礼したっきり）</span>
+                            </label>
+                            <label class="flex items-center gap-3.5 text-base cursor-pointer p-3.5 bg-white border border-stone-200/60 rounded-xl hover:bg-brand-roselight hover:border-brand-rose/30 has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                                <input type="checkbox" name="follow_miss_scene" value="施術数日後" class="w-5.5 h-5.5 text-brand-rose rounded shrink-0">
+                                <span>施術後の数日〜1週間後（お身体チェック等）</span>
+                            </label>
+                            <label class="flex items-center gap-3.5 text-base cursor-pointer p-3.5 bg-white border border-stone-200/60 rounded-xl hover:bg-brand-roselight hover:border-brand-rose/30 has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                                <input type="checkbox" name="follow_miss_scene" value="1ヶ月以上経過" class="w-5.5 h-5.5 text-brand-rose rounded shrink-0">
+                                <span>前回の来店から1ヶ月以上経過したお客様</span>
+                            </label>
+                            <label class="flex items-center gap-3.5 text-base cursor-pointer p-3.5 bg-white border border-stone-200/60 rounded-xl hover:bg-brand-roselight hover:border-brand-rose/30 has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                                <input type="checkbox" name="follow_miss_scene" value="キャンセル後" class="w-5.5 h-5.5 text-brand-rose rounded shrink-0">
+                                <span>急用でのキャンセル連絡の後（日程未定）</span>
+                            </label>
+                            <label class="flex items-center gap-3.5 text-base cursor-pointer p-3.5 bg-white border border-stone-200/60 rounded-xl hover:bg-brand-roselight hover:border-brand-rose/30 has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                                <input type="checkbox" name="follow_miss_scene" value="口コミを頼むのを忘れる" class="w-5.5 h-5.5 text-brand-rose rounded shrink-0">
+                                <span>お見送り時の「口コミ依頼」忘れ</span>
+                            </label>
+                            <label class="flex items-center gap-3.5 text-base cursor-pointer p-3.5 bg-white border border-stone-200/60 rounded-xl hover:bg-brand-roselight hover:border-brand-rose/30 has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                                <input type="checkbox" name="follow_miss_scene" value="休眠顧客" class="w-5.5 h-5.5 text-brand-rose rounded shrink-0">
+                                <span>もう何ヶ月も経ってしまったお客様</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 7. 再来店導線チェック -->
+            <section id="sec-7" class="bg-white rounded-2xl border border-brand-rose/10 p-5 md:p-8 shadow-sm scroll-mt-20 lg:scroll-mt-6 hover:shadow-md transition duration-300">
+                <div class="flex items-center gap-3 border-b border-brand-rose/10 pb-4 mb-5">
+                    <span class="flex items-center justify-center w-8 h-8 rounded-full bg-brand-rose text-white text-xs md:text-sm font-bold font-en">07</span>
+                    <h2 class="text-lg md:text-xl font-bold text-brand-charcoal">再来店（リピート）導線チェック</h2>
+                </div>
+
+                <div class="space-y-3 mb-5">
+                    <label class="block text-base font-bold text-brand-charcoal mb-2">当てはまるものすべてにチェックしてください</label>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <label class="flex items-start gap-3.5 text-base cursor-pointer p-3.5 bg-brand-cream/10 border border-stone-100 rounded-xl hover:bg-brand-roselight has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                            <input type="checkbox" name="repeat_flow" value="次回目安毎回通知" class="mt-0.5 w-5.5 h-5.5 text-brand-rose rounded shrink-0">
+                            <span>「次回目安周期」を毎回丁寧にお伝えできている</span>
+                        </label>
+                        <label class="flex items-start gap-3.5 text-base cursor-pointer p-3.5 bg-brand-cream/10 border border-stone-100 rounded-xl hover:bg-brand-roselight has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                            <input type="checkbox" name="repeat_flow" value="次回予約案内" class="mt-0.5 w-5.5 h-5.5 text-brand-rose rounded shrink-0">
+                            <span>お会計時に次回の予約を押し売り感なく案内できている</span>
+                        </label>
+                        <label class="flex items-start gap-3.5 text-base cursor-pointer p-3.5 bg-brand-cream/10 border border-stone-100 rounded-xl hover:bg-brand-roselight has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                            <input type="checkbox" name="repeat_flow" value="継続メニューあり" class="mt-0.5 w-5.5 h-5.5 text-brand-rose rounded shrink-0">
+                            <span>チケットや回数券、お勧めしやすい継続メニューがある</span>
+                        </label>
+                        <label class="flex items-start gap-3.5 text-base cursor-pointer p-3.5 bg-brand-cream/10 border border-stone-100 rounded-xl hover:bg-brand-roselight has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                            <input type="checkbox" name="repeat_flow" value="個別悩み提案" class="mt-0.5 w-5.5 h-5.5 text-brand-rose rounded shrink-0">
+                            <span>お客様個々の悩みに応じた次回提案ができている</span>
+                        </label>
+                        <label class="flex items-start gap-3.5 text-base cursor-pointer p-3.5 bg-brand-cream/10 border border-stone-100 rounded-xl hover:bg-brand-roselight has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                            <input type="checkbox" name="repeat_flow" value="来店のきっかけ作り" class="mt-0.5 w-5.5 h-5.5 text-brand-rose rounded shrink-0">
+                            <span>セルフケアやご自愛プラン等「再来店したくなる理由」を作れている</span>
+                        </label>
+                        <label class="flex items-start gap-3.5 text-base cursor-pointer p-3.5 bg-brand-cream/10 border border-stone-100 rounded-xl hover:bg-brand-roselight has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                            <input type="checkbox" name="repeat_flow" value="LINEの再来店案内" class="mt-0.5 w-5.5 h-5.5 text-brand-rose rounded shrink-0">
+                            <span>公式LINEに再来店につながる配信ステップがある</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-base font-bold text-brand-charcoal mb-2">再来店（リピート）を増やすために、今いちばん改善したいものは何ですか?</label>
+                    <input type="text" id="target_repeat_improvement" placeholder="例: 回数券の販売は苦手なので、次回予約制度を定着させたい。" class="w-full bg-brand-cream/50 focus:bg-white border border-stone-200 rounded-xl px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-brand-rose/30">
+                </div>
+            </section>
+
+            <!-- 8. 口コミ・紹介チェック -->
+            <section id="sec-8" class="bg-white rounded-2xl border border-brand-rose/10 p-5 md:p-8 shadow-sm scroll-mt-20 lg:scroll-mt-6 hover:shadow-md transition duration-300">
+                <div class="flex items-center gap-3 border-b border-brand-rose/10 pb-4 mb-5">
+                    <span class="flex items-center justify-center w-8 h-8 rounded-full bg-brand-rose text-white text-xs md:text-sm font-bold font-en">08</span>
+                    <h2 class="text-lg md:text-xl font-bold text-brand-charcoal">口コミ・紹介チェック</h2>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <div>
+                        <label class="block text-base font-bold text-brand-charcoal mb-3">現在できていること</label>
+                        <!-- 問い8：すべてホバー時に色がふんわり変わり、タップしやすく、選択時にピンクに美しく染まる大統一カード型に変更 -->
+                        <div class="space-y-2.5">
+                            <label class="flex items-start gap-3.5 text-base cursor-pointer p-3.5 bg-brand-cream/30 border border-stone-200/60 rounded-xl hover:bg-brand-roselight hover:border-brand-rose/30 has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                                <input type="checkbox" name="referral_done" value="Google口コミ依頼" class="mt-0.5 w-5.5 h-5.5 text-brand-rose rounded shrink-0">
+                                <span>Googleマップの口コミをお願いしている</span>
+                            </label>
+                            <label class="flex items-start gap-3.5 text-base cursor-pointer p-3.5 bg-brand-cream/30 border border-stone-200/60 rounded-xl hover:bg-brand-roselight hover:border-brand-rose/30 has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                                <input type="checkbox" name="referral_done" value="ポータルサイト口コミ" class="mt-0.5 w-5.5 h-5.5 text-brand-rose rounded shrink-0">
+                                <span>Hot Pepperの口コミをお願いしている</span>
+                            </label>
+                            <label class="flex items-start gap-3.5 text-base cursor-pointer p-3.5 bg-brand-cream/30 border border-stone-200/60 rounded-xl hover:bg-brand-roselight hover:border-brand-rose/30 has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                                <input type="checkbox" name="referral_done" value="依頼テンプレあり" class="mt-0.5 w-5.5 h-5.5 text-brand-rose rounded shrink-0">
+                                <span>口コミを依頼する優しいテンプレがある</span>
+                            </label>
+                            <label class="flex items-start gap-3.5 text-base cursor-pointer p-3.5 bg-brand-cream/30 border border-stone-200/60 rounded-xl hover:bg-brand-roselight hover:border-brand-rose/30 has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                                <input type="checkbox" name="referral_done" value="満足度が高い人に頼む" class="mt-0.5 w-5.5 h-5.5 text-brand-rose rounded shrink-0">
+                                <span>喜んでくださったタイミングでお願いできる</span>
+                            </label>
+                            <label class="flex items-start gap-3.5 text-base cursor-pointer p-3.5 bg-brand-cream/30 border border-stone-200/60 rounded-xl hover:bg-brand-roselight hover:border-brand-rose/30 has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                                <input type="checkbox" name="referral_done" value="QRやリンクを用意" class="mt-0.5 w-5.5 h-5.5 text-brand-rose rounded shrink-0">
+                                <span>URLやQRコードをすぐ送れる準備ができている</span>
+                            </label>
+                            <label class="flex items-start gap-3.5 text-base cursor-pointer p-3.5 bg-brand-cream/30 border border-stone-200/60 rounded-xl hover:bg-brand-roselight hover:border-brand-rose/30 has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                                <input type="checkbox" name="referral_done" value="口コミ返信" class="mt-0.5 w-5.5 h-5.5 text-brand-rose rounded shrink-0">
+                                <span>いただいた口コミへ丁寧に返信を書いている</span>
+                            </label>
+                            <label class="flex items-start gap-3.5 text-base cursor-pointer p-3.5 bg-brand-cream/30 border border-stone-200/60 rounded-xl hover:bg-brand-roselight hover:border-brand-rose/30 has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                                <input type="checkbox" name="referral_done" value="紹介を頼む流れ" class="mt-0.5 w-5.5 h-5.5 text-brand-rose rounded shrink-0">
+                                <span>「お友達やご家族をご紹介ください」と話す流れがある</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="bg-brand-cream/20 p-4 rounded-xl border border-stone-100 flex flex-col justify-between font-sans">
+                        <div>
+                            <label class="block text-base font-bold text-brand-charcoal mb-3">口コミ依頼について、どんなことでお悩みですか？</label>
+                            <div class="space-y-2.5">
+                                <label class="flex items-center gap-3.5 text-base cursor-pointer p-3.5 bg-white border border-stone-200/60 rounded-xl hover:bg-brand-roselight hover:border-brand-rose/30 has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                                    <input type="checkbox" name="referral_issue" value="お願いしづらい" class="w-5.5 h-5.5 text-brand-rose rounded shrink-0">
+                                    <span>「無理に頼んでいる」感じがしてお願いしづらい</span>
+                                </label>
+                                <label class="flex items-center gap-3.5 text-base cursor-pointer p-3.5 bg-white border border-stone-200/60 rounded-xl hover:bg-brand-roselight hover:border-brand-rose/30 has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                                    <input type="checkbox" name="referral_issue" value="文面がわからない" class="w-5.5 h-5.5 text-brand-rose rounded shrink-0">
+                                    <span>なんて書けば角が立たずお願いできるか分からない</span>
+                                </label>
+                                <label class="flex items-center gap-3.5 text-base cursor-pointer p-3.5 bg-white border border-stone-200/60 rounded-xl hover:bg-brand-roselight hover:border-brand-rose/30 has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                                    <input type="checkbox" name="referral_issue" value="タイミング不明" class="w-5.5 h-5.5 text-brand-rose rounded shrink-0">
+                                    <span>送るのにベストなタイミングがよく分からない</span>
+                                </label>
+                                <label class="flex items-center gap-3.5 text-base cursor-pointer p-3.5 bg-white border border-stone-200/60 rounded-xl hover:bg-brand-roselight hover:border-brand-rose/30 has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                                    <input type="checkbox" name="referral_issue" value="スタッフごとにバラバラ" class="w-5.5 h-5.5 text-brand-rose rounded shrink-0">
+                                    <span>スタッフによって対応が違ってしまっている</span>
+                                </label>
+                                <label class="flex items-center gap-3.5 text-base cursor-pointer p-3.5 bg-white border border-stone-200/60 rounded-xl hover:bg-brand-roselight hover:border-brand-rose/30 has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                                    <input type="checkbox" name="referral_issue" value="そもそも出来ていない" class="w-5.5 h-5.5 text-brand-rose rounded shrink-0">
+                                    <span>忙しくて、口コミ依頼がそもそも全然出来ていない</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 9. 属人化チェック -->
+            <section id="sec-9" class="bg-white rounded-2xl border border-brand-rose/10 p-5 md:p-8 shadow-sm scroll-mt-20 lg:scroll-mt-6 hover:shadow-md transition duration-300">
+                <div class="flex items-center gap-3 border-b border-brand-rose/10 pb-4 mb-5">
+                    <span class="flex items-center justify-center w-8 h-8 rounded-full bg-brand-rose text-white text-xs md:text-sm font-bold font-en">09</span>
+                    <h2 class="text-lg md:text-xl font-bold text-brand-charcoal">属人化チェック（特定の人しかできない仕事）</h2>
+                </div>
+
+                <div class="space-y-3 mb-5">
+                    <label class="block text-base font-bold text-brand-charcoal mb-2">当てはまるものすべてにチェックしてください</label>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <label class="flex items-start gap-3.5 text-base cursor-pointer p-3.5 bg-brand-cream/10 border border-stone-100 rounded-xl hover:bg-brand-roselight has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                            <input type="checkbox" name="individual_work" value="オーナーしか対応できない" class="mt-0.5 w-5.5 h-5.5 text-brand-rose rounded shrink-0">
+                            <span>オーナーしか対応できない業務（返信、SNS更新、予約管理）が多すぎる</span>
+                        </label>
+                        <label class="flex items-start gap-3.5 text-base cursor-pointer p-3.5 bg-brand-cream/10 border border-stone-100 rounded-xl hover:bg-brand-roselight has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                            <input type="checkbox" name="individual_work" value="スタッフに任せるのが不安" class="mt-0.5 w-5.5 h-5.5 text-brand-rose rounded shrink-0">
+                            <span>スタッフに連絡・受付対応を任せると文章の品質が心配</span>
+                        </label>
+                        <label class="flex items-start gap-3.5 text-base cursor-pointer p-3.5 bg-brand-cream/10 border border-stone-100 rounded-xl hover:bg-brand-roselight has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                            <input type="checkbox" name="individual_work" value="返信などの型がない" class="mt-0.5 w-5.5 h-5.5 text-brand-rose rounded shrink-0">
+                            <span>返信文やサロン案内の「共通のテンプレ（型）」が存在しない</span>
+                        </label>
+                        <label class="flex items-start gap-3.5 text-base cursor-pointer p-3.5 bg-brand-cream/10 border border-stone-100 rounded-xl hover:bg-brand-roselight has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                            <input type="checkbox" name="individual_work" value="スタッフ教育に時間がかかる" class="mt-0.5 w-5.5 h-5.5 text-brand-rose rounded shrink-0">
+                            <span>マニュアルがなく、教育に多くの時間がかかってしまう</span>
+                        </label>
+                        <label class="flex items-start gap-3.5 text-base cursor-pointer p-3.5 bg-brand-cream/10 border border-stone-100 rounded-xl hover:bg-brand-roselight has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                            <input type="checkbox" name="individual_work" value="マニュアルが皆無" class="mt-0.5 w-5.5 h-5.5 text-brand-rose rounded shrink-0">
+                            <span>業務フロー、カウンセリングなどのマニュアルが整備されていない</span>
+                        </label>
+                        <label class="flex items-start gap-3.5 text-base cursor-pointer p-3.5 bg-brand-cream/10 border border-stone-100 rounded-xl hover:bg-brand-roselight has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                            <input type="checkbox" name="individual_work" value="休みの日も返信対応" class="mt-0.5 w-5.5 h-5.5 text-brand-rose rounded shrink-0">
+                            <span>お休みの日でもスマホが気になり、メッセージ返信をしてしまう</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-base font-bold text-brand-charcoal mb-2">特に「自分にしかできない状態（属人化）」になっている業務は何ですか？</label>
+                    <input type="text" id="individual_work_detail" placeholder="例: LINEでの個別カウンセリング、Instagram of 投稿文作成" class="w-full bg-brand-cream/50 focus:bg-white border border-stone-200 rounded-xl px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-brand-rose/30">
+                </div>
+            </section>
+
+            <!-- 10. AIで整えやすい業務チェック -->
+            <section id="sec-10" class="bg-white rounded-2xl border border-brand-rose/10 p-5 md:p-8 shadow-sm scroll-mt-20 lg:scroll-mt-6 hover:shadow-md transition duration-300">
+                <div class="flex items-center gap-3 border-b border-brand-rose/10 pb-4 mb-5">
+                    <span class="flex items-center justify-center w-8 h-8 rounded-full bg-brand-rose text-white text-xs md:text-sm font-bold font-en">10</span>
+                    <h2 class="text-lg md:text-xl font-bold text-brand-charcoal">AIで整えやすい業務チェック</h2>
+                </div>
+
+                <div class="mb-5">
+                    <p class="text-base font-bold text-brand-charcoal mb-3">AI（または共通のテンプレート）を使ってラクにしたい業務</p>
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-2">
+                        <label class="flex items-center gap-2.5 text-base cursor-pointer p-3.5 bg-brand-cream/10 border border-stone-200/50 rounded-xl hover:bg-brand-roselight has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200"><input type="checkbox" name="ai_target_work" value="予約返信" class="w-5.5 h-5.5 text-brand-rose rounded shrink-0"><span>予約返信のテンプレ</span></label>
+                        <label class="flex items-center gap-2.5 text-base cursor-pointer p-3.5 bg-brand-cream/10 border border-stone-200/50 rounded-xl hover:bg-brand-roselight has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200"><input type="checkbox" name="ai_target_work" value="事前案内" class="w-5.5 h-5.5 text-brand-rose rounded shrink-0"><span>来店前の事前案内文</span></label>
+                        <label class="flex items-center gap-2.5 text-base cursor-pointer p-3.5 bg-brand-cream/10 border border-stone-200/50 rounded-xl hover:bg-brand-roselight has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200"><input type="checkbox" name="ai_target_work" value="施術お礼メッセージ" class="w-5.5 h-5.5 text-brand-rose rounded shrink-0"><span>施術後お礼メッセージ</span></label>
+                        <label class="flex items-center gap-2.5 text-base cursor-pointer p-3.5 bg-brand-cream/10 border border-stone-200/50 rounded-xl hover:bg-brand-roselight has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200"><input type="checkbox" name="ai_target_work" value="再来店フォロー文" class="w-5.5 h-5.5 text-brand-rose rounded shrink-0"><span>再来店フォロー文</span></label>
+                        <label class="flex items-center gap-2.5 text-base cursor-pointer p-3.5 bg-brand-cream/10 border border-stone-200/50 rounded-xl hover:bg-brand-roselight has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200"><input type="checkbox" name="ai_target_work" value="口コミ依頼文" class="w-5.5 h-5.5 text-brand-rose rounded shrink-0"><span>口コミ依頼の文面</span></label>
+                        <label class="flex items-center gap-2.5 text-base cursor-pointer p-3.5 bg-brand-cream/10 border border-stone-200/50 rounded-xl hover:bg-brand-roselight has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200"><input type="checkbox" name="ai_target_work" value="LINE一斉配信" class="w-5.5 h-5.5 text-brand-rose rounded shrink-0"><span>LINE一斉配信の作成</span></label>
+                        <label class="flex items-center gap-2.5 text-base cursor-pointer p-3.5 bg-brand-cream/10 border border-stone-200/50 rounded-xl hover:bg-brand-roselight has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200"><input type="checkbox" name="ai_target_work" value="インスタ投稿・ネタ" class="w-5.5 h-5.5 text-brand-rose rounded shrink-0"><span>インスタの投稿文</span></label>
+                        <label class="flex items-center gap-2.5 text-base cursor-pointer p-3.5 bg-brand-cream/10 border border-stone-200/50 rounded-xl hover:bg-brand-roselight has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200"><input type="checkbox" name="ai_target_work" value="メニュー説明文" class="w-5.5 h-5.5 text-brand-rose rounded shrink-0"><span>メニューやクーポン説明</span></label>
+                        <label class="flex items-center gap-2.5 text-base cursor-pointer p-3.5 bg-brand-cream/10 border border-stone-200/50 rounded-xl hover:bg-brand-roselight has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200"><input type="checkbox" name="ai_target_work" value="スタッフ用マニュアル" class="w-5.5 h-5.5 text-brand-rose rounded shrink-0"><span>共通マニュアル作成</span></label>
+                        <label class="flex items-center gap-2.5 text-base cursor-pointer p-3.5 bg-brand-cream/10 border border-stone-200/50 rounded-xl hover:bg-brand-roselight has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200"><input type="checkbox" name="ai_target_work" value="よくある質問への返信文" class="w-5.5 h-5.5 text-brand-rose rounded shrink-0"><span>よくある質問の回答文</span></label>
+                        <label class="flex items-center gap-2.5 text-base cursor-pointer p-3.5 bg-brand-cream/10 border border-stone-200/50 rounded-xl hover:bg-brand-roselight has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200"><input type="checkbox" name="ai_target_work" value="休眠客へのアプローチ文" class="w-5.5 h-5.5 text-brand-rose rounded shrink-0"><span>休眠客へのアプローチ</span></label>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-base font-bold text-brand-charcoal mb-2">「まずはここからAIで整えてみたい！」と思うものを1つ教えてください</label>
+                    <input type="text" id="ai_first_step" placeholder="例: 毎回お一人おひとりに優しく気持ちが伝わる『施術直後のお礼＋状態お伺いメッセージ』をラクに作りたい" class="w-full bg-brand-cream/50 focus:bg-white border border-stone-200 rounded-xl px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-brand-rose/30">
+                </div>
+            </section>
+
+            <!-- 11. 優先改善スコア -->
+            <section id="sec-11" class="bg-white rounded-2xl border border-brand-rose/10 p-5 md:p-8 shadow-sm scroll-mt-20 lg:scroll-mt-6 hover:shadow-md transition duration-300">
+                <div class="flex items-center gap-3 border-b border-brand-rose/10 pb-4 mb-3">
+                    <span class="flex items-center justify-center w-8 h-8 rounded-full bg-brand-rose text-white text-xs md:text-sm font-bold font-en">11</span>
+                    <h2 class="text-lg md:text-xl font-bold text-brand-charcoal">優先改善スコア</h2>
+                </div>
+                <div class="text-base text-brand-charcoal font-medium bg-brand-sagelight/90 border border-brand-sage/20 p-4 rounded-xl mb-5 leading-relaxed shadow-inner">
+                    <div class="flex gap-2 items-start">
+                        <i data-lucide="help-circle" class="w-5 h-5 text-brand-sage shrink-0 mt-0.5"></i>
+                        <span>改善したい業務を書き出して、点数（1〜5点）をスライドしてみてください。合計点数が高いものほど、<b>「優先して仕組み化・効率化するべきお仕事」</b>になります。<br><b class="text-brand-rose">※スマホの誤作動を完全に防止するため、スマホで操作するときのみスライダーを「1.0秒グッと長押し」すると、ぷるぷる振動してピンク色のロックが解除され、数値を安全にスライド変更できるようになります。ちょいタップでは数値は変更されません（PCはいつでもそのまま動かせます）。</b></span>
+                    </div>
+                </div>
+
+                <!-- インタラクティブなスコアシート -->
+                <div class="space-y-4">
+                    <!-- 例 -->
+                    <div class="bg-brand-cream/30 p-4 rounded-xl border border-stone-200/50 relative overflow-hidden">
+                        <span class="absolute top-0 right-0 bg-stone-300 text-stone-700 text-[9px] px-2 py-0.5 rounded-bl-lg font-bold">参考例</span>
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-2">
+                            <span class="font-bold text-base text-brand-charcoal/80">業務名: 再来店フォローメッセージの送付</span>
+                            <span class="text-xs font-bold text-brand-rose bg-brand-roselight px-2 py-0.5 rounded-full w-fit">
+                                合計優先スコア: <span class="font-en text-base">17</span> / 20
+                            </span>
+                        </div>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-2 text-base text-stone-600">
+                            <div>頻度: 5点 (ほぼ毎日)</div>
+                            <div>時間: 3点 (まあまあ負担)</div>
+                            <div>売上: 5点 (売上に直結)</div>
+                            <div>属人: 4点 (特定の人しかできない)</div>
+                        </div>
+                    </div>
+
+                    <!-- スコア調整ブロック -->
+                    <div id="scoreContainer" class="space-y-4">
+                        <div class="score-row bg-white p-4 md:p-5 rounded-xl border border-brand-rose/20 shadow-sm relative space-y-4">
+                            <div class="flex items-center justify-between gap-3 flex-wrap">
+                                <div class="flex items-center gap-2 flex-grow min-w-[200px]">
+                                    <span class="w-2 h-2 rounded-full bg-brand-rose shrink-0"></span>
+                                    <input type="text" placeholder="改善したい業務名を入力してください" class="row-title w-full bg-brand-cream/40 border-b border-stone-200 px-2 py-1 text-base focus:outline-none focus:border-brand-rose font-bold font-sans">
+                                </div>
+                                <div class="bg-brand-roselight px-4 py-1.5 rounded-full flex items-center gap-1.5 ml-auto shadow-sm">
+                                    <span class="text-base font-bold text-brand-charcoal/80">優先スコア:</span>
+                                    <span class="row-total font-en font-bold text-brand-rose text-lg md:text-xl">4</span>
+                                    <span class="text-base text-brand-charcoal/40 font-en">/ 20</span>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-5 pt-1">
+                                <!-- スライダー1 -->
+                                <div class="space-y-2 bg-brand-cream/10 p-3 rounded-xl border border-stone-100">
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-base font-bold text-brand-charcoal">① 頻度の高さ（よくやる？）</span>
+                                        <span class="text-base font-bold bg-brand-roselight text-brand-rose px-2.5 py-0.5 rounded-full border border-brand-rose/20 font-en shadow-sm"><span class="val-display">1</span>点</span>
+                                    </div>
+                                    <div class="py-1 relative px-1">
+                                        <input type="range" min="1" max="5" value="1" class="slider-frequency w-full h-2.5 bg-stone-100 rounded-lg appearance-none cursor-pointer">
+                                        <div class="flex justify-between text-xs font-bold text-stone-400 font-en px-1 mt-1">
+                                            <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- スライダー2 -->
+                                <div class="space-y-2 bg-brand-cream/10 p-3 rounded-xl border border-stone-100">
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-base font-bold text-brand-charcoal">② 時間負担（時間がかかる）</span>
+                                        <span class="text-sm font-bold bg-brand-roselight text-brand-rose px-2.5 py-0.5 rounded-full border border-brand-rose/20 font-en shadow-sm"><span class="val-display">1</span>点</span>
+                                    </div>
+                                    <div class="py-1 relative px-1">
+                                        <input type="range" min="1" max="5" value="1" class="slider-time w-full h-2.5 bg-stone-100 rounded-lg appearance-none cursor-pointer">
+                                        <div class="flex justify-between text-xs font-bold text-stone-400 font-en px-1 mt-1">
+                                            <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- スライダー3 -->
+                                <div class="space-y-2 bg-brand-cream/10 p-3 rounded-xl border border-stone-100">
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-base font-bold text-brand-charcoal">③ 売上影響（売上に直結する）</span>
+                                        <span class="text-sm font-bold bg-brand-roselight text-brand-rose px-2.5 py-0.5 rounded-full border border-brand-rose/20 font-en shadow-sm"><span class="val-display">1</span>点</span>
+                                    </div>
+                                    <div class="py-1 relative px-1">
+                                        <input type="range" min="1" max="5" value="1" class="slider-revenue w-full h-2.5 bg-stone-100 rounded-lg appearance-none cursor-pointer">
+                                        <div class="flex justify-between text-xs font-bold text-stone-400 font-en px-1 mt-1">
+                                            <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- スライダー4 -->
+                                <div class="space-y-2 bg-brand-cream/10 p-3 rounded-xl border border-stone-100">
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-base font-bold text-brand-charcoal">④ 属人化（特定の人しかできない）</span>
+                                        <span class="text-sm font-bold bg-brand-roselight text-brand-rose px-2.5 py-0.5 rounded-full border border-brand-rose/20 font-en shadow-sm"><span class="val-display">1</span>点</span>
+                                    </div>
+                                    <div class="py-1 relative px-1">
+                                        <input type="range" min="1" max="5" value="1" class="slider-dependence w-full h-2.5 bg-stone-100 rounded-lg appearance-none cursor-pointer">
+                                        <div class="flex justify-between text-xs font-bold text-stone-400 font-en px-1 mt-1">
+                                            <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 行の追加ボタン -->
+                    <button type="button" onclick="addScoreRow()" class="flex items-center justify-center gap-2 w-full border border-dashed border-brand-rose/40 text-brand-rose hover:bg-brand-roselight font-bold text-base py-4 rounded-xl transition duration-300 shadow-sm">
+                        <i data-lucide="plus-circle" class="w-4.5 h-4.5"></i>
+                        新しい改善項目をシートに追加する
+                    </button>
+                </div>
+            </section>
+
+            <!-- 12. 診断結果のまとめ欄 -->
+            <section id="sec-12" class="bg-white rounded-2xl border border-brand-rose/10 p-5 md:p-8 shadow-sm scroll-mt-20 lg:scroll-mt-6 hover:shadow-md transition duration-300">
+                <div class="flex items-center gap-3 border-b border-brand-rose/10 pb-4 mb-5">
+                    <span class="flex items-center justify-center w-8 h-8 rounded-full bg-brand-rose text-white text-xs md:text-sm font-bold font-en">12</span>
+                    <h2 class="text-lg md:text-xl font-bold text-brand-charcoal">診断結果のまとめ</h2>
+                </div>
+
+                <div class="mb-5">
+                    <label class="block text-base font-bold text-brand-charcoal mb-3">振り返ってみて、ご自身のサロンの「現在の主な課題」はどれだと思いますか？ (複数選択可)</label>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                        <label class="flex items-center gap-3.5 text-base cursor-pointer p-3.5 bg-brand-cream/10 border border-stone-200/50 rounded-xl hover:bg-brand-roselight has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200"><input type="checkbox" name="summary_issue" value="反復業務が多い" class="w-5.5 h-5.5 text-brand-rose rounded shrink-0"><span>日々の同じような反復業務が多い</span></label>
+                        <label class="flex items-center gap-3.5 text-base cursor-pointer p-3.5 bg-brand-cream/10 border border-stone-200/50 rounded-xl hover:bg-brand-roselight has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200"><input type="checkbox" name="summary_issue" value="文章作成が多い" class="w-5.5 h-5.5 text-brand-rose rounded shrink-0"><span>毎回文章を考える時間が多い</span></label>
+                        <label class="flex items-center gap-3.5 text-base cursor-pointer p-3.5 bg-brand-cream/10 border border-stone-200/50 rounded-xl hover:bg-brand-roselight has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200"><input type="checkbox" name="summary_issue" value="顧客フォローが弱い" class="w-5.5 h-5.5 text-brand-rose rounded shrink-0"><span>来店前後の顧客フォローが抜けがち</span></label>
+                        <label class="flex items-center gap-3.5 text-base cursor-pointer p-3.5 bg-brand-cream/10 border border-stone-200/50 rounded-xl hover:bg-brand-roselight has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200"><input type="checkbox" name="summary_issue" value="再来店導線が弱い" class="w-5.5 h-5.5 text-brand-rose rounded shrink-0"><span>次回来店したくなる予約導線が弱い</span></label>
+                        <label class="flex items-center gap-3.5 text-base cursor-pointer p-3.5 bg-brand-cream/10 border border-stone-200/50 rounded-xl hover:bg-brand-roselight has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200"><input type="checkbox" name="summary_issue" value="媒体依存度が高い" class="w-5.5 h-5.5 text-brand-rose rounded shrink-0"><span>特定の予約サイト（媒体）の依存が重い</span></label>
+                        <label class="flex items-center gap-3.5 text-base cursor-pointer p-3.5 bg-brand-cream/10 border border-stone-200/50 rounded-xl hover:bg-brand-roselight has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200"><input type="checkbox" name="summary_issue" value="口コミ導線が弱い" class="w-5.5 h-5.5 text-brand-rose rounded shrink-0"><span>Google口コミなどを増やす流れがない</span></label>
+                        <label class="flex items-center gap-3.5 text-base cursor-pointer p-3.5 bg-brand-cream/10 border border-stone-200/50 rounded-xl hover:bg-brand-roselight has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200"><input type="checkbox" name="summary_issue" value="業務が属人化している" class="w-5.5 h-5.5 text-brand-rose rounded shrink-0"><span>オーナーにしか任せられない業務が多い</span></label>
+                        <label class="flex items-center gap-3.5 text-base cursor-pointer p-3.5 bg-brand-cream/10 border border-stone-200/50 rounded-xl hover:bg-brand-roselight has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200"><input type="checkbox" name="summary_issue" value="発信が続かない" class="w-5.5 h-5.5 text-brand-rose rounded shrink-0"><span>Instagramやブログの発信が途切れる</span></label>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <div>
+                        <label class="block text-base font-bold text-brand-charcoal mb-2">あなたが「最初に整えるべき」だと思う業務はなんですか？</label>
+                        <textarea id="first_to_fix" rows="2" placeholder="例: 1. 施術直後のお礼メッセージテンプレート化&#10;2. 口コミを自然にお願いするLINE配信の流れ" class="w-full bg-brand-cream/50 focus:bg-white border border-stone-200 rounded-xl px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-brand-rose/30"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-base font-bold text-brand-charcoal mb-2">業務を整えて効率化した後、どのようなサロンの姿を目指したいですか？</label>
+                        <textarea id="future_vision" rows="2" placeholder="例: 面倒な事務作業から解放され、目の前のお客様の施術やおおおもてなしに、心穏やかに時間を使えるようになりたい。" class="w-full bg-brand-cream/50 focus:bg-white border border-stone-200 rounded-xl px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-brand-rose/30"></textarea>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 13. 次の一歩 -->
+            <section id="sec-13" class="bg-white rounded-2xl border border-brand-rose/10 p-5 md:p-8 shadow-sm scroll-mt-20 lg:scroll-mt-6 hover:shadow-md transition duration-300">
+                <div class="flex items-center gap-3 border-b border-brand-rose/10 pb-4 mb-5">
+                    <span class="flex items-center justify-center w-8 h-8 rounded-full bg-brand-rose text-white text-xs md:text-sm font-bold font-en">13</span>
+                    <h2 class="text-lg md:text-xl font-bold text-brand-charcoal">次の一歩に向けて</h2>
+                </div>
+
+                <div class="space-y-4 mb-5">
+                    <label class="block text-base font-bold text-brand-charcoal">今後、ご興味や関心があるものを教えてください (複数選択可)</label>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <label class="flex items-start gap-3.5 text-base cursor-pointer p-4 bg-brand-cream/10 border border-stone-100 rounded-xl hover:bg-brand-roselight has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                            <input type="checkbox" name="next_step" value="簡単なアドバイスがほしい" class="mt-0.5 w-5.5 h-5.5 text-brand-rose rounded shrink-0">
+                            <span>まずは今の課題に対して簡単な改善コメントがほしい</span>
+                        </label>
+                        <label class="flex items-start gap-3.5 text-base cursor-pointer p-4 bg-brand-cream/10 border border-stone-100 rounded-xl hover:bg-brand-roselight has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                            <input type="checkbox" name="next_step" value="改善ポイントを知りたい" class="mt-0.5 w-5.5 h-5.5 text-brand-rose rounded shrink-0">
+                            <span>サロン独自のパーソナル改善ロードマップを具体的に知りたい</span>
+                        </label>
+                        <label class="flex items-start gap-3.5 text-base cursor-pointer p-4 bg-brand-cream/10 border border-stone-100 rounded-xl hover:bg-brand-roselight has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                            <input type="checkbox" name="next_step" value="AIで文章を作りたい" class="mt-0.5 w-5.5 h-5.5 text-brand-rose rounded shrink-0">
+                            <span>AIを使って自分にぴったりな返信文やフォロー文の仕組みを作りたい</span>
+                        </label>
+                        <label class="flex items-start gap-3.5 text-base cursor-pointer p-4 bg-brand-cream/10 border border-stone-100 rounded-xl hover:bg-brand-roselight has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                            <input type="checkbox" name="next_step" value="フォロー導線を整えたい" class="mt-0.5 w-5.5 h-5.5 text-brand-rose rounded shrink-0">
+                            <span>LINEを活用して予約忘れ・フォロー漏れが起きない導線を構築したい</span>
+                        </label>
+                        <label class="flex items-start gap-3.5 text-base cursor-pointer p-4 bg-brand-cream/10 border border-stone-100 rounded-xl hover:bg-brand-roselight has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                            <input type="checkbox" name="next_step" value="媒体費依存を下げたい" class="mt-0.5 w-5.5 h-5.5 text-brand-rose rounded shrink-0">
+                            <span>Hot Pepper掲載料に依存しない、自社リスト（LINE/紹介）集客力を高めたい</span>
+                        </label>
+                        <label class="flex items-start gap-3.5 text-base cursor-pointer p-4 bg-brand-cream/10 border border-stone-100 rounded-xl hover:bg-brand-roselight has-[:checked]:bg-brand-roselight has-[:checked]:border-brand-rose transition duration-200">
+                            <input type="checkbox" name="next_step" value="個別相談を受けたい" class="mt-0.5 w-5.5 h-5.5 text-brand-rose rounded shrink-0">
+                            <span>一度サロンの状況についてじっくり個別相談をしてみたい</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-base font-bold text-brand-charcoal mb-2">その他、ご自由に疑問や聞いてみたいことをご記入ください</label>
+                    <textarea id="free_question" rows="3" placeholder="例: 一人きりのサロンなのでパソコン作業が苦手です。それでもAIなどを導入して効果が出るでしょうか？" class="w-full bg-brand-cream/50 focus:bg-white border border-stone-200 rounded-xl px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-brand-rose/30"></textarea>
+                </div>
+            </section>
+
+            <!-- 診断ボタンエリア -->
+            <div class="text-center py-4 no-print">
+                <button type="button" onclick="generateDiagnosticReport()" class="group relative overflow-hidden bg-brand-rose hover:bg-brand-rose/90 text-white font-bold text-base md:text-lg px-8 py-4 md:px-12 md:py-5 rounded-2xl shadow-md hover:shadow-xl transition duration-300 w-full md:w-auto">
+                    <span class="relative z-10 flex items-center justify-center gap-2">
+                        <i data-lucide="send" class="w-5 h-5 animate-pulse"></i>
+                        結果を送信する
+                    </span>
+                    <span class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></span>
+                </button>
+            </div>
+
+            <!-- AI生成中ローディング -->
+            <div id="loadingArea" class="hidden no-print text-center py-10 bg-white rounded-2xl border border-brand-rose/10 p-5 shadow-sm">
+                <div class="inline-block relative w-12 h-12">
+                    <div class="absolute inset-0 rounded-full border-4 border-brand-rose/20 animate-ping"></div>
+                    <div class="absolute inset-0 rounded-full border-4 border-t-brand-rose animate-spin"></div>
+                </div>
+                <h3 class="font-bold text-brand-charcoal mt-5 text-sm md:text-base">サロンカルテを丁寧に作成しています...</h3>
+                <p class="text-[11px] md:text-xs text-brand-charcoal/70 mt-2 max-w-sm mx-auto leading-relaxed px-4">
+                    ハーブティーを一口飲んで、10秒〜15秒ほどリラックスしてお待ちください。あなたらしく輝けるサロン運営 of ヒントを、やさしく言葉にしてお届けします。
+                </p>
+            </div>
+
+            <!-- 診断結果表示エリア -->
+            <div id="resultArea" class="hidden bg-white rounded-2xl border-2 border-brand-rose/40 p-5 md:p-8 shadow-xl scroll-mt-20 lg:scroll-mt-6">
+                <div class="flex items-center justify-between border-b border-brand-rose/20 pb-4 mb-5 flex-wrap gap-3">
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-9 h-9 rounded-full bg-brand-rose flex items-center justify-center text-white">
+                            <i data-lucide="sparkles" class="w-4.5 h-4.5"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-sm md:text-xl font-bold text-brand-charcoal">あなただけのサロン改善診断カルテ</h2>
+                            <p class="text-[10px] text-brand-charcoal/60 font-en">AI Support & Salon DX Diagnosis Card</p>
+                        </div>
+                    </div>
+                    <!-- 操作ボタン (印刷 & コピー) -->
+                    <div class="flex items-center gap-1.5 no-print ml-auto">
+                        <button type="button" onclick="copyResultText()" class="text-[11px] flex items-center gap-1.5 border border-stone-200 hover:bg-stone-50 px-2.5 py-1.5 rounded-lg text-stone-600 transition">
+                            <i data-lucide="copy" class="w-3 h-3"></i>
+                            <span>コピー</span>
+                        </button>
+                        <button type="button" onclick="window.print()" class="text-[11px] flex items-center gap-1.5 bg-brand-sagelight text-brand-sage hover:bg-brand-sage hover:text-white px-2.5 py-1.5 rounded-lg font-bold transition">
+                            <i data-lucide="printer" class="w-3 h-3"></i>
+                            <span>印刷 / 保存</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 診断カルテの中身 -->
+                <div id="resultContent" class="prose prose-sm max-w-none text-brand-charcoal leading-relaxed space-y-5 px-1 text-base">
+                    <!-- ここに動的に診断結果が入ります -->
+                </div>
+
+                <!-- 診断結果下の特別な案内導線 -->
+                <div class="mt-6 pt-5 border-t border-brand-rose/20 bg-brand-roselight/50 p-5 rounded-2xl border border-brand-rose/10 no-print">
+                    <h3 class="font-bold text-brand-charcoal text-sm md:text-base flex items-center gap-2 mb-2">
+                        <i data-lucide="info" class="w-4.5 h-4.5 text-brand-rose"></i>
+                        個別診断＆AIお試し体験のご案内
+                    </h3>
+                    <p class="text-xs md:text-sm text-brand-charcoal/80 leading-relaxed mb-4">
+                        こちらのシートを送信、または画面を保存して個別相談へお持ちいただくと、本日診断した<b>「お礼メッセージ等のAI作成テンプレの調整」や、「LINEの具体的な自動配信ステップ設計」</b>をマンツーマンで無料実演サポートいたします。
+                    </p>
+                    <div class="text-center">
+                        <a href="#sec-13" class="inline-block bg-brand-sage hover:bg-brand-sage/95 text-white font-bold text-xs md:text-sm px-5 py-3 rounded-xl shadow-sm transition">
+                            個別相談・AIサポートの詳細について確認する
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </main>
+
+    <!-- フッター（米印※から始まる1行を全てカット） -->
+    <footer class="bg-brand-cream border-t border-brand-rose/10 py-6 px-4 text-center text-[11px] text-brand-charcoal/60 mt-10 no-print">
+        <div class="max-w-4xl mx-auto space-y-1">
+            <p>© サロン業務スマート化推進サポート All Rights Reserved.</p>
         </div>
-        <label for="free-issue">具体的に困っていること</label>
-        <textarea id="free-issue" placeholder="例：施術後のお礼LINEや再来店案内を毎回考えるのが大変です。"></textarea>
-      </section>
+    </footer>
 
-      <section>
-        <h2>3. 業務の負担</h2>
-        <div class="grid">
-          <div>
-            <label for="message-load">文章作成の負担</label>
-            <select id="message-load">
-              <option value="3">かなり負担</option>
-              <option value="2">少し負担</option>
-              <option value="1">あまり負担ではない</option>
-            </select>
-          </div>
-          <div>
-            <label for="follow-load">フォロー漏れの不安</label>
-            <select id="follow-load">
-              <option value="3">かなりある</option>
-              <option value="2">少しある</option>
-              <option value="1">あまりない</option>
-            </select>
-          </div>
-          <div>
-            <label for="ad-load">広告・媒体費の重さ</label>
-            <select id="ad-load">
-              <option value="3">かなり重い</option>
-              <option value="2">少し重い</option>
-              <option value="1">あまり重くない</option>
-            </select>
-          </div>
-          <div>
-            <label for="manual-load">手作業の多さ</label>
-            <select id="manual-load">
-              <option value="3">かなり多い</option>
-              <option value="2">少し多い</option>
-              <option value="1">少ない</option>
-            </select>
-          </div>
-        </div>
-      </section>
+    <!-- JS処理用ロジック -->
+    <script>
+        // Lucideアイコンの初期化
+        lucide.createIcons();
 
-      <section>
-        <h2>4. これから整えたいこと</h2>
-        <div class="choices">
-          <label class="choice"><input type="checkbox" name="next" value="お礼メッセージをテンプレート化したい">お礼メッセージをテンプレート化したい</label>
-          <label class="choice"><input type="checkbox" name="next" value="LINEのステップ配信を作りたい">LINEのステップ配信を作りたい</label>
-          <label class="choice"><input type="checkbox" name="next" value="口コミ依頼の流れを整えたい">口コミ依頼の流れを整えたい</label>
-          <label class="choice"><input type="checkbox" name="next" value="個別相談で具体的に見直したい">個別相談で具体的に見直したい</label>
-        </div>
-        <button type="submit">診断結果を作成する</button>
-      </section>
-    </form>
+        // API設定
+        const apiKey = ""; // 定義のみ、実行時に自動注入
+        
+        // 優先改善スコアの動的な追加用テンプレート
+        function addScoreRow() {
+            const container = document.getElementById('scoreContainer');
+            const rowCount = container.querySelectorAll('.score-row').length + 1;
+            
+            const newRow = document.createElement('div');
+            newRow.className = "score-row bg-white p-4 rounded-xl border border-stone-200 shadow-sm relative space-y-4 transition duration-300 hover:border-brand-rose/20";
+            newRow.innerHTML = `
+                <button type="button" onclick="this.closest('.score-row').remove(); updateProgress();" class="absolute top-2 right-2 text-stone-400 hover:text-red-400 transition p-1" title="削除">
+                    <i data-lucide="trash-2" class="w-4 h-4 text-brand-charcoal"></i>
+                </button>
+                <div class="flex items-center justify-between gap-3 flex-wrap">
+                    <div class="flex items-center gap-2 flex-grow min-w-[200px]">
+                        <span class="w-2 h-2 rounded-full bg-brand-sage shrink-0"></span>
+                        <input type="text" placeholder="改善したい業務名を入力してください" class="row-title w-full bg-brand-cream/40 border-b border-stone-200 px-2 py-1 text-base focus:outline-none focus:border-brand-rose font-bold font-sans">
+                    </div>
+                    <div class="bg-brand-sagelight px-4 py-1.5 rounded-full flex items-center gap-1.5 ml-auto shadow-sm">
+                        <span class="text-xs font-bold text-brand-charcoal/70">優先スコア:</span>
+                        <span class="row-total font-en font-bold text-brand-sage text-lg md:text-xl">4</span>
+                        <span class="text-xs text-brand-charcoal/40 font-en">/ 20</span>
+                    </div>
+                </div>
 
-    <section id="result" class="result">
-      <h2>診断結果</h2>
-      <div class="card" id="result-body"></div>
-      <div class="actions">
-        <button type="button" class="sub" onclick="window.print()">印刷・PDF保存</button>
-        <a class="button" href="https://lin.ee/SHmdTyU">LINEへ戻る</a>
-      </div>
-    </section>
-  </main>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5 pt-1">
+                    <div class="space-y-2 bg-brand-cream/10 p-3 rounded-xl border border-stone-100">
+                        <div class="flex justify-between items-center">
+                            <span class="text-base font-bold text-brand-charcoal">① 頻度の高さ（よくやる？）</span>
+                            <span class="text-base font-bold bg-brand-roselight text-brand-rose px-2.5 py-0.5 rounded-full border border-brand-rose/20 font-en shadow-sm"><span class="val-display">1</span>点</span>
+                        </div>
+                        <div class="py-1 relative px-1">
+                            <input type="range" min="1" max="5" value="1" class="slider-frequency w-full h-2.5 bg-stone-100 rounded-lg appearance-none cursor-pointer">
+                            <div class="flex justify-between text-xs font-bold text-stone-400 font-en px-1 mt-1">
+                                <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span>
+                            </div>
+                        </div>
+                    </div>
 
-  <script>
-    const form = document.getElementById('diagnosis-form');
-    const result = document.getElementById('result');
-    const resultBody = document.getElementById('result-body');
+                    <div class="space-y-2 bg-brand-cream/10 p-3 rounded-xl border border-stone-100">
+                        <div class="flex justify-between items-center">
+                            <span class="text-base font-bold text-brand-charcoal">② 時間負担（時間がかかる）</span>
+                            <span class="text-sm font-bold bg-brand-roselight text-brand-rose px-2.5 py-0.5 rounded-full border border-brand-rose/20 font-en shadow-sm"><span class="val-display">1</span>点</span>
+                        </div>
+                        <div class="py-1 relative px-1">
+                            <input type="range" min="1" max="5" value="1" class="slider-time w-full h-2.5 bg-stone-100 rounded-lg appearance-none cursor-pointer">
+                            <div class="flex justify-between text-xs font-bold text-stone-400 font-en px-1 mt-1">
+                                <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span>
+                            </div>
+                        </div>
+                    </div>
 
-    function checkedValues(name) {
-      return Array.from(document.querySelectorAll(`input[name="${name}"]:checked`)).map(el => el.value);
-    }
+                    <div class="space-y-2 bg-brand-cream/10 p-3 rounded-xl border border-stone-100">
+                        <div class="flex justify-between items-center">
+                            <span class="text-base font-bold text-brand-charcoal">③ 売上影響（売上に直結する）</span>
+                            <span class="text-sm font-bold bg-brand-roselight text-brand-rose px-2.5 py-0.5 rounded-full border border-brand-rose/20 font-en shadow-sm"><span class="val-display">1</span>点</span>
+                        </div>
+                        <div class="py-1 relative px-1">
+                            <input type="range" min="1" max="5" value="1" class="slider-revenue w-full h-2.5 bg-stone-100 rounded-lg appearance-none cursor-pointer">
+                            <div class="flex justify-between text-xs font-bold text-stone-400 font-en px-1 mt-1">
+                                <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span>
+                            </div>
+                        </div>
+                    </div>
 
-    function escapeHtml(value) {
-      return String(value || '').replace(/[&<>"]/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[char]));
-    }
+                    <div class="space-y-2 bg-brand-cream/10 p-3 rounded-xl border border-stone-100">
+                        <div class="flex justify-between items-center">
+                            <span class="text-base font-bold text-brand-charcoal">④ 属人化（特定の人しかできない）</span>
+                            <span class="text-sm font-bold bg-brand-roselight text-brand-rose px-2.5 py-0.5 rounded-full border border-brand-rose/20 font-en shadow-sm"><span class="val-display">1</span>点</span>
+                        </div>
+                        <div class="py-1 relative px-1">
+                            <input type="range" min="1" max="5" value="1" class="slider-dependence w-full h-2.5 bg-stone-100 rounded-lg appearance-none cursor-pointer">
+                            <div class="flex justify-between text-xs font-bold text-stone-400 font-en px-1 mt-1">
+                                <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            container.appendChild(newRow);
+            
+            // 新しく追加されたスライダーにもロック解除システムを確実に登録
+            newRow.querySelectorAll('input[type="range"]').forEach(setupSliderTouchLock);
+            
+            lucide.createIcons();
+            initSliders();
+            updateProgress();
+        }
 
-    form.addEventListener('submit', (event) => {
-      event.preventDefault();
-      const salonName = document.getElementById('salon-name').value.trim();
-      const ownerName = document.getElementById('owner-name').value.trim();
-      if (!salonName || !ownerName) {
-        alert('サロン名とお名前を入力してください。');
-        return;
-      }
+        // スライダーの初期値と各行の合計値を動的計算
+        function initSliders() {
+            const rows = document.querySelectorAll('.score-row');
+            rows.forEach(row => {
+                const sliders = row.querySelectorAll('input[type="range"]');
+                const totalDisplay = row.querySelector('.row-total');
+                let sum = 0;
+                sliders.forEach(slider => {
+                    const display = slider.closest('.space-y-2').querySelector('.val-display');
+                    if (display) {
+                        display.textContent = slider.value;
+                    }
+                    sum += parseInt(slider.value);
+                });
+                if (totalDisplay) {
+                    totalDisplay.textContent = sum;
+                }
+            });
+        }
 
-      const issues = checkedValues('issue');
-      const next = checkedValues('next');
-      const freeIssue = document.getElementById('free-issue').value.trim();
-      const score = Number(document.getElementById('message-load').value) + Number(document.getElementById('follow-load').value) + Number(document.getElementById('ad-load').value) + Number(document.getElementById('manual-load').value);
-      const level = score >= 10 ? '優先的に仕組み化したい状態' : score >= 7 ? '少しずつ整えると効果が出やすい状態' : '今の良い流れを保ちながら改善できる状態';
-      const firstAction = next[0] || 'お礼メッセージのテンプレート化';
-      const issueText = issues.length ? issues.join('、') : '大きな課題は未選択';
-      const freeText = freeIssue ? `<p><b>具体メモ：</b>${escapeHtml(freeIssue)}</p>` : '';
+        // --- 🌸 スマートスライダー タッチ誤作動完全防止システム（1.0秒長押しロック） 🌸 ---
+        function setupSliderTouchLock(slider) {
+            let pressTimer = null;
+            let startTouchX = 0;
+            let startTouchY = 0;
+            let isHolding = false;
 
-      resultBody.innerHTML = `
-        <p><span class="score">${score}</span></p>
-        <p><b>${escapeHtml(ownerName)}さん、診断ありがとうございます。</b><br>${escapeHtml(salonName)}の現在地は、<b>${level}</b>です。</p>
-        <p><b>見えてきた主なテーマ：</b>${escapeHtml(issueText)}</p>
-        ${freeText}
-        <p><b>最初の一歩：</b>${escapeHtml(firstAction)}から始めるのがおすすめです。まずは毎回ゼロから文章を考える作業を減らし、お客様へのフォローを決まった流れにしていきましょう。</p>
-        <p><b>LINEステップ配信の例：</b><br>登録直後：お礼と診断シート案内<br>3日後：よくある悩みへのヒント<br>7日後：個別相談や改善提案の案内</p>
-        <p><b>メッセージ例：</b><br>本日はご来店ありがとうございました。今日のケアで整えた状態をキープするために、2〜3日は無理をせずゆっくりお過ごしくださいね。気になることがあれば、このLINEにそのままご相談ください。</p>
-        <p>焦らず、ひとつずつで大丈夫です。小さな仕組み化を重ねることで、サロンの魅力がもっと自然に届きやすくなります。</p>
-      `;
-      result.style.display = 'block';
-      result.scrollIntoView({ behavior: 'smooth' });
-    });
-  </script>
+            const container = slider.closest('.py-1');
+            const touchArea = slider.parentElement; // スライダーの親要素（タッチエリア）
+
+            // 📱 スマホ（タッチ操作）の1.0秒長押し検出
+            touchArea.addEventListener('touchstart', function(e) {
+                // すでにアンロックされている場合は何もせず標準動作を許可
+                if (slider.classList.contains('unlocked')) return;
+
+                const touch = e.touches[0];
+                startTouchX = touch.clientX;
+                startTouchY = touch.clientY;
+                isHolding = true;
+
+                // タップした一瞬での数値ワープ・変更を防ぐため、開始イベントをキャンセル
+                e.preventDefault();
+
+                // ぷるぷる振動するような長押し中の視覚エフェクトを追加
+                if (container) {
+                    container.classList.add('pressing-hold');
+                }
+
+                // 【1.0秒（1000ms）】じっと指を置いていられたらロック解除
+                pressTimer = setTimeout(() => {
+                    if (isHolding) {
+                        slider.classList.add('unlocked');
+                        slider.style.pointerEvents = 'auto'; // ロック解除してドラッグを受け付ける
+                        if (container) {
+                            container.classList.remove('pressing-hold');
+                            container.classList.add('slider-unlocked-glow');
+                        }
+                        if (navigator.vibrate) {
+                            navigator.vibrate(60); // 成功時の心地よいしっかりした微振動
+                        }
+                    }
+                }, 1000); // 1.0秒に完全に大統一
+            }, { passive: false });
+
+            // 指が10px以上ズレたら「画面スクロールをしようとしている」とみなして、長押しを瞬時にキャンセル
+            touchArea.addEventListener('touchmove', function(e) {
+                if (!isHolding) return;
+                const touch = e.touches[0];
+                const diffX = Math.abs(touch.clientX - startTouchX);
+                const diffY = Math.abs(touch.clientY - startTouchY);
+
+                if (!slider.classList.contains('unlocked')) {
+                    // ロック中のちょっとした移動はすべてキャンセル
+                    e.preventDefault();
+                    if (diffX > 10 || diffY > 10) {
+                        resetSliderLock();
+                    }
+                } else {
+                    // 🔓 ロック解除成功状態：指の動きに合わせてスライダーを心地よく操作させる
+                    e.preventDefault(); // 画面スクロールを完全に止める
+                    updateSliderValueFromTouch(slider, touch.clientX);
+                }
+            }, { passive: false });
+
+            // タッチ終了（指が離れたら瞬時に安全に再ロック）
+            slider.addEventListener('touchend', resetSliderLock);
+            slider.addEventListener('touchcancel', resetSliderLock);
+            touchArea.addEventListener('touchend', resetSliderLock);
+            touchArea.addEventListener('touchcancel', resetSliderLock);
+
+            // ロックをかけ直す内部関数
+            function resetSliderLock() {
+                isHolding = false;
+                if (pressTimer) {
+                    clearTimeout(pressTimer);
+                    pressTimer = null;
+                }
+                slider.classList.remove('unlocked');
+                slider.style.pointerEvents = ''; // CSSメディアクエリ（通常ロック状態：coarse）に戻す
+                if (container) {
+                    container.classList.remove('pressing-hold', 'slider-unlocked-glow');
+                }
+            }
+        }
+
+        // スマホの指の位置から「1点〜5点」を計算して綺麗に値を動かす手動連動関数
+        function updateSliderValueFromTouch(slider, clientX) {
+            const rect = slider.getBoundingClientRect();
+            const width = rect.width;
+            let offsetX = clientX - rect.left;
+            
+            if (offsetX < 0) offsetX = 0;
+            if (offsetX > width) offsetX = width;
+            
+            const percentage = offsetX / width;
+            const min = parseInt(slider.min) || 1;
+            const max = parseInt(slider.max) || 5;
+            
+            const value = Math.round(min + percentage * (max - min));
+            
+            if (parseInt(slider.value) !== value) {
+                slider.value = value;
+                slider.dispatchEvent(new Event('input', { bubbles: true }));
+            }
+        }
+
+        // --- 🌸 スライダー値の変更検知リスナー（100%確実に即座反映） 🌸 ---
+        document.addEventListener('input', function(e) {
+            if (e.target && e.target.type === 'range') {
+                const slider = e.target;
+                const scoreRow = slider.closest('.score-row');
+                
+                // 1. スライダー横の「点数バッジ (〇点)」に数値を即時反映
+                const container = slider.closest('.space-y-2');
+                if (container) {
+                    const display = container.querySelector('.val-display');
+                    if (display) {
+                        display.textContent = slider.value;
+                    }
+                }
+                
+                // 2. 行全体の「合計スコア (〇 / 20)」を瞬時に再計算
+                if (scoreRow) {
+                    const allSliders = scoreRow.querySelectorAll('input[type="range"]');
+                    const totalDisplay = scoreRow.querySelector('.row-total');
+                    let sum = 0;
+                    allSliders.forEach(s => {
+                        sum += parseInt(s.value);
+                    });
+                    if (totalDisplay) {
+                        totalDisplay.textContent = sum;
+                    }
+                }
+            }
+        });
+
+        // 入力進捗バーの更新 (スマホ/PC双方)
+        function updateProgress() {
+            let doneCount = 0;
+
+            // セクション1: 基本情報のチェック (必須のサロン名とお名前)
+            const sName = document.getElementById('salon_name').value.trim();
+            const oName = document.getElementById('owner_name').value.trim();
+            if (sName && oName) doneCount++;
+
+            // セクション2: 売上分解のチェック (いづれか1つでもラジオが選択されているか)
+            if (document.querySelector('input[name="new_customer_status"]:checked') ||
+                document.querySelector('input[name="repeat_status"]:checked') ||
+                document.querySelector('input[name="frequency_status"]:checked') ||
+                document.querySelector('input[name="price_status"]:checked')) {
+                doneCount++;
+            }
+
+            // セクション3: 集集媒体
+            if (document.querySelectorAll('input[name="dependence_check"]:checked').length > 0 ||
+                document.getElementById('main_marketing_dependence').value.trim() ||
+                document.getElementById('ad_cost_feeling').value.trim()) {
+                doneCount++;
+            }
+
+            // セクション4: 反復業務
+            if (document.querySelectorAll('input[name="routine_work"]:checked').length > 0 ||
+                document.getElementById('annoying_work_1').value.trim() ||
+                document.getElementById('annoying_work_2').value.trim() ||
+                document.getElementById('annoying_work_3').value.trim()) {
+                doneCount++;
+            }
+
+            // セクション5: 文章業務
+            if (document.querySelectorAll('input[name="writing_work"]:checked').length > 0 ||
+                document.querySelectorAll('input[name="writing_issue"]:checked').length > 0) {
+                doneCount++;
+            }
+
+            // セクション6: 顧客フォロー
+            if (document.querySelectorAll('input[name="follow_done"]:checked').length > 0 ||
+                document.querySelectorAll('input[name="follow_miss_scene"]:checked').length > 0) {
+                doneCount++;
+            }
+
+            // セクション7: 再来店
+            if (document.querySelectorAll('input[name="repeat_flow"]:checked').length > 0 ||
+                document.getElementById('target_repeat_improvement').value.trim()) {
+                doneCount++;
+            }
+
+            // セクション8: 口コミ紹介
+            if (document.querySelectorAll('input[name="referral_done"]:checked').length > 0 ||
+                document.querySelectorAll('input[name="referral_issue"]:checked').length > 0) {
+                doneCount++;
+            }
+
+            // セクション9: 属人化
+            if (document.querySelectorAll('input[name="individual_work"]:checked').length > 0 ||
+                document.getElementById('individual_work_detail').value.trim()) {
+                doneCount++;
+            }
+
+            // セクション10: AI
+            if (document.querySelectorAll('input[name="ai_target_work"]:checked').length > 0 ||
+                document.getElementById('ai_first_step').value.trim()) {
+                doneCount++;
+            }
+
+            // セクション11: 優先改善
+            let anyRowFilled = false;
+            document.querySelectorAll('.score-row').forEach(row => {
+                if (row.querySelector('.row-title').value.trim()) anyRowFilled = true;
+            });
+            if (anyRowFilled) doneCount++;
+
+            // セクション12: まとめ
+            if (document.querySelectorAll('input[name="summary_issue"]:checked').length > 0 ||
+                document.getElementById('first_to_fix').value.trim() ||
+                document.getElementById('future_vision').value.trim()) {
+                doneCount++;
+            }
+
+            // セクション13: 次の一歩
+            if (document.querySelectorAll('input[name="next_step"]:checked').length > 0 ||
+                document.getElementById('free_question').value.trim()) {
+                doneCount++;
+            }
+
+            const percentage = Math.round((doneCount / 13) * 100);
+            
+            // デスクトップ用プログレスバーの更新
+            const progressBar = document.getElementById('progressBar');
+            const progressText = document.getElementById('progressText');
+            if (progressBar && progressText) {
+                progressBar.style.width = `${percentage}%`;
+                progressText.textContent = `${doneCount} / 13 項目 記入完了`;
+            }
+
+            // スマホ用プログレスバーの更新
+            const mobileProgressBar = document.getElementById('mobileProgressBar');
+            const mobileProgressText = document.getElementById('mobileProgressText');
+            if (mobileProgressBar && mobileProgressText) {
+                mobileProgressBar.style.width = `${percentage}%`;
+                mobileProgressText.textContent = `${percentage}%`;
+            }
+
+            // ナビゲーションのドットの色更新 (デスクトップ)
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach((item, index) => {
+                const dot = item.querySelector('.nav-status-dot');
+                if (dot) {
+                    let isCompleted = false;
+                    switch(index) {
+                        case 0: isCompleted = (sName && oName); break;
+                        case 1: isCompleted = (document.querySelector('input[name="new_customer_status"]:checked') || document.querySelector('input[name="repeat_status"]:checked')); break;
+                        case 2: isCompleted = (document.querySelectorAll('input[name="dependence_check"]:checked').length > 0 || document.getElementById('main_marketing_dependence').value.trim()); break;
+                        case 3: isCompleted = (document.querySelectorAll('input[name="routine_work"]:checked').length > 0 || document.getElementById('annoying_work_1').value.trim()); break;
+                        case 4: isCompleted = (document.querySelectorAll('input[name="writing_work"]:checked').length > 0 || document.querySelectorAll('input[name="writing_issue"]:checked').length > 0); break;
+                        case 5: isCompleted = (document.querySelectorAll('input[name="follow_done"]:checked').length > 0); break;
+                        case 6: isCompleted = (document.querySelectorAll('input[name="repeat_flow"]:checked').length > 0); break;
+                        case 7: isCompleted = (document.querySelectorAll('input[name="referral_done"]:checked').length > 0); break;
+                        case 8: isCompleted = (document.querySelectorAll('input[name="individual_work"]:checked').length > 0 || document.getElementById('individual_work_detail').value.trim()); break;
+                        case 9: isCompleted = (document.querySelectorAll('input[name="ai_target_work"]:checked').length > 0); break;
+                        case 10: isCompleted = anyRowFilled; break;
+                        case 11: isCompleted = (document.getElementById('first_to_fix').value.trim() !== ""); break;
+                        case 12: isCompleted = (document.querySelectorAll('input[name="next_step"]:checked').length > 0); break;
+                    }
+
+                    if (isCompleted) {
+                        dot.className = "nav-status-dot w-2.5 h-2.5 rounded-full bg-brand-rose shadow-sm";
+                    } else {
+                        dot.className = "nav-status-dot w-2.5 h-2.5 rounded-full bg-stone-200";
+                    }
+                }
+            });
+        }
+
+        // 入力の監視イベントを設置
+        document.getElementById('diagnosticForm').addEventListener('input', updateProgress);
+        document.getElementById('diagnosticForm').addEventListener('change', updateProgress);
+
+        // ページ読み込み時の初期化
+        window.onload = function() {
+            // 🌸 すべてのスライダー要素に長押しロック解除制御システムを適用
+            document.querySelectorAll('input[type="range"]').forEach(setupSliderTouchLock);
+            initSliders();
+            updateProgress();
+        };
+
+        // 結果テキストをクリップボードにコピー
+        function copyResultText() {
+            const resultDiv = document.getElementById('resultContent');
+            if (!resultDiv) return;
+            
+            const range = document.createRange();
+            range.selectNode(resultDiv);
+            window.getSelection().removeAllRanges();
+            window.getSelection().addRange(range);
+            
+            try {
+                document.execCommand('copy');
+                alert("診断カルテをクリップボードにコピーしました！メモ帳やLINEに貼り付けて保管できます🌸");
+            } catch (err) {
+                alert("コピーに失敗しました。お手数ですが、テキストを選択して直接コピーをお願いします。");
+            }
+            window.getSelection().removeAllRanges();
+        }
+
+        // 指数バックオフを考慮したAPIコール処理
+        async function makeApiCall(prompt, systemInstruction, retries = 5, delay = 1000) {
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+            const payload = {
+                contents: [{ parts: [{ text: prompt }] }],
+                systemInstruction: { parts: [{ text: systemInstruction }] }
+            };
+            
+            for (let i = 0; i < retries; i++) {
+                try {
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                    const data = await response.json();
+                    return data;
+                } catch (error) {
+                    if (i === retries - 1) throw error;
+                    await new Promise(resolve => setTimeout(resolve, delay));
+                    delay *= 2; // 指数バックオフ
+                }
+            }
+        }
+
+        // 診断レポートを生成して表示
+        async function generateDiagnosticReport() {
+            const sName = document.getElementById('salon_name').value.trim();
+            const oName = document.getElementById('owner_name').value.trim();
+            
+            if (!sName || !oName) {
+                alert("お手数ですが、最初のセクション「1. 基本情報」の【サロン名】と【お名前】をご入力のうえ、もう一度お試しください。");
+                document.getElementById('sec-1').scrollIntoView({ behavior: 'smooth' });
+                return;
+            }
+
+            // ローディングを表示、結果エリアを非表示
+            const loadingArea = document.getElementById('loadingArea');
+            const resultArea = document.getElementById('resultArea');
+            loadingArea.classList.remove('hidden');
+            resultArea.classList.add('hidden');
+            
+            // スムーズスクロールで結果位置へ (スマホ用にオフセットを考慮)
+            const offset = window.innerWidth < 1024 ? 80 : 20;
+            const elementPosition = loadingArea.getBoundingClientRect().top;
+            const offsetPosition = elementPosition + window.pageYOffset - offset;
+            window.scrollTo({
+                top: offsetPosition,
+                behavior: "smooth"
+            });
+
+            // ユーザーの回答を集約
+            const industries = Array.from(document.querySelectorAll('input[name="industry"]:checked')).map(el => el.value);
+            if (document.getElementById('industry_other_check').checked) {
+                industries.push("その他: " + document.getElementById('industry_other_text').value);
+            }
+            const staffScale = document.querySelector('input[name="staff_scale"]:checked')?.value || "不明";
+            const channels = Array.from(document.querySelectorAll('input[name="marketing_channel"]:checked')).map(el => el.value);
+            const biggestIssue = document.getElementById('biggest_issue').value;
+
+            const newCust = document.querySelector('input[name="new_customer_status"]:checked')?.value || "未回答";
+            const repeatSt = document.querySelector('input[name="repeat_status"]:checked')?.value || "未回答";
+            const freqSt = document.querySelector('input[name="frequency_status"]:checked')?.value || "未回答";
+            const priceSt = document.querySelector('input[name="price_status"]:checked')?.value || "未回答";
+
+            const depChecks = Array.from(document.querySelectorAll('input[name="dependence_check"]:checked')).map(el => el.value);
+            const mainDep = document.getElementById('main_marketing_dependence').value;
+            const adFeeling = document.getElementById('ad_cost_feeling').value;
+
+            const routines = Array.from(document.querySelectorAll('input[name="routine_work"]:checked')).map(el => el.value);
+            const annoyance1 = document.getElementById('annoying_work_1').value;
+            const annoyance2 = document.getElementById('annoying_work_2').value;
+            const annoyance3 = document.getElementById('annoying_work_3').value;
+
+            const writingWorks = Array.from(document.querySelectorAll('input[name="writing_work"]:checked')).map(el => el.value);
+            const writingIssues = Array.from(document.querySelectorAll('input[name="writing_issue"]:checked')).map(el => el.value);
+
+            const followDones = Array.from(document.querySelectorAll('input[name="follow_done"]:checked')).map(el => el.value);
+            const followMisses = Array.from(document.querySelectorAll('input[name="follow_miss_scene"]:checked')).map(el => el.value);
+
+            const repeatFlows = Array.from(document.querySelectorAll('input[name="repeat_flow"]:checked')).map(el => el.value);
+            const repeatImps = document.getElementById('target_repeat_improvement').value;
+
+            const refDones = Array.from(document.querySelectorAll('input[name="referral_done"]:checked')).map(el => el.value);
+            const refIssues = Array.from(document.querySelectorAll('input[name="referral_issue"]:checked')).map(el => el.value);
+
+            const indWorks = Array.from(document.querySelectorAll('input[name="individual_work"]:checked')).map(el => el.value);
+            const indDetail = document.getElementById('individual_work_detail').value;
+
+            const aiTargets = Array.from(document.querySelectorAll('input[name="ai_target_work"]:checked')).map(el => el.value);
+            const aiFirst = document.getElementById('ai_first_step').value;
+
+            // 優先改善
+            let scoreDetails = [];
+            document.querySelectorAll('.score-row').forEach(row => {
+                const title = row.querySelector('.row-title').value.trim();
+                const total = row.querySelector('.row-total').textContent;
+                if (title) {
+                    scoreDetails.push(`${title} (優先スコア: ${total}点/20)`);
+                }
+            });
+
+            const summaryIssues = Array.from(document.querySelectorAll('input[name="summary_issue"]:checked')).map(el => el.value);
+            const firstFix = document.getElementById('first_to_fix').value;
+            const futVision = document.getElementById('future_vision').value;
+            const freeQ = document.getElementById('free_question').value;
+
+            const prompt = `
+# サロン分析シート回答データ
+- サロン名: ${sName}
+- オーナー名: ${oName}
+- 業種: ${industries.join(', ')}
+- 規模/運営体制: ${staffScale}
+- 主な集客方法: ${channels.join(', ')}
+- 一番困っていること: ${biggestIssue}
+
+[売上感覚]
+- 新規集客: ${newCust}
+- リピート: ${repeatSt}
+- 来店頻度: ${freqSt}
+- 客単価: ${priceSt}
+
+[媒体依存]
+- 当てはまる不満: ${depChecks.join(', ')}
+- 最も依存している方法: ${mainDep}
+- 広告・媒体費への本音: ${adFeeling}
+
+[日々の反復業務 & 面面倒なもの]
+- 行っている業務: ${routines.join(', ')}
+- 面倒な業務TOP3: 1.${annoyance1}, 2.${annoyance2}, 3.${annoyance3}
+
+[文章作成]
+- 都度書いているもの: ${writingWorks.join(', ')}
+- 文章のお悩み: ${writingIssues.join(', ')}
+
+[フォロー体制]
+- 現在できていること: ${followDones.join(', ')}
+- 漏れが生じやすい場面: ${followMisses.join(', ')}
+
+[リピート＆口コミ]
+- 導入できているリピート導線: ${repeatFlows.join(', ')}
+- リピート改善したい点: ${repeatImps}
+- できている紹介・口コミ活動: ${refDones.join(', ')}
+- 口コミ依頼の課題: ${refIssues.join(', ')}
+
+[属人化 & AI要望]
+- 属人化状況: ${indWorks.join(', ')}
+- 属人化している具体的な業務: ${indDetail}
+- AIで整えたいこと: ${aiTargets.join(', ')}
+- 最初にやりたいこと: ${aiFirst}
+
+[シミュレータによる優先改善項目]
+${scoreDetails.join('\n')}
+
+[まとめ・未来]
+- 自身が捉えている主な課題: ${summaryIssues.join(', ')}
+- 最初に整えたいと感じていること: ${firstFix}
+- 効率化後の理想の姿: ${futVision}
+- AI導入や改善に関する質問・不安: ${freeQ}
+`;
+
+            const systemInstruction = `
+あなたは、個人エステサロンやプライベートサロンのオーナーに寄り添い、経営改善と業務効率化を支援する「優しく親しみやすいAIビジネスアドバイザー」です。
+サロンを経営する女性オーナーが多く回答するため、文章は威圧感が全くなく、温かみがあり、まるでカフェでハーブティーを飲みながら相談に乗っているようなトーン（〜ですね、〜していきましょう、など）を徹底してください。
+
+以下の形式に従って、美しく見やすいマークダウン形式で回答を構成してください。
+
+# 構成テンプレート
+## 🌸 ${oName} 様、毎日サロンを支えてくれてありがとうございます
+（まずは、日々のハードワークや『一番困っていること』に共感し、労いと肯定を優しく伝えます。そしてこの診断がラクな未来へのスタートラインであることを伝えてください。）
+
+## 🔍 お答えから見えた、あなたのサロンの「業務のムダとボトルネック」
+（回答データ、特に『日々の反復業務』『面倒な業務TOP3』『属人化』から、何がオーナーのエネルギーや時間を奪っているのかをプロフェッショナルかつ優しく解きほぐして解説します。）
+
+## 💡 有料集客サイト頼みから抜けて「ファンが自然に通う」ための処方箋
+（『集客媒体への依存度』や『顧客フォロー』『再来店導線』の回答を踏まえ、高額な掲載費に頼り続けず、自前のリストや丁寧なメッセージを通じてリピート・来店頻度を増やすための戦略的かつ簡単な改善アイデアを伝えます。）
+
+## 🤖 【具体例つき】最初にAIやテンプレートでスマートに整える第一歩
+（『最初にAIでやってみたいこと』『文章のお悩み』に基づき、例えばどのような「お礼メッセージ」や「口コミ誘導」のテキストを作れば良いか、1つ具体的な【AI風メッセージテンプレート例】を作成して載せてください。これにより体験の価値が劇的に上がります！）
+
+## 🎯 優先して取り組むべきロードマップ＆優しいエール
+（『シミュレータ』や『未来の理想』を元に、何から順に手を付けていけばいいかをステップ1、2で示し、最後に未来を明るく肯定するあたたかいメッセージで締めくくってください。）
+
+※注意：専門用語は避け、優しい表現、箇書き、太字などを活用して、スマホからでもスクロールで非常に見やすくデザインしてください。
+`;
+
+            try {
+                const response = await makeApiCall(prompt, systemInstruction);
+                const text = response.candidates?.[0]?.content?.parts?.[0]?.text;
+                
+                if (text) {
+                    document.getElementById('resultContent').innerHTML = parseMarkdown(text);
+                    resultArea.classList.remove('hidden');
+                    
+                    // スムーズスクロール
+                    const offset = window.innerWidth < 1024 ? 80 : 20;
+                    const elementPosition = resultArea.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - offset;
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: "smooth"
+                    });
+                } else {
+                    showError("診断結果のテキストが取得できませんでした。お手数ですが、もう一度お試しください。");
+                }
+            } catch (error) {
+                showError("診断の生成中にエラーが発生しました。接続環境を確認の上、もう一度ボタンを押してみてくださいね。");
+                console.error(error);
+            } finally {
+                loadingArea.classList.add('hidden');
+            }
+        }
+
+        // 簡易Markdownパーサー
+        function parseMarkdown(md) {
+            let html = md;
+            html = html.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            html = html.replace(/\*\*(.*?)\*\*/g, '<strong class="font-bold text-brand-charcoal">$1</strong>');
+            html = html.replace(/### (.*?)\n/g, '<h4 class="text-sm md:text-base font-bold text-brand-charcoal mt-4 mb-2 flex items-center gap-1.5"><span class="w-1 h-4 bg-brand-rose rounded-full"></span>$1</h4>');
+            html = html.replace(/## (.*?)\n/g, '<h3 class="text-base md:text-lg font-bold text-brand-charcoal border-b border-brand-rose/10 pb-2 mt-5 mb-3 flex items-center gap-2"><i data-lucide="flower" class="w-4.5 h-4.5 text-brand-rose inline"></i>$1</h3>');
+            html = html.replace(/# (.*?)\n/g, '<h2 class="text-base md:text-xl font-bold text-brand-charcoal bg-brand-roselight p-3 rounded-xl mb-4">$1</h2>');
+            html = html.replace(/\n/g, '<br>');
+            html = html.replace(/- (.*?)(<br>|$)/g, '<li class="list-disc list-inside ml-4 text-xs md:text-sm text-stone-700">$1</li>');
+            html = html.replace(/(<br>){2,}/g, '<br><br>');
+            return html;
+        }
+
+        function showError(msg) {
+            const resultContent = document.getElementById('resultContent');
+            const resultArea = document.getElementById('resultArea');
+            resultContent.innerHTML = `
+                <div class="bg-red-50 text-red-700 p-4 rounded-xl text-xs border border-red-200">
+                    <p class="font-bold flex items-center gap-2">
+                        <i data-lucide="alert-circle" class="w-5 h-5"></i>
+                        申し訳ありません
+                    </p>
+                    <p class="mt-1">${msg}</p>
+                </div>
+            `;
+            resultArea.classList.remove('hidden');
+            resultArea.scrollIntoView({ behavior: 'smooth' });
+            lucide.createIcons();
+        }
+    </script>
 </body>
 </html>
