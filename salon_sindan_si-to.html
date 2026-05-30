@@ -1185,6 +1185,9 @@
 
         // API設定
         const apiKey = ""; // 定義のみ、実行時に自動注入
+        const DIAGNOSIS_ENDPOINT = "https://script.google.com/macros/s/AKfycbwhsv2C9BtdtFkyl0RFNRUeyl06-Iz5LjoGPyWkicPvXkNvL3nGiBLhq38HKjykvek/exec";
+        const API_SECURITY_TOKEN = "hide_salon_step_2026_secure";
+        const DIAGNOSIS_RECIPIENT_EMAIL = "info@hide-ai-lab.com";
         
         // 優先改善スコアの動的な追加用テンプレート
         function addScoreRow() {
@@ -1704,6 +1707,7 @@
             const firstFix = document.getElementById('first_to_fix').value;
             const futVision = document.getElementById('future_vision').value;
             const freeQ = document.getElementById('free_question').value;
+            const registeredEmail = getRegisteredEmail();
 
             const prompt = `
 # サロン分析シート回答データ
@@ -1791,6 +1795,24 @@ ${scoreDetails.join('\n')}
                 prompt: prompt
             }));
 
+            fetch(DIAGNOSIS_ENDPOINT, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify({
+                    request_type: 'diagnosis_submission',
+                    security_token: API_SECURITY_TOKEN,
+                    recipient_email: DIAGNOSIS_RECIPIENT_EMAIL,
+                    salon_name: sName,
+                    name: oName,
+                    email: registeredEmail,
+                    submitted_at: new Date().toISOString(),
+                    body: prompt
+                })
+            }).catch(function (error) {
+                console.error('診断シート回答のメール送信に失敗しました。', error);
+            });
+
             document.getElementById('resultContent').innerHTML = `
                 <div class="bg-brand-roselight/70 border border-brand-rose/30 rounded-2xl p-5 md:p-6">
                     <p class="font-bold text-brand-charcoal text-base md:text-lg mb-3">回答を受け付けました</p>
@@ -1810,6 +1832,15 @@ ${scoreDetails.join('\n')}
                 top: resultPosition + window.pageYOffset - resultOffset,
                 behavior: "smooth"
             });
+        }
+
+        function getRegisteredEmail() {
+            try {
+                const lastSubmit = JSON.parse(localStorage.getItem('salonApplicationLastSubmit') || '{}');
+                return lastSubmit.email || '';
+            } catch (error) {
+                return '';
+            }
         }
 
         // 簡易Markdownパーサー
