@@ -6,7 +6,7 @@
   <title>サロンの業務ムダ診断シート お申し込みフォーム</title>
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
   <style>
-    *{box-sizing:border-box}body{margin:0;min-height:100vh;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Noto Sans JP",sans-serif;background:#f8f6f2;color:#4a4641}main{min-height:100vh;display:grid;place-items:center;padding:28px 18px}.panel{width:min(100%,460px);background:#fffdfa;border:1px solid #e8e0d5;border-radius:18px;padding:24px;box-shadow:0 16px 40px rgba(89,75,58,.08)}.badge{display:inline-flex;padding:8px 14px;border-radius:999px;background:#dd9f9e;color:#3f3634;font-size:12px;font-weight:700}h1{margin:14px 0 8px;font-size:22px;line-height:1.55;color:#5a5246}.lead{margin:0 0 22px;color:#736b60;font-size:14px;line-height:1.8}label{display:block;margin:14px 0 6px;font-size:13px;font-weight:700}input,select{width:100%;border:1px solid #d4cdbe;border-radius:10px;padding:13px 12px;font-size:16px;background:#fff}.agree{display:flex;gap:10px;align-items:flex-start;margin-top:16px;padding:13px;background:#f3efe9;border:1px solid #e3dcce;border-radius:12px;font-size:13px;line-height:1.7}.agree input{width:18px;height:18px;margin-top:3px;flex:0 0 auto}button,.button{width:100%;border:0;border-radius:14px;padding:15px 16px;margin-top:18px;background:#27c8c8;color:#fff;font-size:15px;font-weight:800;text-align:center;text-decoration:none;cursor:pointer;display:inline-flex;justify-content:center;align-items:center}button:disabled{background:#b8b2aa;cursor:not-allowed}.line{background:#06c755}.error{display:none;margin-top:12px;border:1px solid #f3b5b5;background:#fff1f1;color:#9b2424;border-radius:10px;padding:11px 12px;font-size:13px;line-height:1.7}.note{background:#fff;border:1px solid #ebe7e0;border-radius:14px;padding:16px;white-space:pre-line;font-size:14px;text-align:left}.hidden{display:none}.center{text-align:center}.keyword{display:inline-block;margin:8px 0;padding:8px 22px;border-radius:12px;background:#eaf8f8;color:#137f7f;font-weight:900;font-size:22px;letter-spacing:.08em}
+    *{box-sizing:border-box}body{margin:0;min-height:100vh;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Noto Sans JP",sans-serif;background:#f8f6f2;color:#4a4641}main{min-height:100vh;display:grid;place-items:center;padding:28px 18px}.panel{width:min(100%,460px);background:#fffdfa;border:1px solid #e8e0d5;border-radius:18px;padding:24px;box-shadow:0 16px 40px rgba(89,75,58,.08)}.badge{display:inline-flex;padding:8px 14px;border-radius:999px;background:#dd9f9e;color:#3f3634;font-size:12px;font-weight:700}h1{margin:14px 0 8px;font-size:22px;line-height:1.55;color:#5a5246}.lead{margin:0 0 18px;color:#736b60;font-size:14px;line-height:1.8}.status{margin:0 0 12px;padding:10px 12px;border-radius:10px;background:#eef8f8;color:#137f7f;font-size:12px;line-height:1.6}label{display:block;margin:14px 0 6px;font-size:13px;font-weight:700}input,select{width:100%;border:1px solid #d4cdbe;border-radius:10px;padding:13px 12px;font-size:16px;background:#fff}.agree{display:flex;gap:10px;align-items:flex-start;margin-top:16px;padding:13px;background:#f3efe9;border:1px solid #e3dcce;border-radius:12px;font-size:13px;line-height:1.7}.agree input{width:18px;height:18px;margin-top:3px;flex:0 0 auto}button,.button{width:100%;border:0;border-radius:14px;padding:15px 16px;margin-top:18px;background:#27c8c8;color:#fff;font-size:15px;font-weight:800;text-align:center;text-decoration:none;cursor:pointer;display:inline-flex;justify-content:center;align-items:center}button:disabled{background:#b8b2aa;cursor:not-allowed}.line{background:#06c755}.error{display:none;margin-top:12px;border:1px solid #f3b5b5;background:#fff1f1;color:#9b2424;border-radius:10px;padding:11px 12px;font-size:13px;line-height:1.7}.note{background:#fff;border:1px solid #ebe7e0;border-radius:14px;padding:16px;white-space:pre-line;font-size:14px;text-align:left}.hidden{display:none}.center{text-align:center}.keyword{display:inline-block;margin:8px 0;padding:8px 22px;border-radius:12px;background:#eaf8f8;color:#137f7f;font-weight:900;font-size:22px;letter-spacing:.08em}
   </style>
 </head>
 <body>
@@ -14,6 +14,7 @@
     <section id="form-screen" class="panel">
       <div class="center"><span class="badge">LINE登録者限定</span></div>
       <h1>サロンの業務ムダ診断シート<br>お申し込みフォーム</h1>
+      <p id="liff-status" class="status">LINE連携を確認しています。</p>
       <p class="lead">入力後すぐに、診断シートの受け取り手順を表示します。</p>
       <form id="application-form">
         <label for="salon-name">サロン名、または企業名</label><input id="salon-name" type="text" placeholder="例：ココロ美容サロン" required>
@@ -22,7 +23,7 @@
         <label for="business-type">業種</label><select id="business-type" required><option value="サロン">サロン</option><option value="美容室">美容室</option><option value="整体・リラクゼーション">整体・リラクゼーション</option><option value="その他">その他</option></select>
         <label class="agree"><input id="agreement" type="checkbox" required><span>入力内容を、診断メッセージとフォロー配信のために利用することに同意します。</span></label>
         <p id="form-error" class="error"></p>
-        <button id="submit-button" type="submit">無料診断シートを受け取る</button>
+        <button id="submit-button" type="submit" disabled>LINE連携を確認中...</button>
       </form>
     </section>
     <section id="success-screen" class="panel hidden center">
@@ -42,18 +43,69 @@
   <script>
     const FORM_ENDPOINT='https://script.google.com/macros/s/AKfycbwhsv2C9BtdtFkyl0RFNRUeyl06-Iz5LjoGPyWkicPvXkNvL3nGiBLhq38HKjykvek/exec';
     const LIFF_ID='2010236362-Sx1UkYe1';
+    const LIFF_URL='https://liff.line.me/2010236362-Sx1UkYe1';
     const API_SECURITY_TOKEN='hide_salon_step_2026_secure';
     const LINE_URL='https://lin.ee/SHmdTyU';
-    let lineProfile=null;
+    let lineUserId='';
+    let lineDisplayName='';
+    let liffReady=false;
     const form=document.getElementById('application-form');
     const submitButton=document.getElementById('submit-button');
     const errorBox=document.getElementById('form-error');
+    const statusBox=document.getElementById('liff-status');
+
+    function setStatus(message){statusBox.textContent=message}
     function showError(message){errorBox.textContent=message;errorBox.style.display='block'}
+    function clearError(){errorBox.style.display='none'}
     function isValidEmail(value){return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim())}
-    function showSuccess(){document.getElementById('form-screen').classList.add('hidden');document.getElementById('success-screen').classList.remove('hidden');window.scrollTo({top:0,behavior:'smooth'})}
-    async function setupLiff(){if(!window.liff)return;try{await liff.init({liffId:LIFF_ID});if(liff.isLoggedIn())lineProfile=await liff.getProfile()}catch(error){console.warn(error)}}
+    function sendDiag(result,message,userId){
+      const url=FORM_ENDPOINT+'?action=liff_diag&security_token='+encodeURIComponent(API_SECURITY_TOKEN)+'&result='+encodeURIComponent(result)+'&line_user_id='+encodeURIComponent(userId||'')+'&message='+encodeURIComponent(message)+'&t='+Date.now();
+      const img=new Image();img.src=url;
+    }
+    function enableSubmit(){liffReady=true;submitButton.disabled=false;submitButton.textContent='無料診断シートを受け取る'}
+    function disableSubmit(message){liffReady=false;submitButton.disabled=true;submitButton.textContent=message||'LINE連携を確認中...'}
+    async function setupLiff(){
+      disableSubmit('LINE連携を確認中...');
+      if(!window.liff){setStatus('LIFF SDKを読み込めませんでした。');sendDiag('sdk_missing',location.href,'');return}
+      try{
+        await liff.init({liffId:LIFF_ID});
+        const inClient=liff.isInClient();
+        const loggedIn=liff.isLoggedIn();
+        const context=liff.getContext ? liff.getContext() : null;
+        if(!inClient && !loggedIn && !sessionStorage.getItem('liff_redirected')){
+          sessionStorage.setItem('liff_redirected','1');
+          sendDiag('redirect_to_liff','not in LIFF client: '+location.href,'');
+          location.replace(LIFF_URL);
+          return;
+        }
+        if(loggedIn){
+          try{
+            const profile=await liff.getProfile();
+            lineUserId=profile.userId||'';
+            lineDisplayName=profile.displayName||'';
+          }catch(profileError){
+            sendDiag('profile_error',String(profileError && (profileError.message||profileError)),'');
+          }
+        }
+        if(!lineUserId && context && context.userId){lineUserId=context.userId}
+        if(!lineDisplayName){lineDisplayName='LINE登録者'}
+        if(lineUserId){
+          setStatus('LINE連携済みです。');
+          sendDiag('liff_ok','inClient='+inClient+', loggedIn='+loggedIn,lineUserId);
+          enableSubmit();
+          return;
+        }
+        setStatus('LINE連携を確認できません。LINEのリンク設定またはLIFF設定を確認してください。');
+        sendDiag('no_user_id','inClient='+inClient+', loggedIn='+loggedIn+', context='+JSON.stringify(context||{}),'');
+        disableSubmit('LINE連携エラー');
+      }catch(error){
+        setStatus('LINE連携の初期化でエラーが出ています。');
+        sendDiag('init_error',String(error && (error.message||error)),'');
+        disableSubmit('LINE連携エラー');
+      }
+    }
     form.addEventListener('submit',async(event)=>{
-      event.preventDefault();errorBox.style.display='none';
+      event.preventDefault();clearError();
       const salonName=document.getElementById('salon-name').value.trim();
       const userName=document.getElementById('user-name').value.trim();
       const email=document.getElementById('email').value.trim();
@@ -62,14 +114,20 @@
       if(!salonName||!userName||!email||!businessType){showError('必須項目をすべて入力してください。');return}
       if(!isValidEmail(email)){showError('メールアドレスの形式を確認してください。');return}
       if(!agreed){showError('同意チェックを入れてください。');return}
+      if(!liffReady||!lineUserId){showError('LINE連携が完了していないため登録できません。画面を閉じてLINEのボタンから開き直してください。');sendDiag('submit_blocked','no lineUserId on submit','');return}
       submitButton.disabled=true;submitButton.textContent='送信中...';
-      const fallbackId='web_'+Date.now();
-      const payload={line_user_id:lineProfile?.userId||fallbackId,line_display_name:lineProfile?.displayName||userName,salon_name:salonName,name:userName,email,business_type:businessType,scenario_id:'salon_ai_basic',security_token:API_SECURITY_TOKEN,source:lineProfile?.userId?'github_pages_liff':'github_pages_webview',submittedAt:new Date().toISOString()};
-      localStorage.setItem('salonApplicationLastSubmit',JSON.stringify(payload));
-      showSuccess();
-      fetch(FORM_ENDPOINT,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)}).catch(error=>console.warn('登録送信に失敗しました。',error));
+      const payload={line_user_id:lineUserId,line_display_name:lineDisplayName||userName,salon_name:salonName,name:userName,email,business_type:businessType,scenario_id:'salon_ai_basic',security_token:API_SECURITY_TOKEN,source:'liff_form',submittedAt:new Date().toISOString()};
+      try{
+        await fetch(FORM_ENDPOINT,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)});
+        localStorage.setItem('salonApplicationLastSubmit',JSON.stringify(payload));
+        document.getElementById('form-screen').classList.add('hidden');document.getElementById('success-screen').classList.remove('hidden');window.scrollTo({top:0,behavior:'smooth'});
+      }catch(error){
+        showError('送信できませんでした。時間をおいて再度お試しください。');
+        submitButton.disabled=false;submitButton.textContent='無料診断シートを受け取る';
+      }
     });
-    document.getElementById('line-return-link').href=LINE_URL;setupLiff();
+    document.getElementById('line-return-link').href=LINE_URL;
+    setupLiff();
   </script>
 </body>
 </html>
