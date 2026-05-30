@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
@@ -1143,7 +1143,7 @@
                 <button type="button" onclick="generateDiagnosticReport()" class="group relative overflow-hidden bg-brand-rose hover:bg-brand-rose/90 text-white font-bold text-base md:text-lg px-8 py-4 md:px-12 md:py-5 rounded-2xl shadow-md hover:shadow-xl transition duration-300 w-full md:w-auto">
                     <span class="relative z-10 flex items-center justify-center gap-2">
                         <i data-lucide="send" class="w-5 h-5 animate-pulse"></i>
-                        結果を送信する
+                        回答を送信する
                     </span>
                     <span class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></span>
                 </button>
@@ -1161,50 +1161,10 @@
                 </p>
             </div>
 
-            <!-- 診断結果表示エリア -->
+            <!-- 回答送信後メッセージ -->
             <div id="resultArea" class="hidden bg-white rounded-2xl border-2 border-brand-rose/40 p-5 md:p-8 shadow-xl scroll-mt-20 lg:scroll-mt-6">
-                <div class="flex items-center justify-between border-b border-brand-rose/20 pb-4 mb-5 flex-wrap gap-3">
-                    <div class="flex items-center gap-2.5">
-                        <div class="w-9 h-9 rounded-full bg-brand-rose flex items-center justify-center text-white">
-                            <i data-lucide="sparkles" class="w-4.5 h-4.5"></i>
-                        </div>
-                        <div>
-                            <h2 class="text-sm md:text-xl font-bold text-brand-charcoal">あなただけのサロン改善診断カルテ</h2>
-                            <p class="text-[10px] text-brand-charcoal/60 font-en">AI Support & Salon DX Diagnosis Card</p>
-                        </div>
-                    </div>
-                    <!-- 操作ボタン (印刷 & コピー) -->
-                    <div class="flex items-center gap-1.5 no-print ml-auto">
-                        <button type="button" onclick="copyResultText()" class="text-[11px] flex items-center gap-1.5 border border-stone-200 hover:bg-stone-50 px-2.5 py-1.5 rounded-lg text-stone-600 transition">
-                            <i data-lucide="copy" class="w-3 h-3"></i>
-                            <span>コピー</span>
-                        </button>
-                        <button type="button" onclick="window.print()" class="text-[11px] flex items-center gap-1.5 bg-brand-sagelight text-brand-sage hover:bg-brand-sage hover:text-white px-2.5 py-1.5 rounded-lg font-bold transition">
-                            <i data-lucide="printer" class="w-3 h-3"></i>
-                            <span>印刷 / 保存</span>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- 診断カルテの中身 -->
-                <div id="resultContent" class="prose prose-sm max-w-none text-brand-charcoal leading-relaxed space-y-5 px-1 text-base">
-                    <!-- ここに動的に診断結果が入ります -->
-                </div>
-
-                <!-- 診断結果下の特別な案内導線 -->
-                <div class="mt-6 pt-5 border-t border-brand-rose/20 bg-brand-roselight/50 p-5 rounded-2xl border border-brand-rose/10 no-print">
-                    <h3 class="font-bold text-brand-charcoal text-sm md:text-base flex items-center gap-2 mb-2">
-                        <i data-lucide="info" class="w-4.5 h-4.5 text-brand-rose"></i>
-                        個別診断＆AIお試し体験のご案内
-                    </h3>
-                    <p class="text-xs md:text-sm text-brand-charcoal/80 leading-relaxed mb-4">
-                        こちらのシートを送信、または画面を保存して個別相談へお持ちいただくと、本日診断した<b>「お礼メッセージ等のAI作成テンプレの調整」や、「LINEの具体的な自動配信ステップ設計」</b>をマンツーマンで無料実演サポートいたします。
-                    </p>
-                    <div class="text-center">
-                        <a href="#sec-13" class="inline-block bg-brand-sage hover:bg-brand-sage/95 text-white font-bold text-xs md:text-sm px-5 py-3 rounded-xl shadow-sm transition">
-                            個別相談・AIサポートの詳細について確認する
-                        </a>
-                    </div>
+                <div id="resultContent" class="text-brand-charcoal leading-relaxed space-y-4 text-base">
+                    <!-- ここに送信完了メッセージが入ります -->
                 </div>
             </div>
 
@@ -1674,7 +1634,7 @@
                 return;
             }
 
-            // ローディングを表示、結果エリアを非表示
+            // 送信中表示、完了エリアを非表示
             const loadingArea = document.getElementById('loadingArea');
             const resultArea = document.getElementById('resultArea');
             loadingArea.classList.remove('hidden');
@@ -1824,31 +1784,32 @@ ${scoreDetails.join('\n')}
 ※注意：専門用語は避け、優しい表現、箇書き、太字などを活用して、スマホからでもスクロールで非常に見やすくデザインしてください。
 `;
 
-            try {
-                const response = await makeApiCall(prompt, systemInstruction);
-                const text = response.candidates?.[0]?.content?.parts?.[0]?.text;
-                
-                if (text) {
-                    document.getElementById('resultContent').innerHTML = parseMarkdown(text);
-                    resultArea.classList.remove('hidden');
-                    
-                    // スムーズスクロール
-                    const offset = window.innerWidth < 1024 ? 80 : 20;
-                    const elementPosition = resultArea.getBoundingClientRect().top;
-                    const offsetPosition = elementPosition + window.pageYOffset - offset;
-                    window.scrollTo({
-                        top: offsetPosition,
-                        behavior: "smooth"
-                    });
-                } else {
-                    showError("診断結果のテキストが取得できませんでした。お手数ですが、もう一度お試しください。");
-                }
-            } catch (error) {
-                showError("診断の生成中にエラーが発生しました。接続環境を確認の上、もう一度ボタンを押してみてくださいね。");
-                console.error(error);
-            } finally {
-                loadingArea.classList.add('hidden');
-            }
+            localStorage.setItem('salonDiagnosticLastSubmit', JSON.stringify({
+                submittedAt: new Date().toISOString(),
+                salonName: sName,
+                ownerName: oName,
+                prompt: prompt
+            }));
+
+            document.getElementById('resultContent').innerHTML = `
+                <div class="bg-brand-roselight/70 border border-brand-rose/30 rounded-2xl p-5 md:p-6">
+                    <p class="font-bold text-brand-charcoal text-base md:text-lg mb-3">回答を受け付けました</p>
+                    <p class="text-sm md:text-base text-brand-charcoal/80 leading-relaxed">
+                        ご入力ありがとうございます。<br>
+                        ヒデが内容を確認し、1週間以内にメールで簡易な「サロン診断カルテ」をお送りします。<br>
+                        楽しみにお待ちください。
+                    </p>
+                </div>
+            `;
+            resultArea.classList.remove('hidden');
+            loadingArea.classList.add('hidden');
+
+            const resultOffset = window.innerWidth < 1024 ? 80 : 20;
+            const resultPosition = resultArea.getBoundingClientRect().top;
+            window.scrollTo({
+                top: resultPosition + window.pageYOffset - resultOffset,
+                behavior: "smooth"
+            });
         }
 
         // 簡易Markdownパーサー
