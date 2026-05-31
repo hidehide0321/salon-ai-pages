@@ -1,0 +1,58 @@
+name: Remove red frame text once
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Remove only requested red-frame text
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          form_text = '<p id="token-status" class="status">入力後、LINEに戻って「シート」と送ると診断シートが届きます。</p>\n'
+          for name in ['index.html', 'salon_mousikomi.html']:
+              path = Path(name)
+              text = path.read_text(encoding='utf-8')
+              text = text.replace(form_text, '')
+              path.write_text(text, encoding='utf-8')
+
+          diag_text = '''            <!-- 「お茶を飲みながら」と「、」を削除 -->
+            <p class="text-xs md:text-base text-brand-charcoal/80 max-w-2xl mx-auto leading-relaxed px-2">
+                日々のサロンワーク、本当にお疲れ様です。このシートは、AIでスマートに整えられる業務と、大切なリピート（再来店）につながる改善ポイントを優しく見つけるためのものです。リラックスして振り返ってみてくださいね。
+            </p>
+'''
+          path = Path('salon_sindan_si-to.html')
+          text = path.read_text(encoding='utf-8-sig')
+          text = text.replace(diag_text, '')
+          path.write_text('\ufeff' + text.lstrip('\ufeff'), encoding='utf-8')
+
+          workflow = Path('.github/workflows/remove-red-frame-text.yml')
+          if workflow.exists():
+              workflow.unlink()
+          PY
+      - name: Commit requested text removal
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html salon_mousikomi.html salon_sindan_si-to.html .github/workflows/remove-red-frame-text.yml
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "Remove pre-registration guidance text"
+            git push
+          fi
