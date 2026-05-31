@@ -1,15 +1,17 @@
 name: Remove diagnosis intro once
 
 on:
+  push:
+    branches:
+      - main
   workflow_dispatch:
-  schedule:
-    - cron: '*/5 * * * *'
 
 permissions:
   contents: write
 
 jobs:
   patch:
+    if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -20,20 +22,17 @@ jobs:
         run: |
           python - <<'PY'
           from pathlib import Path
-
-          diag_text = '''            <!-- 「お茶を飲みながら」と「、」を削除 -->
-            <p class="text-xs md:text-base text-brand-charcoal/80 max-w-2xl mx-auto leading-relaxed px-2">
-                日々のサロンワーク、本当にお疲れ様です。このシートは、AIでスマートに整えられる業務と、大切なリピート（再来店）につながる改善ポイントを優しく見つけるためのものです。リラックスして振り返ってみてくださいね。
-            </p>
-'''
-          path = Path('salon_sindan_si-to.html')
-          text = path.read_text(encoding='utf-8-sig')
-          if diag_text not in text:
-              print('target text already absent')
-          else:
-              text = text.replace(diag_text, '')
-              path.write_text('\ufeff' + text.lstrip('\ufeff'), encoding='utf-8')
-
+          target = (
+              '            <!-- 「お茶を飲みながら」と「、」を削除 -->\n'
+              '            <p class="text-xs md:text-base text-brand-charcoal/80 max-w-2xl mx-auto leading-relaxed px-2">\n'
+              '                日々のサロンワーク、本当にお疲れ様です。このシートは、AIでスマートに整えられる業務と、大切なリピート（再来店）につながる改善ポイントを優しく見つけるためのものです。リラックスして振り返ってみてくださいね。\n'
+              '            </p>\n'
+          )
+          page = Path('salon_sindan_si-to.html')
+          text = page.read_text(encoding='utf-8-sig')
+          if target in text:
+              text = text.replace(target, '')
+              page.write_text('\ufeff' + text.lstrip('\ufeff'), encoding='utf-8')
           workflow = Path('.github/workflows/remove-diagnosis-intro.yml')
           if workflow.exists():
               workflow.unlink()
