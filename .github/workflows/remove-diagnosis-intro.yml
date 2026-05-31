@@ -1,0 +1,45 @@
+name: Remove diagnosis intro once
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Remove only requested diagnosis intro text
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          diag_text = '''            <!-- 「お茶を飲みながら」と「、」を削除 -->
+            <p class="text-xs md:text-base text-brand-charcoal/80 max-w-2xl mx-auto leading-relaxed px-2">
+                日々のサロンワーク、本当にお疲れ様です。このシートは、AIでスマートに整えられる業務と、大切なリピート（再来店）につながる改善ポイントを優しく見つけるためのものです。リラックスして振り返ってみてくださいね。
+            </p>
+'''
+          path = Path('salon_sindan_si-to.html')
+          text = path.read_text(encoding='utf-8-sig')
+          if diag_text not in text:
+              raise SystemExit('target text not found')
+          text = text.replace(diag_text, '')
+          path.write_text('\ufeff' + text.lstrip('\ufeff'), encoding='utf-8')
+
+          workflow = Path('.github/workflows/remove-diagnosis-intro.yml')
+          if workflow.exists():
+              workflow.unlink()
+          PY
+      - name: Commit requested text removal
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add salon_sindan_si-to.html .github/workflows/remove-diagnosis-intro.yml
+          git commit -m "Remove diagnosis intro text"
+          git push
