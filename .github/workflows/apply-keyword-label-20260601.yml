@@ -1,0 +1,49 @@
+name: Apply keyword label to form pages
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - .github/workflows/apply-keyword-label-20260601.yml
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Patch keyword label
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          files = [Path('index.html'), Path('salon_mousikomi.html')]
+          old_css = '.thanks{white-space:pre-line;line-height:1.9;background:#fff;border:1px solid #ebe7e0;border-radius:14px;padding:18px;font-size:15px}.keyword-box{display:block;background:#8de1f0;color:#1f4f5a;text-align:center;border-radius:0;padding:12px 16px;margin:14px 0;font-size:18px;font-weight:800;line-height:1.2}'
+          new_css = '.thanks{white-space:pre-line;line-height:1.9;background:#fff;border:1px solid #ebe7e0;border-radius:14px;padding:18px;font-size:15px}.keyword-label{display:block;margin:12px 0 4px;color:#1f1f1f;text-align:center;font-size:24px;font-weight:800;line-height:1.2}.keyword-box{display:block;background:#8de1f0;color:#1f4f5a;text-align:center;border-radius:0;padding:12px 16px;margin:8px 0 14px;font-size:18px;font-weight:800;line-height:1.2}'
+          old_html = '<span class="keyword-box">シート</span>'
+          new_html = '<span class="keyword-label">合言葉</span>\n<span class="keyword-box">シート</span>'
+
+          changed = False
+          for path in files:
+              text = path.read_text(encoding='utf-8-sig')
+              original = text
+              if '.keyword-label{' not in text:
+                  text = text.replace(old_css, new_css)
+              if '<span class="keyword-label">合言葉</span>' not in text:
+                  text = text.replace(old_html, new_html)
+              if text != original:
+                  path.write_text(text, encoding='utf-8')
+                  changed = True
+
+          Path('.github/workflows/apply-keyword-label-20260601.yml').unlink()
+          PY
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html salon_mousikomi.html .github/workflows/apply-keyword-label-20260601.yml
+          git commit -m "Apply keyword label to form pages"
+          git push
