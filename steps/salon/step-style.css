@@ -100,6 +100,18 @@ a {
   color: #4f5d60;
 }
 
+.step-image {
+  margin: 24px 0 28px;
+}
+
+.step-image img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid #eadfd2;
+  border-radius: 12px;
+}
+
 .visual-note {
   margin: 26px 0;
   padding: 18px;
