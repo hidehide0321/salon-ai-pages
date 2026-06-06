@@ -13,5 +13,36 @@
 <body data-day="5">
   <main class="page"><article class="article"><header class="hero"><p class="eyebrow" id="day-label">Day 5</p><h1 class="title" id="title">読み込み中です</h1><div class="meta"><span id="meta-day"></span><span id="meta-theme"></span></div></header><section class="body"><div id="visual"></div><div id="article-body"></div><div id="cta"></div></section><footer class="footer">ヒデ｜お客さまに選ばれるサロンをAIでつくる人</footer></article></main>
   <script src="./step-content.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      var images = [
+        {
+          after: "お客様の体験にも差が出ます。",
+          url: "https://line.hide-ai-lab.com/assets/steps/salon/day5-02.jpg",
+          alt: "サロンに接客の型がある場合とない場合の違い"
+        },
+        {
+          after: "こういうものを、少しずつ整えていけます。",
+          url: "https://line.hide-ai-lab.com/assets/steps/salon/day5-01.jpg",
+          alt: "AIで整える接客の型6つの例"
+        }
+      ];
+      var paragraphs = Array.from(document.querySelectorAll("#article-body p"));
+      images.forEach(function (image) {
+        var target = paragraphs.find(function (paragraph) {
+          return paragraph.textContent.trim() === image.after;
+        });
+        if (!target) return;
+        var figure = document.createElement("figure");
+        figure.className = "step-image";
+        var img = document.createElement("img");
+        img.src = image.url;
+        img.alt = image.alt;
+        img.loading = "lazy";
+        figure.appendChild(img);
+        target.insertAdjacentElement("afterend", figure);
+      });
+    });
+  </script>
 </body>
 </html>
