@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
+  var diagnosisUrl = 'https://lin.ee/oMZDqoM';
   var images = [
     {
       url: 'https://line.hide-ai-lab.com/assets/steps/salon/day6-02.jpg',
@@ -13,6 +14,13 @@ document.addEventListener('DOMContentLoaded', function () {
   ];
   var body = document.getElementById('article-body');
   if (!body) return;
+
+  Array.prototype.forEach.call(body.querySelectorAll('a'), function (link) {
+    if (link.href.indexOf('/salon_sindan_si-to.html') >= 0) {
+      link.href = diagnosisUrl;
+      link.textContent = diagnosisUrl;
+    }
+  });
 
   var paragraphs = Array.prototype.slice.call(body.querySelectorAll('p'));
   images.forEach(function (item) {
