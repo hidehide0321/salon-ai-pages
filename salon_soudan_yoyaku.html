@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>30分 個別相談のご予約 | ヒデ サロン経営をAIで快適にする人</title>
+  <meta name="description" content="診断シートを受け取った方へ。LINE配信文やInstagram投稿文を見ながら、予約・リピートにつながる改善ポイントを一緒に整理する30分の個別相談です。">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kiwi+Maru:wght@400;500&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Noto Sans JP', sans-serif;
+      background: #F8F6F2;
+      color: #4A4641;
+    }
+    .font-elegant {
+      font-family: 'Kiwi Maru', 'Noto Sans JP', serif;
+    }
+
+    .google-booking-frame {
+      width: 100%;
+      min-height: 760px;
+      border: 0;
+      background: #fff;
+    }
+
+    @media (max-width: 640px) {
+      .google-booking-frame {
+        min-height: 720px;
+      }
+    }
+  </style>
+</head>
+<body class="min-h-screen">
+  <main class="min-h-screen px-5 py-8 flex items-center justify-center">
+
+    <!-- ========== フォーム画面 ========== -->
+    <section id="form-screen" class="w-full max-w-3xl">
+      <div class="bg-[#FAF9F6] border border-[#E8E0D5] rounded-2xl shadow-sm p-5 sm:p-6">
+
+        <!-- バッジ -->
+        <div class="flex justify-center">
+          <span class="inline-flex items-center rounded-full bg-[#dd9f9e] px-4 py-1.5 text-[12px] font-bold leading-none text-[#3F3634] shadow-sm font-elegant">
+            診断シートを受け取った方へ
+          </span>
+        </div>
+
+        <!-- タイトル -->
+        <h1 class="font-elegant text-center text-lg font-bold leading-relaxed text-[#5A5246] pt-2 pb-3 border-b border-[#EBE7E0]">
+          30分 個別相談のご予約
+        </h1>
+
+        <!-- リード文 -->
+        <div class="mt-4 mb-5 text-sm leading-relaxed text-[#5A5246] bg-[#F3EFE9] border border-[#E3DCCE] rounded-xl p-4">
+          <p class="text-[11px] font-bold text-[#9EAA95] mb-2">こんな方におすすめです</p>
+          <ul class="text-xs leading-loose text-[#5A5246] space-y-1">
+            <li>✦ LINEやInstagramで発信しているのに予約が増えない</li>
+            <li>✦ 何をどう改善すればいいか整理できていない</li>
+            <li>✦ 実際の投稿文を見ながら具体的に確認したい</li>
+          </ul>
+          <p class="text-[11px] text-[#9E9587] mt-3 pt-2 border-t border-[#E3DCCE] leading-relaxed">
+            実際に使っているLINE配信文やInstagram投稿文を見ながら、<br>どこを直せば予約につながりやすくなるかを一緒に確認します。
+          </p>
+        </div>
+
+        <!-- ===== Googleカレンダー予約サービス ===== -->
+        <div class="mb-5">
+          <h2 class="font-elegant text-sm font-bold text-[#5A5246] mb-3 flex items-center gap-2">
+            <span class="w-5 h-5 rounded-full bg-[#27c8c8] text-white text-[10px] flex items-center justify-center font-bold shrink-0">1</span>
+            ご希望の日時を選んでください
+          </h2>
+
+          <div class="overflow-hidden rounded-xl border border-[#EBE7E0] bg-white shadow-sm">
+            <iframe
+              id="google-booking-frame"
+              class="google-booking-frame hidden"
+              title="Googleカレンダー予約サービス"
+              loading="lazy"></iframe>
+            <div id="google-booking-placeholder" class="p-5 sm:p-6 text-center">
+              <p class="font-elegant text-sm font-bold text-[#5A5246]">予約ページのURL設定待ちです</p>
+              <p class="mt-2 text-xs leading-relaxed text-[#8E8577]">
+                Googleカレンダーの予約ページURLを設定すると、この場所に予約サービスが表示されます。
+              </p>
+            </div>
+          </div>
+
+          <a id="google-booking-link" href="#" target="_blank" rel="noopener noreferrer"
+            class="hidden mt-4 w-full items-center justify-center rounded-xl bg-[#27c8c8] px-4 py-3.5 text-sm font-bold text-white shadow-md transition-all hover:bg-[#20adad] active:scale-95">
+            予約ページを別タブで開く
+          </a>
+        </div>
+
+        <!-- 当日メッセージ -->
+        <div class="text-left text-xs leading-relaxed text-[#5A5246] bg-[#F3EFE9] border border-[#E3DCCE] rounded-xl p-4 shadow-sm mb-5 whitespace-pre-line">当日は、以下をご準備ください。
+
+・最近使ったLINE配信文
+・Instagramの投稿文
+・一番増やしたい予約メニュー
+・今いちばん困っている集客の悩み
+
+無理にきれいにまとめる必要はありません。
+今あるものを一緒に整理していきましょう。
+
+ヒデ</div>
+
+        <a id="line-return-link" href="https://lin.ee/SHmdTyU" target="_blank" rel="noopener noreferrer"
+          class="inline-flex w-full items-center justify-center rounded-xl bg-[#27c8c8] px-4 py-3.5 text-sm font-bold text-white shadow-md transition-all hover:bg-[#20adad] active:scale-95">
+          LINEへ戻る
+        </a>
+      </div>
+    </section><!-- /form-screen -->
+
+  </main>
+
+  <script>
+    // Googleカレンダーの予約ページURLを入れてください。
+    // 例: https://calendar.google.com/calendar/appointments/schedules/...
+    const GOOGLE_CALENDAR_BOOKING_URL = 'https://calendar.app.google/mGNgvwiGSu38faHh6';
+    const LINE_URL = 'https://lin.ee/SHmdTyU';
+
+    const bookingUrl = GOOGLE_CALENDAR_BOOKING_URL.trim();
+    const bookingFrame = document.getElementById('google-booking-frame');
+    const bookingLink = document.getElementById('google-booking-link');
+    const placeholder = document.getElementById('google-booking-placeholder');
+
+    if (bookingUrl) {
+      bookingFrame.src = bookingUrl;
+      bookingFrame.classList.remove('hidden');
+      placeholder.classList.add('hidden');
+      bookingLink.href = bookingUrl;
+      bookingLink.classList.remove('hidden');
+      bookingLink.classList.add('inline-flex');
+    }
+
+    document.getElementById('line-return-link').href = LINE_URL;
+  </script>
+</body>
+</html>
