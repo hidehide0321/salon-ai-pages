@@ -1,0 +1,205 @@
+name: Publish diagnosis PDF format fix
+
+on:
+  push:
+    paths:
+      - .github/workflows/publish-diagnosis-pdf-fix.yml
+
+permissions:
+  contents: write
+
+jobs:
+  patch-diagnosis-page:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Update diagnosis submission format
+        shell: python
+        run: |
+          from pathlib import Path
+          import re
+
+          path = Path("salon_sindan_si-to.html")
+          text = path.read_text(encoding="utf-8-sig")
+
+          text = text.replace(
+              'const DIAGNOSIS_RECIPIENT_EMAIL = "info@hide-ai-lab.com";',
+              'const DIAGNOSIS_RECIPIENT_EMAIL = "imhide@office-komlab.com";'
+          )
+
+          score_pattern = re.compile(
+              r"""            document\.querySelectorAll\('\.score-row'\)\.forEach\(row => \{\n                const title = row\.querySelector\('\.row-title'\)\.value\.trim\(\);\n                const total = row\.querySelector\('\.row-total'\)\.textContent;\n                if \(title\) \{\n                    scoreDetails\.push\(`\$\{title\} \(優先スコア: \$\{total\}点/20\)`\);\n                \}\n            \}\);"""
+          )
+          score_replacement = """            document.querySelectorAll('.score-row').forEach(row => {
+                const title = row.querySelector('.row-title').value.trim();
+                const total = row.querySelector('.row-total').textContent;
+                const frequency = row.querySelector('.slider-frequency')?.value || "未回答";
+                const time = row.querySelector('.slider-time')?.value || "未回答";
+                const revenue = row.querySelector('.slider-revenue')?.value || "未回答";
+                const dependence = row.querySelector('.slider-dependence')?.value || "未回答";
+                if (title) {
+                    scoreDetails.push([
+                        `【${title}】`,
+                        `Q. 合計優先スコア`,
+                        `A. ${total}点 / 20点`,
+                        `Q. ① 頻度の高さ（よくやる？）`,
+                        `A. ${frequency}点 / 5点`,
+                        `Q. ② 時間負担（時間がかかる）`,
+                        `A. ${time}点 / 5点`,
+                        `Q. ③ 売上影響（売上に直結する）`,
+                        `A. ${revenue}点 / 5点`,
+                        `Q. ④ 属人化（特定の人しかできない）`,
+                        `A. ${dependence}点 / 5点`
+                    ].join('\\n'));
+                }
+            });"""
+          text, score_count = score_pattern.subn(score_replacement, text, count=1)
+          if score_count != 1:
+              raise RuntimeError(f"score block replacement count: {score_count}")
+
+          marker = "            const registeredEmail = getRegisteredEmail();\n"
+          formatter = """            const registeredEmail = getRegisteredEmail();
+            const formatAnswer = value => {
+                if (Array.isArray(value)) {
+                    return value.length ? value.join('、') : "未回答";
+                }
+                const text = String(value || "").trim();
+                return text || "未回答";
+            };
+"""
+          if marker not in text:
+              raise RuntimeError("registeredEmail marker not found")
+          text = text.replace(marker, formatter, 1)
+
+          prompt_pattern = re.compile(
+              r"            const prompt = `\n# サロン分析シート回答データ\n.*?\n`;\n\n            const systemInstruction = `",
+              re.DOTALL
+          )
+          prompt_replacement = """            const prompt = `
+# サロン分析シート回答データ
+
+【1. 基本情報】
+Q. サロン名
+A. ${formatAnswer(sName)}
+
+Q. オーナー名
+A. ${formatAnswer(oName)}
+
+Q. 業種
+A. ${formatAnswer(industries)}
+
+Q. 規模・運営体制
+A. ${formatAnswer(staffScale)}
+
+Q. 主な集客方法
+A. ${formatAnswer(channels)}
+
+Q. 一番困っていること
+A. ${formatAnswer(biggestIssue)}
+
+【2. 売上感覚】
+Q. 新規集客
+A. ${formatAnswer(newCust)}
+
+Q. リピート
+A. ${formatAnswer(repeatSt)}
+
+Q. 来店頻度
+A. ${formatAnswer(freqSt)}
+
+Q. 客単価
+A. ${formatAnswer(priceSt)}
+
+【3. 集客媒体への依存度】
+Q. 当てはまる不満
+A. ${formatAnswer(depChecks)}
+
+Q. 最も依存している方法
+A. ${formatAnswer(mainDep)}
+
+Q. 広告・媒体費への本音
+A. ${formatAnswer(adFeeling)}
+
+【4. 日々の反復業務】
+Q. 行っている業務
+A. ${formatAnswer(routines)}
+
+Q. 面倒な業務1
+A. ${formatAnswer(annoyance1)}
+
+Q. 面倒な業務2
+A. ${formatAnswer(annoyance2)}
+
+Q. 面倒な業務3
+A. ${formatAnswer(annoyance3)}
+
+【5. 文章作成】
+Q. 都度書いているもの
+A. ${formatAnswer(writingWorks)}
+
+Q. 文章のお悩み
+A. ${formatAnswer(writingIssues)}
+
+【6. 顧客フォロー】
+Q. 現在できていること
+A. ${formatAnswer(followDones)}
+
+Q. 漏れが生じやすい場面
+A. ${formatAnswer(followMisses)}
+
+【7・8. リピート・口コミ】
+Q. 導入できているリピート導線
+A. ${formatAnswer(repeatFlows)}
+
+Q. リピート改善したい点
+A. ${formatAnswer(repeatImps)}
+
+Q. できている紹介・口コミ活動
+A. ${formatAnswer(refDones)}
+
+Q. 口コミ依頼の課題
+A. ${formatAnswer(refIssues)}
+
+【9・10. 属人化・AI活用】
+Q. 属人化状況
+A. ${formatAnswer(indWorks)}
+
+Q. 属人化している具体的な業務
+A. ${formatAnswer(indDetail)}
+
+Q. AIで整えたいこと
+A. ${formatAnswer(aiTargets)}
+
+Q. 最初にやりたいこと
+A. ${formatAnswer(aiFirst)}
+
+【11. シミュレータによる優先改善項目】
+${scoreDetails.length ? scoreDetails.join('\\n\\n') : "未回答"}
+
+【12・13. まとめ・未来】
+Q. 自身が捉えている主な課題
+A. ${formatAnswer(summaryIssues)}
+
+Q. 最初に整えたいと感じていること
+A. ${formatAnswer(firstFix)}
+
+Q. 効率化後の理想の姿
+A. ${formatAnswer(futVision)}
+
+Q. AI導入や改善に関する質問・不安
+A. ${formatAnswer(freeQ)}
+`;
+
+            const systemInstruction = `"""
+          text, prompt_count = prompt_pattern.subn(lambda _: prompt_replacement, text, count=1)
+          if prompt_count != 1:
+              raise RuntimeError(f"prompt replacement count: {prompt_count}")
+
+          path.write_text(text, encoding="utf-8")
+      - name: Commit published page
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add salon_sindan_si-to.html
+          git commit -m "Fix diagnosis PDF answer format"
+          git push
