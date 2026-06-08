@@ -11,6 +11,18 @@ const STEP_IMAGES = {
       after: "オーナーが毎回同じことを考え続けていないかどうかです。"
     }
   ],
+  2: [
+    {
+      url: "https://line.hide-ai-lab.com/assets/steps/salon/day2-01.jpg",
+      alt: "AIをもう一人の仕組み化スタッフとして活用するイメージ",
+      after: "もう少し言うと、サロンに「もう一人の仕組み化スタッフ」を入れるイメージです。"
+    },
+    {
+      url: "https://line.hide-ai-lab.com/assets/steps/salon/day2-02.jpg",
+      alt: "AIに任せてサロンに余白時間をつくる考え方",
+      after: "これが、サロンでAIを使う本当の意味です。"
+    }
+  ],
   3: [
     {
       url: "https://line.hide-ai-lab.com/assets/steps/salon/day3-01.jpg",
