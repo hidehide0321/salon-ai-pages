@@ -1,0 +1,1654 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>中小企業向けAI業務改善パック｜無料AI化優先順位チェックシート</title>
+  <meta name="description" content="御社のどの業務からAI化すべきか、まずは無料で確認できます。AI化優先順位チェックシートで、業務負担・属人化・質問の多さを整理し、必要な方にはAI業務診断＋デモ構築をご案内します。" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    /* ===========================
+       CSS カスタムプロパティ（設計トークン）
+    =========================== */
+    :root {
+      --blue-deep:    #0D2B55;
+      --blue-mid:     #1A4A8A;
+      --blue-light:   #2E6DB4;
+      --blue-pale:    #E8F2FF;
+      --blue-bg:      #F0F6FF;
+      --gold:         #C9A84C;
+      --gold-light:   #E4C76B;
+      --gold-pale:    #FBF5E6;
+      --white:        #FFFFFF;
+      --gray-100:     #F7F8FA;
+      --gray-200:     #EAECEF;
+      --gray-500:     #8B96A5;
+      --gray-700:     #4A5568;
+      --gray-900:     #1A202C;
+      --shadow-sm:    0 2px 8px rgba(13, 43, 85, 0.08);
+      --shadow-md:    0 8px 24px rgba(13, 43, 85, 0.12);
+      --shadow-lg:    0 20px 48px rgba(13, 43, 85, 0.16);
+      --radius-sm:    6px;
+      --radius-md:    12px;
+      --radius-lg:    20px;
+      --font-sans:    'Noto Sans JP', sans-serif;
+      --font-serif:   'Noto Serif JP', serif;
+      --transition:   0.25s ease;
+    }
+
+    /* ===========================
+       リセット & ベース
+    =========================== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-sans);
+      color: var(--gray-900);
+      background: var(--white);
+      line-height: 1.8;
+      font-size: 16px;
+    }
+    img { max-width: 100%; height: auto; display: block; }
+    a { color: inherit; text-decoration: none; }
+
+    /* ===========================
+       ユーティリティ
+    =========================== */
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    .section {
+      padding: 88px 0;
+    }
+    .section-alt {
+      background: var(--gray-100);
+    }
+    .section-blue {
+      background: var(--blue-deep);
+      color: var(--white);
+    }
+    .section-blue-pale {
+      background: var(--blue-bg);
+    }
+    .section-gold-pale {
+      background: var(--gold-pale);
+    }
+
+    /* セクション見出し */
+    .section-label {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      border-bottom: 2px solid var(--gold);
+      padding-bottom: 4px;
+      margin-bottom: 20px;
+    }
+    .section-title {
+      font-family: var(--font-serif);
+      font-size: clamp(22px, 3.5vw, 36px);
+      font-weight: 700;
+      line-height: 1.45;
+      color: var(--blue-deep);
+      margin-bottom: 24px;
+    }
+    .section-blue .section-title { color: var(--white); }
+    .section-blue .section-label { color: var(--gold-light); border-color: var(--gold-light); }
+    .section-lead {
+      font-size: 16px;
+      color: var(--gray-700);
+      line-height: 1.9;
+    }
+    .section-blue .section-lead { color: rgba(255,255,255,0.85); }
+
+    /* CTAボタン */
+    .btn-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--blue-deep);
+      color: var(--white);
+      font-size: 17px;
+      font-weight: 700;
+      padding: 20px 44px;
+      border-radius: 50px;
+      border: 2px solid var(--gold);
+      box-shadow: 0 4px 20px rgba(13,43,85,0.3), 0 0 0 1px rgba(201,168,76,0.2);
+      cursor: pointer;
+      transition: all var(--transition);
+      letter-spacing: 0.04em;
+    }
+    .btn-cta:hover {
+      background: var(--blue-mid);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(13,43,85,0.4), 0 0 0 2px var(--gold);
+    }
+    .btn-cta .price-accent {
+      color: var(--gold-light);
+      font-weight: 900;
+    }
+    .btn-cta-wrap {
+      text-align: center;
+      margin-top: 48px;
+    }
+    .btn-cta-large {
+      font-size: 19px;
+      padding: 24px 56px;
+    }
+
+    /* ===========================
+       ヘッダー（スティッキー）
+    =========================== */
+    .site-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: rgba(13, 43, 85, 0.96);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(201,168,76,0.3);
+    }
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 24px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .header-logo {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: 0.05em;
+    }
+    .header-logo span { color: var(--gold-light); }
+    .header-cta {
+      background: var(--gold);
+      color: var(--blue-deep);
+      font-size: 13px;
+      font-weight: 700;
+      padding: 10px 24px;
+      border-radius: 50px;
+      border: none;
+      cursor: pointer;
+      transition: all var(--transition);
+      letter-spacing: 0.04em;
+    }
+    .header-cta:hover {
+      background: var(--gold-light);
+      transform: translateY(-1px);
+    }
+
+    /* ===========================
+       1. ファーストビュー
+    =========================== */
+    .hero {
+      padding-top: 72px; /* ヘッダー分 */
+      background: var(--blue-deep);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(26,74,138,0.4) 0%, rgba(13,43,85,0.2) 100%);
+      pointer-events: none;
+    }
+    .hero-image-wrap {
+      position: relative;
+      background: var(--blue-deep);
+    }
+    .hero-image-wrap img {
+      width: 100%;
+      max-height: none;
+      object-fit: contain;
+      display: block;
+    }
+    .hero-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 15%;
+      background: linear-gradient(to top, var(--blue-deep) 0%, rgba(13, 43, 85, 0.8) 50%, transparent 100%);
+    }
+    .hero-content {
+      position: relative;
+      padding: 56px 0 72px;
+      text-align: center;
+    }
+    .hero-badge {
+      display: inline-block;
+      background: rgba(201,168,76,0.15);
+      border: 1px solid var(--gold);
+      color: var(--gold-light);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      padding: 6px 20px;
+      border-radius: 50px;
+      margin-bottom: 28px;
+    }
+    .hero-title {
+      font-family: var(--font-serif);
+      font-size: clamp(26px, 4vw, 46px);
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1.5;
+      margin-bottom: 20px;
+    }
+    .hero-title em {
+      font-style: normal;
+      color: var(--gold-light);
+    }
+    .hero-sub {
+      font-size: clamp(15px, 2vw, 18px);
+      color: rgba(255,255,255,0.80);
+      margin-bottom: 44px;
+      line-height: 1.9;
+    }
+    /* AI活用注記バナー */
+    .hero-notice {
+      background: rgba(46, 109, 180, 0.25);
+      border: 1px solid rgba(46,109,180,0.5);
+      border-radius: var(--radius-md);
+      padding: 20px 32px;
+      margin-top: 48px;
+      text-align: left;
+      max-width: 680px;
+      margin-left: auto;
+      margin-right: auto;
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+    }
+    .hero-notice-icon {
+      font-size: 22px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .hero-notice-text {
+      font-size: 13px;
+      color: rgba(255,255,255,0.75);
+      line-height: 1.85;
+    }
+    .hero-notice-text strong {
+      color: var(--gold-light);
+      font-weight: 700;
+      display: block;
+      margin-bottom: 4px;
+      font-size: 14px;
+    }
+
+    /* ===========================
+       2. AI研修との違い
+    =========================== */
+    .diff-section { }
+    .diff-image-wrap {
+      margin-top: 48px;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+    }
+    .diff-image-wrap img { width: 100%; }
+
+    /* ===========================
+       3. 属人化の問題提起
+    =========================== */
+    .problem-section { }
+    .problem-list {
+      list-style: none;
+      margin: 24px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .problem-list li {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--gray-700);
+    }
+    .problem-list li::before {
+      content: '▸';
+      color: var(--gold);
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+    .problem-conclusion {
+      background: var(--blue-deep);
+      color: var(--white);
+      border-radius: var(--radius-md);
+      padding: 32px 40px;
+      margin-top: 40px;
+      border-left: 4px solid var(--gold);
+    }
+    .problem-conclusion p {
+      font-size: 17px;
+      line-height: 1.9;
+      color: rgba(255,255,255,0.90);
+    }
+    .problem-conclusion strong {
+      color: var(--gold-light);
+    }
+    .problem-image-wrap {
+      margin-top: 48px;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+    }
+    .problem-image-wrap img { width: 100%; }
+
+    /* ===========================
+       4. 5万円診断の流れ
+    =========================== */
+    .flow-section { }
+    .flow-lead-box {
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-md);
+      padding: 28px 36px;
+      margin-bottom: 40px;
+      position: relative;
+    }
+    .flow-lead-box::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 4px;
+      background: linear-gradient(to bottom, var(--gold), var(--blue-light));
+      border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+    }
+    .flow-image-wrap {
+      margin-top: 48px;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+    }
+    .flow-image-wrap img { width: 100%; }
+
+    /* ===========================
+       5. デモシステム例
+    =========================== */
+    .demo-section { }
+    .demo-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin: 28px 0;
+    }
+    .demo-tag {
+      background: var(--white);
+      border: 1.5px solid var(--blue-light);
+      color: var(--blue-mid);
+      font-size: 14px;
+      font-weight: 700;
+      padding: 8px 20px;
+      border-radius: 50px;
+      letter-spacing: 0.03em;
+    }
+    .demo-image-wrap {
+      margin-top: 48px;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+    }
+    .demo-image-wrap img { width: 100%; }
+
+    /* ===========================
+       6. 5万円診断でわかること（カード）
+    =========================== */
+    .cards-section { }
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 48px;
+    }
+    .card-item-wrapper {
+      display: contents; /* PC表示ではGridの子要素として直接cardとcard-detail-contentを扱わせる */
+    }
+    .card {
+      background: var(--white);
+      border-radius: var(--radius-md);
+      padding: 36px 28px 48px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--gray-200);
+      transition: all var(--transition);
+      position: relative;
+      overflow: hidden;
+      text-align: left;
+      cursor: pointer;
+      font-family: inherit;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--gold), var(--blue-light));
+    }
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-md);
+      border-color: var(--blue-light);
+    }
+    .card.is-active {
+      background: var(--blue-bg);
+      border-color: var(--blue-light);
+      box-shadow: var(--shadow-md);
+    }
+    .card-number {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      color: var(--gold);
+      margin-bottom: 16px;
+      display: block;
+    }
+    .card-title {
+      font-family: var(--font-serif);
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--blue-deep);
+      margin-bottom: 12px;
+      display: block;
+    }
+    .card-text {
+      font-size: 14px;
+      color: var(--gray-700);
+      line-height: 1.85;
+      display: block;
+      margin-bottom: 16px;
+    }
+    .card-detail-label {
+      position: absolute;
+      bottom: 16px;
+      left: 28px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--blue-light);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .card.is-active .card-detail-label {
+      color: var(--blue-mid);
+    }
+    .card-detail-icon {
+      font-size: 10px;
+      transition: transform var(--transition);
+    }
+
+    /* アコーディオン詳細パネルのスタイル */
+    .card-detail-content {
+      display: none;
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-md);
+      position: relative;
+      overflow: hidden;
+      margin-top: 16px;
+      margin-bottom: 24px;
+      grid-column: 1 / -1; /* PC Grid上でも全幅（1カラム分）でカードの下に出るように配置 */
+    }
+    .card-detail-content::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; bottom: 0;
+      width: 4px;
+      background: var(--blue-light);
+    }
+    .card-detail-content.is-open {
+      display: block;
+      animation: fadeInUp 0.4s ease both;
+    }
+    .card-detail-inner {
+      padding: 32px 40px;
+    }
+    .card-detail-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--gold);
+      letter-spacing: 0.1em;
+      margin-bottom: 8px;
+    }
+    .card-detail-recommend {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--blue-deep);
+      margin-bottom: 16px;
+      line-height: 1.6;
+    }
+    .card-detail-body {
+      font-size: 15px;
+      color: var(--gray-700);
+      line-height: 1.85;
+    }
+    @media (max-width: 768px) {
+      .cards-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+      .card-item-wrapper {
+        display: block; /* スマホではラッパーを有効化して、直下にcard-detail-contentを落とし込む */
+        margin-bottom: 16px;
+      }
+      .card-detail-content {
+        margin-top: 8px;
+        margin-bottom: 8px;
+      }
+      .card-detail-inner {
+        padding: 24px 20px;
+      }
+      .card-detail-recommend {
+        font-size: 15px;
+      }
+      .card-detail-body {
+        font-size: 14px;
+      }
+    }
+
+
+    /* ===========================
+       無料チェックシート導線
+    =========================== */
+    .hero-proof-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      max-width: 760px;
+      margin: 40px auto 0;
+    }
+    .hero-proof-card {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(201,168,76,0.28);
+      border-radius: var(--radius-md);
+      padding: 18px 16px;
+      color: rgba(255,255,255,0.86);
+      font-size: 14px;
+      line-height: 1.7;
+    }
+    .hero-proof-card strong {
+      display: block;
+      color: var(--gold-light);
+      font-size: 15px;
+      margin-bottom: 4px;
+    }
+    .cta-support-text {
+      margin-top: 16px;
+      font-size: 13px;
+      color: rgba(255,255,255,0.72);
+      line-height: 1.8;
+    }
+    .paid-link {
+      display: inline-block;
+      margin-top: 12px;
+      font-size: 13px;
+      color: var(--gold-light);
+      text-decoration: underline;
+      text-underline-offset: 4px;
+    }
+    .section-gold-pale .paid-link,
+    .section-blue-pale .paid-link,
+    .lead-form-section .paid-link {
+      color: var(--blue-mid);
+    }
+
+    .flow-steps {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 14px;
+      margin-top: 36px;
+    }
+    .flow-step-card {
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-sm);
+      padding: 24px 18px;
+      position: relative;
+      overflow: hidden;
+    }
+    .flow-step-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--gold), var(--blue-light));
+    }
+    .flow-step-number {
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--gold);
+      letter-spacing: 0.16em;
+      margin-bottom: 10px;
+    }
+    .flow-step-title {
+      font-family: var(--font-serif);
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--blue-deep);
+      line-height: 1.55;
+      margin-bottom: 8px;
+    }
+    .flow-step-text {
+      font-size: 13px;
+      color: var(--gray-700);
+      line-height: 1.75;
+    }
+
+    .lead-form-section {
+      background: var(--blue-bg);
+    }
+    .lead-form-box {
+      margin-top: 40px;
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-md);
+      padding: 40px;
+    }
+    .lead-form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px 20px;
+    }
+    .lead-form-field {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .lead-form-field.full {
+      grid-column: 1 / -1;
+    }
+    .lead-form-field label {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--blue-deep);
+    }
+    .lead-form-field input,
+    .lead-form-field select,
+    .lead-form-field textarea {
+      width: 100%;
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-sm);
+      padding: 13px 14px;
+      font-family: var(--font-sans);
+      font-size: 15px;
+      color: var(--gray-900);
+      background: var(--white);
+    }
+    .lead-form-field textarea {
+      min-height: 110px;
+      resize: vertical;
+    }
+    .lead-form-note {
+      margin-top: 18px;
+      font-size: 13px;
+      color: var(--gray-700);
+      line-height: 1.8;
+    }
+    .lead-form-actions {
+      margin-top: 28px;
+      text-align: center;
+    }
+    .lead-form-actions .btn-cta {
+      border: none;
+    }
+
+
+    /* ===========================
+       7. よくある質問（アコーディオン）
+    =========================== */
+    .faq-section { }
+    .faq-list {
+      list-style: none;
+      margin-top: 48px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .faq-item {
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+    }
+    .faq-question {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 24px 28px;
+      cursor: pointer;
+      user-select: none;
+      transition: background var(--transition);
+      width: 100%;
+      border: none;
+      background: transparent;
+      text-align: left;
+      font-family: inherit;
+    }
+    .faq-question:hover { background: var(--blue-bg); }
+    .faq-question[aria-expanded="true"] { background: var(--blue-pale); }
+    .faq-q-text {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--blue-deep);
+      line-height: 1.6;
+    }
+    .faq-q-icon {
+      background: var(--blue-deep);
+      color: var(--white);
+      font-size: 12px;
+      font-weight: 900;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .faq-arrow {
+      color: var(--blue-light);
+      font-size: 18px;
+      transition: transform var(--transition);
+      flex-shrink: 0;
+    }
+    .faq-question[aria-expanded="true"] .faq-arrow { transform: rotate(180deg); }
+    .faq-answer {
+      display: none;
+      padding: 0 28px 24px 68px;
+      font-size: 15px;
+      color: var(--gray-700);
+      line-height: 1.9;
+    }
+    .faq-answer.is-open { display: block; }
+
+    /* ===========================
+       8. 最終CTA
+    =========================== */
+    .final-cta {
+      background: linear-gradient(135deg, var(--blue-deep) 0%, var(--blue-mid) 100%);
+      padding: 100px 0;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .final-cta::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -10%;
+      width: 120%;
+      height: 200%;
+      background: radial-gradient(ellipse at center, rgba(201,168,76,0.06) 0%, transparent 70%);
+    }
+    .final-cta-title {
+      font-family: var(--font-serif);
+      font-size: clamp(22px, 3vw, 34px);
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+    .final-cta-title span {
+      color: var(--gold-light);
+    }
+    .final-cta-sub {
+      font-size: 16px;
+      color: rgba(255,255,255,0.78);
+      line-height: 1.9;
+      margin-bottom: 48px;
+    }
+    .final-price-note {
+      display: inline-block;
+      background: rgba(201,168,76,0.15);
+      border: 1px solid rgba(201,168,76,0.4);
+      color: var(--gold-light);
+      font-size: 13px;
+      padding: 8px 24px;
+      border-radius: 50px;
+      margin-top: 24px;
+    }
+
+    /* ===========================
+       フッター
+    =========================== */
+    .site-footer {
+      background: #0A1F3E;
+      color: rgba(255,255,255,0.5);
+      text-align: center;
+      padding: 32px 24px;
+      font-size: 13px;
+    }
+    .site-footer a { color: rgba(255,255,255,0.6); }
+
+    /* ===========================
+       区切り装飾
+    =========================== */
+    .divider {
+      width: 48px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--gold), var(--blue-light));
+      margin: 0 auto 32px;
+      border-radius: 2px;
+    }
+    .divider-left {
+      margin: 0 0 32px;
+    }
+
+    /* ===========================
+       アニメーション
+    =========================== */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .fade-in-up {
+      animation: fadeInUp 0.7s ease both;
+    }
+    .delay-1 { animation-delay: 0.1s; }
+    .delay-2 { animation-delay: 0.2s; }
+    .delay-3 { animation-delay: 0.35s; }
+
+    /* スクロールアニメーション */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.65s ease, transform 0.65s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ===========================
+       レスポンシブ
+    =========================== */
+    @media (max-width: 768px) {
+      .section { padding: 64px 0; }
+      .cards-grid {
+        grid-template-columns: 1fr;
+      }
+      .card:last-child:nth-child(odd):nth-last-child(1) {
+        grid-column: 1;
+      }
+      .hero-content { padding: 44px 0 56px; }
+      .btn-cta { font-size: 15px; padding: 18px 32px; }
+      .btn-cta-large { font-size: 16px; padding: 20px 36px; }
+      .problem-conclusion { padding: 24px 28px; }
+      .flow-lead-box { padding: 22px 24px; }
+      .hero-notice { padding: 16px 20px; flex-direction: column; gap: 10px; }
+      .faq-answer { padding-left: 28px; }
+
+      .hero-proof-grid {
+        grid-template-columns: 1fr;
+      }
+      .flow-steps {
+        grid-template-columns: 1fr;
+      }
+      .lead-form-box {
+        padding: 28px 20px;
+      }
+      .lead-form-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .container { padding: 0 16px; }
+      .section-title { font-size: 22px; }
+      .hero-title { font-size: 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===========================
+       固定ヘッダー
+  =========================== -->
+  <header class="site-header" role="banner">
+    <div class="header-inner">
+      <div class="header-logo">中小企業向け<span>AI業務改善パック</span></div>
+      <a href="#checksheet-form" class="header-cta">無料チェックシート</a>
+    </div>
+  </header>
+
+  <!-- ===========================
+       1. ファーストビュー
+  =========================== -->
+  <section class="hero" id="hero" aria-label="ファーストビュー">
+<div class="hero-image-wrap">
+      <img
+        src="https://hidehide0321.github.io/hide-smb-ai-lp/images/小室秀治_ビジネスAI_1.png"
+        alt="AI研修ではなく、AIで業務を仕組み化するサービス"
+        loading="eager"
+      />
+      <div class="hero-overlay" aria-hidden="true"></div>
+    </div>
+<div class="hero-overlay" aria-hidden="true"></div>
+    <div class="hero-content">
+      <div class="container">
+        <p class="hero-badge fade-in-up">中小企業向けAI業務改善パック</p>
+        <h1 class="hero-title fade-in-up delay-1">
+          AI研修ではなく、<br />AIで業務を<em>仕組み化</em>するサービスです。
+        </h1>
+        <p class="hero-sub fade-in-up delay-2">
+          まずは無料で、御社のどの業務からAI化すべきか確認しませんか。<br />
+          「AI化優先順位チェックシート」をお送りします。<br />
+          回答いただいた内容をもとに、必要な方には5万円のAI業務診断＋デモ構築をご案内します。
+        </p>
+        <div class="fade-in-up delay-3">
+          <a href="#checksheet-form" class="btn-cta" id="hero-cta">
+            <span>まずは<span class="price-accent">無料</span>でAI化優先順位チェックシートを受け取る</span>
+            <span aria-hidden="true">→</span>
+          </a>
+          <div class="cta-support-text">
+            メールアドレス登録後、チェックシートの案内をお送りします。<br />
+            売り込みではなく、まずは御社の業務課題を整理するための無料シートです。
+          </div>
+          <a href="mailto:info@hide-ai-lab.com?subject=AI業務診断＋デモ構築の相談" class="paid-link">
+            すぐに5万円のAI業務診断＋デモ構築を相談したい方はこちら
+          </a>
+        </div>
+
+        <div class="hero-proof-grid fade-in-up delay-3" aria-label="無料チェックシートで確認できること">
+          <div class="hero-proof-card">
+            <strong>業務負担を整理</strong>
+            時間を取られている作業を洗い出します。
+          </div>
+          <div class="hero-proof-card">
+            <strong>属人化を見える化</strong>
+            あの人しか分からない業務を確認します。
+          </div>
+          <div class="hero-proof-card">
+            <strong>最初の一手を判断</strong>
+            AI化の優先順位を考える材料になります。
+          </div>
+        </div>
+
+        <!-- AI活用注記 -->
+        <div class="hero-notice fade-in-up delay-3" role="note" aria-label="AIを活用した制作注記">
+          <div class="hero-notice-icon" aria-hidden="true">💡</div>
+          <div class="hero-notice-text">
+            <strong>このページ自体が、AIを実務で使った成果物です。</strong>
+            このLPの構成・文章・図解・画像は、AIを活用して制作しています。
+            AIは、もう「学ぶだけ」のものではありません。
+            業務整理、資料作成、図解、仕組み化まで、実務で使える時代です。
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===========================
+       2. AI研修との違い
+  =========================== -->
+  <section class="section diff-section" id="difference" aria-labelledby="diff-heading">
+    <div class="container">
+      <p class="section-label reveal">What's Different</p>
+      <h2 class="section-title reveal" id="diff-heading">
+        AI研修とAI実装サービスの違い
+      </h2>
+      <div class="divider divider-left reveal"></div>
+      <div class="section-lead reveal">
+        <p>AI研修を受けても、現場の業務が変わらないことがあります。<br />
+        理由はシンプルです。<strong>学ぶことと、業務で使える仕組みを作ることは別だからです。</strong></p>
+        <br />
+        <p>社員がAIを学んでも、どの業務に使うのか、どう運用するのか、誰が管理するのかが決まっていなければ、結局使われません。</p>
+        <br />
+        <p>このサービスは、AIを学ぶ講座ではありません。<br />
+        <strong>御社の業務に合わせて、実際に使える仕組みを作る実装サービスです。</strong></p>
+      </div>
+      <div class="diff-image-wrap reveal">
+        <img
+        src="https://hidehide0321.github.io/hide-smb-ai-lp/images/小室秀治_ビジネスAI_2.png"
+          alt="AI研修とAI実装サービスの比較図"
+          loading="lazy"
+        />
+      </div>
+    </div>
+  </section>
+
+  <!-- ===========================
+       3. 属人化の問題提起
+  =========================== -->
+  <section class="section section-alt problem-section" id="problem" aria-labelledby="problem-heading">
+    <div class="container">
+      <p class="section-label reveal">Problem</p>
+      <h2 class="section-title reveal" id="problem-heading">
+        担当者に依存する会社から、<br />仕組みで回る会社へ
+      </h2>
+      <div class="divider divider-left reveal"></div>
+      <p class="section-lead reveal">中小企業では、長年の担当者だけが知っている仕事がたくさんあります。</p>
+      <ul class="problem-list reveal" aria-label="属人化の課題一覧">
+        <li>人に聞かないと分からない</li>
+        <li>資料がバラバラ</li>
+        <li>引き継ぎが大変</li>
+        <li>社長に確認が集中する</li>
+      </ul>
+      <p class="section-lead reveal">なんとなく危ないとは分かっている。<br />でも、忙しくて後回しになっている。</p>
+      <div class="problem-conclusion reveal">
+        <p><strong>そこにAIを入れます。</strong><br />
+        業務効率化だけでなく、<strong>会社に残る資産を作っていきます。</strong></p>
+      </div>
+      <div class="problem-image-wrap reveal">
+        <img
+        src="https://hidehide0321.github.io/hide-smb-ai-lp/images/小室秀治_ビジネスAI_4.png"
+          alt="担当者依存からAI仕組み化へのビフォーアフター"
+          loading="lazy"
+        />
+      </div>
+    </div>
+  </section>
+
+  <!-- ===========================
+       4. 無料チェックシートの流れ
+  =========================== -->
+  <section class="section section-blue-pale flow-section" id="flow" aria-labelledby="flow-heading">
+    <div class="container">
+      <p class="section-label reveal">Step-by-Step</p>
+      <h2 class="section-title reveal" id="flow-heading">
+        御社のどの業務からAI化すべきか、<br />まずは無料で確認できます
+      </h2>
+      <div class="divider divider-left reveal"></div>
+      <div class="flow-lead-box reveal">
+        <p class="section-lead">
+          いきなり高額なシステム構築を提案するサービスではありません。<br /><br />
+          まずは無料の「AI化優先順位チェックシート」で、御社の業務を整理していただきます。<br /><br />
+          チェックシートでは、業務の負担、属人化の度合い、質問の多さ、ミスの起きやすさなどを確認します。<br /><br />
+          回答いただいた内容をもとに、AI化しやすい業務と、最初に着手すべき業務が見えやすくなります。<br /><br />
+          必要な方には、その後に5万円の「AI業務診断＋デモ構築」をご案内します。
+        </p>
+      </div>
+<div class="flow-image-wrap reveal">
+        <img
+        src="https://hidehide0321.github.io/hide-smb-ai-lp/images/小室秀治_ビジネスAI_3.png"
+          alt="5万円診断の申し込み後の流れ・成果物・費用感"
+          loading="lazy"
+        />
+      </div>
+
+      <div class="flow-steps reveal" aria-label="無料チェックシート利用の流れ">
+        <div class="flow-step-card">
+          <span class="flow-step-number">STEP 01</span>
+          <h3 class="flow-step-title">チェックシートを受け取る</h3>
+          <p class="flow-step-text">メールアドレスを登録すると、AI化優先順位チェックシートの案内が届きます。</p>
+        </div>
+        <div class="flow-step-card">
+          <span class="flow-step-number">STEP 02</span>
+          <h3 class="flow-step-title">社内業務を整理する</h3>
+          <p class="flow-step-text">日報、問い合わせ、マニュアル、教育、引き継ぎなど、AI化候補を確認します。</p>
+        </div>
+        <div class="flow-step-card">
+          <span class="flow-step-number">STEP 03</span>
+          <h3 class="flow-step-title">チェックシートに回答する</h3>
+          <p class="flow-step-text">業務負担、属人化、質問の多さ、ミスの起きやすさを入力します。</p>
+        </div>
+        <div class="flow-step-card">
+          <span class="flow-step-number">STEP 04</span>
+          <h3 class="flow-step-title">優先順位を確認する</h3>
+          <p class="flow-step-text">どの業務からAI化すべきか、社内で考える材料が整理されます。</p>
+        </div>
+        <div class="flow-step-card">
+          <span class="flow-step-number">STEP 05</span>
+          <h3 class="flow-step-title">必要な方のみ有料診断へ</h3>
+          <p class="flow-step-text">より具体的に進めたい場合のみ、AI業務診断＋デモ構築をご案内します。</p>
+        </div>
+      </div>
+
+      <div class="btn-cta-wrap reveal">
+        <a href="#checksheet-form" class="btn-cta" id="flow-cta">
+          <span>まずは<span class="price-accent">無料</span>でAI化優先順位チェックシートを受け取る</span>
+          <span aria-hidden="true">→</span>
+        </a>
+        <br />
+        <a href="mailto:info@hide-ai-lab.com?subject=AI業務診断＋デモ構築の相談" class="paid-link">
+          すぐに5万円のAI業務診断＋デモ構築を相談したい方はこちら
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===========================
+       5. デモシステム例
+  =========================== -->
+  <section class="section demo-section" id="demo" aria-labelledby="demo-heading">
+    <div class="container">
+      <p class="section-label reveal">Demo Examples</p>
+      <h2 class="section-title reveal" id="demo-heading">
+        御社専用のデモシステムで、<br />業務改善の形が見えます
+      </h2>
+      <div class="divider divider-left reveal"></div>
+      <p class="section-lead reveal">デモは、難しいAIツールの説明ではありません。<br />御社の業務に合わせて、まずは小さく試せる形にします。</p>
+      <div class="demo-tags reveal" aria-label="デモシステムの種類">
+        <!-- 優先度の高い4つを左から配置 -->
+        <span class="demo-tag">日報まとめAI</span>
+        <span class="demo-tag">議事録要約AI</span>
+        <span class="demo-tag">営業提案書AI</span>
+        <span class="demo-tag">業務引き継ぎAI</span>
+        <!-- その他のボタン候補（〇〇AI / 社内FAQ） -->
+        <span class="demo-tag">社内マニュアルAI</span>
+        <span class="demo-tag">問い合わせ対応AI</span>
+        <span class="demo-tag">新人教育AI</span>
+        <span class="demo-tag">社内FAQ</span>
+        <span class="demo-tag">勤怠問い合わせAI</span>
+        <span class="demo-tag">見積もり補助AI</span>
+        <span class="demo-tag">クレーム対応AI</span>
+        <span class="demo-tag">採用面接AI</span>
+        <span class="demo-tag">稟議文作成AI</span>
+        <span class="demo-tag">チェックリスト作成AI</span>
+      </div>
+      <div class="demo-image-wrap reveal">
+        <img
+        src="https://hidehide0321.github.io/hide-smb-ai-lp/images/小室秀治_ビジネスAI_5.png"
+          alt="実際に作れるデモシステムの例一覧"
+          loading="lazy"
+        />
+      </div>
+    </div>
+  </section>
+
+  <!-- ===========================
+       6. AI化優先順位チェックシートで整理できること（カード＆アコーディオン）
+  =========================== -->
+  <section class="section section-gold-pale cards-section" id="what-you-get" aria-labelledby="cards-heading">
+    <div class="container">
+      <p class="section-label reveal">What You Get</p>
+      <h2 class="section-title reveal" id="cards-heading">
+        AI化優先順位チェックシートで、<br>社内の悩みを整理できます
+      </h2>
+      <div class="divider reveal"></div>
+
+      <div class="cards-grid" role="list" aria-label="診断でわかること5つ">
+        <!-- カード1 -->
+        <div class="card-item-wrapper">
+          <button class="card reveal card-accordion-trigger" id="card-btn-1" aria-expanded="false" aria-controls="card-detail-1">
+            <span class="card-number">01 / INSIGHT</span>
+            <span class="card-title">AI化できる業務</span>
+            <span class="card-text">文章作成、確認、整理など、AI化しやすい業務を見つけます。</span>
+            <span class="card-detail-label">詳細を見る <span class="card-detail-icon">▼</span></span>
+          </button>
+          <div class="card-detail-content" id="card-detail-1" role="region" aria-labelledby="card-btn-1">
+            <div class="card-detail-inner">
+              <h4 class="card-detail-title">01 / AI化できる業務</h4>
+              <p class="card-detail-recommend">問い合わせ返信、議事録、日報、資料作成に時間を取られている会社におすすめです。</p>
+              <p class="card-detail-body">
+                AIで成果が出やすい業務には、わかりやすい特徴があります。<br>
+                それは、<strong>毎回似たような入力があり、毎回似たような判断や文章作成が発生している業務</strong>です。<br>
+                たとえば、問い合わせへの一次返信、社内マニュアルの確認、議事録の整理、日報の要約、提案書の下書き、チェックリスト作成などです。<br>
+                診断では、御社の業務をヒアリングしながら、「AIに任せやすい業務」と「人が判断すべき業務」を切り分けます。<br>
+                いきなり全社導入を目指すのではなく、まずは小さく試して効果が見えやすい場所を見つけます。
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- カード2 -->
+        <div class="card-item-wrapper">
+          <button class="card reveal card-accordion-trigger" id="card-btn-2" aria-expanded="false" aria-controls="card-detail-2">
+            <span class="card-number">02 / INSIGHT</span>
+            <span class="card-title">属人化している業務</span>
+            <span class="card-text">特定の人にしか分からない手順や判断基準を整理します。</span>
+            <span class="card-detail-label">詳細を見る <span class="card-detail-icon">▼</span></span>
+          </button>
+          <div class="card-detail-content" id="card-detail-2" role="region" aria-labelledby="card-btn-2">
+            <div class="card-detail-inner">
+              <h4 class="card-detail-title">02 / 属人化している業務</h4>
+              <p class="card-detail-recommend">ベテラン社員や社長に確認が集中している会社におすすめです。</p>
+              <p class="card-detail-body">
+                中小企業には、「あの人に聞かないと進まない仕事」がよくあります。<br>
+                普段は問題なく回っているように見えても、担当者が休む、異動する、退職するだけで業務が止まるリスクがあります。<br>
+                診断では、担当者の頭の中にある手順、判断基準、よくある質問、過去の対応例を洗い出します。<br>
+                そこから、<strong>社内マニュアルAI、社内FAQ、新人教育AI、業務引き継ぎAI</strong>として使える形に整理します。<br>
+                人に依存していた知識を、会社に残る資産に変えていきます。
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- カード3 -->
+        <div class="card-item-wrapper">
+          <button class="card reveal card-accordion-trigger" id="card-btn-3" aria-expanded="false" aria-controls="card-detail-3">
+            <span class="card-number">03 / INSIGHT</span>
+            <span class="card-title">最初に着手する業務</span>
+            <span class="card-text">効果が見えやすく、現場が使いやすい順番に並べます。</span>
+            <span class="card-detail-label">詳細を見る <span class="card-detail-icon">▼</span></span>
+          </button>
+          <div class="card-detail-content" id="card-detail-3" role="region" aria-labelledby="card-btn-3">
+            <div class="card-detail-inner">
+              <h4 class="card-detail-title">03 / 最初に着手する業務</h4>
+              <p class="card-detail-recommend">AIを使いたいが、何から始めればいいかわからない会社におすすめです。</p>
+              <p class="card-detail-body">
+                AI導入で失敗しやすい会社は、最初から大きな仕組みを作ろうとします。<br>
+                でも、最初にやるべきなのは、<strong>小さく作れて、現場がすぐ使えて、効果を説明しやすい業務</strong>です。<br>
+                診断では、「工数が多い」「ミスが起きやすい」「質問が多い」「担当者依存が強い」「成果が見えやすい」という視点で優先順位をつけます。<br>
+                最初の一歩が決まると、社内での説明もしやすくなります。<br>
+                御社にとって、今すぐ試すべき業務から整理します。
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- カード4 -->
+        <div class="card-item-wrapper">
+          <button class="card reveal card-accordion-trigger" id="card-btn-4" aria-expanded="false" aria-controls="card-detail-4">
+            <span class="card-number">04 / DELIVERABLE</span>
+            <span class="card-title">簡易デモシステム</span>
+            <span class="card-text">御社の実際の業務に近い形で、簡易デモを作ります。</span>
+            <span class="card-detail-label">詳細を見る <span class="card-detail-icon">▼</span></span>
+          </button>
+          <div class="card-detail-content" id="card-detail-4" role="region" aria-labelledby="card-btn-4">
+            <div class="card-detail-inner">
+              <h4 class="card-detail-title">04 / 簡易デモシステム</h4>
+              <p class="card-detail-recommend">説明だけでは社内の理解が進まない会社におすすめです。</p>
+              <p class="card-detail-body">
+                AIの説明を聞くだけでは、なかなか社内は動きません。<br>
+                大事なのは、「実際に触ると、どう業務が変わるのか」を見せることです。<br>
+                診断後は、御社の業務に合わせて簡易デモを作成します。<br>
+                たとえば、<strong>社内マニュアルAI、問い合わせ対応AI、日報まとめAI、議事録要約AI、営業提案書AI</strong>などです。<br>
+                実物に近い形で確認できるので、社長、担当者、現場メンバーが同じイメージを持ちやすくなります。
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- カード5 -->
+        <div class="card-item-wrapper">
+          <button class="card reveal card-accordion-trigger" id="card-btn-5" aria-expanded="false" aria-controls="card-detail-5">
+            <span class="card-number">05 / DELIVERABLE</span>
+            <span class="card-title">改善ロードマップ</span>
+            <span class="card-text">本格導入に進む場合の手順と社内運用を整理します。</span>
+            <span class="card-detail-label">詳細を見る <span class="card-detail-icon">▼</span></span>
+          </button>
+          <div class="card-detail-content" id="card-detail-5" role="region" aria-labelledby="card-btn-5">
+            <div class="card-detail-inner">
+              <h4 class="card-detail-title">05 / 改善ロードマップ</h4>
+              <p class="card-detail-recommend">AI導入を一度きりで終わらせず、業務改善につなげたい会社におすすめです。</p>
+              <p class="card-detail-body">
+                AI導入は、ツールを入れて終わりではありません。<br>
+                業務の流れ、社内ルール、使う人、管理する人、更新する情報まで整える必要があります。<br>
+                診断では、最初に作るデモ、次に整える社内データ、現場での使い方、運用ルールまで整理します。<br>
+                <strong>「何から始めるか」「誰が使うか」「次に何を整えるか」</strong>が見えるので、社内で検討しやすくなります。<br>
+                小さく試して、効果が見えたところから本格導入に進める形を提案します。
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===========================
+       7. 無料チェックシート登録フォーム
+  =========================== -->
+  <section class="section lead-form-section" id="checksheet-form" aria-labelledby="checksheet-form-heading">
+    <div class="container">
+      <p class="section-label reveal">Free Check Sheet</p>
+      <h2 class="section-title reveal" id="checksheet-form-heading">
+        AI化優先順位チェックシートを<br />無料で受け取る
+      </h2>
+      <div class="divider divider-left reveal"></div>
+      <p class="section-lead reveal">
+        入力いただいたメールアドレスに、チェックシートの案内をお送りします。<br />
+        回答いただいた内容をもとに、必要な方には5万円のAI業務診断＋デモ構築をご案内します。
+      </p>
+
+      <form class="lead-form-box reveal" action="https://script.google.com/macros/s/AKfycbyW09_ZQ8iSB1UcvrYXmJ3aiX9WlGUCO_UlzRXanzxMxgJHEiq_auS_E6yqoNZpS6MC/exec" method="post" aria-label="AI化優先順位チェックシート登録フォーム">
+        <input type="hidden" name="api_token" value="448c7683726e479da0076316ddbc22ff9fc69104a2694750813ccdec39c3ad5b" />
+        <input type="hidden" name="source" value="company_lp" />
+        <input type="text" name="website" value="" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;" />
+        <div class="lead-form-grid">
+          <div class="lead-form-field">
+            <label for="company">会社名</label>
+            <input type="text" id="company" name="company" placeholder="株式会社〇〇" />
+          </div>
+          <div class="lead-form-field">
+            <label for="name">お名前</label>
+            <input type="text" id="name" name="name" placeholder="山田 太郎" />
+          </div>
+          <div class="lead-form-field">
+            <label for="email">メールアドレス</label>
+            <input type="email" id="email" name="email" placeholder="sample@example.com" required />
+          </div>
+          <div class="lead-form-field">
+            <label for="industry">業種</label>
+            <input type="text" id="industry" name="industry" placeholder="製造業、士業、店舗運営など" />
+          </div>
+          <div class="lead-form-field">
+            <label for="employees">従業員数</label>
+            <select id="employees" name="employees">
+              <option value="">選択してください</option>
+              <option>1〜5名</option>
+              <option>6〜20名</option>
+              <option>21〜50名</option>
+              <option>51〜100名</option>
+              <option>101名以上</option>
+            </select>
+          </div>
+          <div class="lead-form-field">
+            <label for="role">お立場</label>
+            <input type="text" id="role" name="role" placeholder="経営者、総務、現場責任者など" />
+          </div>
+          <div class="lead-form-field full">
+            <label for="concern">今、社内で困っている業務</label>
+            <textarea id="concern" name="concern" placeholder="問い合わせ対応に時間がかかる、日報が活用できていない、社内マニュアルが散らばっている、など"></textarea>
+          </div>
+        </div>
+        <p class="lead-form-note">
+          ご入力いただいた情報は、チェックシートの配信、AI業務改善に関するご案内、回答内容の確認に使用します。<br />
+          送信後、チェックシートのご案内を入力いただいたメールアドレスへお送りします。
+        </p>
+        <div class="lead-form-actions">
+          <button type="submit" class="btn-cta btn-cta-large">
+            <span>無料でAI化優先順位チェックシートを受け取る</span>
+            <span aria-hidden="true">→</span>
+          </button>
+          <br />
+          <a href="mailto:info@hide-ai-lab.com?subject=AI業務診断＋デモ構築の相談" class="paid-link">
+            すぐに5万円のAI業務診断＋デモ構築を相談したい方はこちら
+          </a>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- ===========================
+       7. よくある質問
+  =========================== -->
+  <section class="section faq-section" id="faq" aria-labelledby="faq-heading">
+    <div class="container">
+      <p class="section-label reveal">FAQ</p>
+      <h2 class="section-title reveal" id="faq-heading">よくある質問</h2>
+      <div class="divider divider-left reveal"></div>
+      <ul class="faq-list" role="list">
+
+        <li class="faq-item reveal">
+          <button
+            class="faq-question"
+            aria-expanded="false"
+            aria-controls="faq-answer-1"
+            id="faq-btn-1"
+          >
+            <span class="faq-q-text">
+              <span class="faq-q-icon" aria-hidden="true">Q</span>
+              AIに詳しくなくても大丈夫ですか。
+            </span>
+            <span class="faq-arrow" aria-hidden="true">▾</span>
+          </button>
+          <div
+            class="faq-answer"
+            id="faq-answer-1"
+            role="region"
+            aria-labelledby="faq-btn-1"
+          >
+            大丈夫です。AIの知識ではなく、御社の業務内容から整理します。専門用語が分からなくても問題ありません。
+          </div>
+        </li>
+
+        <li class="faq-item reveal">
+          <button
+            class="faq-question"
+            aria-expanded="false"
+            aria-controls="faq-answer-2"
+            id="faq-btn-2"
+          >
+            <span class="faq-q-text">
+              <span class="faq-q-icon" aria-hidden="true">Q</span>
+              どんな資料を用意すればいいですか。
+            </span>
+            <span class="faq-arrow" aria-hidden="true">▾</span>
+          </button>
+          <div
+            class="faq-answer"
+            id="faq-answer-2"
+            role="region"
+            aria-labelledby="faq-btn-2"
+          >
+            マニュアル、Excel、メール文面、社内ルール、よくある質問などがあると進めやすいです。なければ、ヒアリングの中で一緒に整理します。
+          </div>
+        </li>
+
+        <li class="faq-item reveal">
+          <button
+            class="faq-question"
+            aria-expanded="false"
+            aria-controls="faq-answer-3"
+            id="faq-btn-3"
+          >
+            <span class="faq-q-text">
+              <span class="faq-q-icon" aria-hidden="true">Q</span>
+              診断のあと、強引な営業はありませんか。
+            </span>
+            <span class="faq-arrow" aria-hidden="true">▾</span>
+          </button>
+          <div
+            class="faq-answer"
+            id="faq-answer-3"
+            role="region"
+            aria-labelledby="faq-btn-3"
+          >
+            ありません。簡易デモを見ていただき、必要性を感じていただいた場合のみ、本格的な構築をご検討ください。
+          </div>
+        </li>
+
+        <li class="faq-item reveal">
+          <button
+            class="faq-question"
+            aria-expanded="false"
+            aria-controls="faq-answer-4"
+            id="faq-btn-4"
+          >
+            <span class="faq-q-text">
+              <span class="faq-q-icon" aria-hidden="true">Q</span>
+              費用は5万円以外にかかりますか。
+            </span>
+            <span class="faq-arrow" aria-hidden="true">▾</span>
+          </button>
+          <div
+            class="faq-answer"
+            id="faq-answer-4"
+            role="region"
+            aria-labelledby="faq-btn-4"
+          >
+            初期診断と簡易デモ作成までは5万円（税別）のみです。本格導入される場合のみ、別途お見積もりいたします。
+          </div>
+        </li>
+
+        <li class="faq-item reveal">
+          <button
+            class="faq-question"
+            aria-expanded="false"
+            aria-controls="faq-answer-5"
+            id="faq-btn-5"
+          >
+            <span class="faq-q-text">
+              <span class="faq-q-icon" aria-hidden="true">Q</span>
+              社員が使えるか不安です。
+            </span>
+            <span class="faq-arrow" aria-hidden="true">▾</span>
+          </button>
+          <div
+            class="faq-answer"
+            id="faq-answer-5"
+            role="region"
+            aria-labelledby="faq-btn-5"
+          >
+            操作だけでなく、使い方や運用ルールも含めて提案します。現場に定着することを前提に設計します。
+          </div>
+        </li>
+
+      </ul>
+    </div>
+  </section>
+
+  <!-- ===========================
+       8. 最終CTA
+  =========================== -->
+  <section class="final-cta" id="final-cta" aria-labelledby="final-cta-heading">
+    <div class="container" style="position:relative;">
+      <p class="section-label reveal" style="color:var(--gold-light);border-color:var(--gold-light);margin-bottom:20px;">Get Started</p>
+      <h2 class="final-cta-title reveal" id="final-cta-heading">
+        まずは無料で、<br />
+        御社のAI化の<span>最初の一手</span>を確認しませんか。
+      </h2>
+      <p class="final-cta-sub reveal">
+        AI化優先順位チェックシートで、業務負担・属人化・質問の多さを整理できます。<br />
+        必要な方には、回答内容をもとに5万円のAI業務診断＋デモ構築をご案内します。
+      </p>
+      <div class="reveal">
+        <a
+          href="#checksheet-form"
+          class="btn-cta btn-cta-large"
+          id="final-cta-btn"
+        >
+          <span>無料でAI化優先順位チェックシートを受け取る</span>
+          <span aria-hidden="true">→</span>
+        </a>
+        <p class="final-price-note">無料チェックシートから開始・必要な方のみ有料診断をご案内</p>
+        <br />
+        <a href="mailto:info@hide-ai-lab.com?subject=AI業務診断＋デモ構築の相談" class="paid-link">
+          すぐに5万円のAI業務診断＋デモ構築を相談したい方はこちら
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===========================
+       フッター
+  =========================== -->
+  <footer class="site-footer" role="contentinfo">
+    <p>© 2026 中小企業向けAI業務改善パック ／ 小室秀治</p>
+  </footer>
+
+  <!-- ===========================
+       JavaScript（アコーディオン＋スクロールアニメーション）
+  =========================== -->
+  <script>
+    /* ---------- カード アコーディオン ---------- */
+    document.querySelectorAll('.card-accordion-trigger').forEach(function (trigger) {
+      trigger.addEventListener('click', function () {
+        var targetId = this.getAttribute('aria-controls');
+        var targetContent = document.getElementById(targetId);
+        var isOpen = this.getAttribute('aria-expanded') === 'true';
+
+        // 全てのカードと詳細アコーディオンをリセット
+        document.querySelectorAll('.card-accordion-trigger').forEach(function (t) {
+          t.setAttribute('aria-expanded', 'false');
+          t.classList.remove('is-active');
+          var icon = t.querySelector('.card-detail-icon');
+          if (icon) icon.textContent = '▼';
+        });
+        document.querySelectorAll('.card-detail-content').forEach(function (c) {
+          c.classList.remove('is-open');
+        });
+
+        // クリックしたものが閉じていた場合のみ開く
+        if (!isOpen) {
+          this.setAttribute('aria-expanded', 'true');
+          this.classList.add('is-active');
+          targetContent.classList.add('is-open');
+          var icon = this.querySelector('.card-detail-icon');
+          if (icon) icon.textContent = '▲';
+
+          // 開いたアコーディオンまでスムーズスクロール
+          setTimeout(function() {
+            targetContent.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          }, 150);
+        }
+      });
+    });
+
+    /* ---------- FAQ アコーディオン ---------- */
+    document.querySelectorAll('.faq-question').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var isOpen = this.getAttribute('aria-expanded') === 'true';
+        var answerId = this.getAttribute('aria-controls');
+        var answer = document.getElementById(answerId);
+
+        // 全て閉じる
+        document.querySelectorAll('.faq-question').forEach(function (b) {
+          b.setAttribute('aria-expanded', 'false');
+        });
+        document.querySelectorAll('.faq-answer').forEach(function (a) {
+          a.classList.remove('is-open');
+        });
+
+        // クリックしたものが閉じていたら開く
+        if (!isOpen) {
+          this.setAttribute('aria-expanded', 'true');
+          answer.classList.add('is-open');
+        }
+      });
+    });
+
+
+    /* ---------- GASフォーム送信 ---------- */
+    var leadForm = document.querySelector('.lead-form-box');
+    if (leadForm) {
+      leadForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var submitButton = leadForm.querySelector('button[type="submit"]');
+        var originalHtml = submitButton.innerHTML;
+        submitButton.disabled = true;
+        submitButton.textContent = '送信中...';
+
+        fetch(leadForm.action, {
+          method: 'POST',
+          mode: 'no-cors',
+          body: new FormData(leadForm)
+        }).then(function () {
+          alert('お申し込みを受け付けました。ご入力いただいたメールアドレスをご確認ください。');
+          leadForm.reset();
+        }).catch(function () {
+          alert('送信できませんでした。時間を空けて、もう一度お試しください。');
+        }).finally(function () {
+          submitButton.disabled = false;
+          submitButton.innerHTML = originalHtml;
+        });
+      });
+    }
+
+    /* ---------- スクロールアニメーション（IntersectionObserver） ---------- */
+    var revealEls = document.querySelectorAll('.reveal');
+    var observer = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.12 }
+    );
+    revealEls.forEach(function (el) { observer.observe(el); });
+  </script>
+</body>
+</html>
