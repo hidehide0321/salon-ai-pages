@@ -1,0 +1,99 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI業務診断＋デモ構築｜申し込み</title>
+  <meta name="description" content="無料チェックシートを待たずに、AI業務診断と簡易デモ構築へ直接申し込む方向けのページです。" />
+  <style>
+    :root { --blue-deep:#102a43; --blue-mid:#1f5f99; --blue-pale:#edf5fb; --gold:#c89b3c; --gold-pale:#fbf6e9; --gray-900:#1f2933; --gray-700:#52606d; --gray-200:#d9e2ec; --white:#ffffff; --shadow:0 18px 45px rgba(16,42,67,.12); --radius:16px; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    html { scroll-behavior:smooth; }
+    body { color:var(--gray-900); background:var(--gold-pale); font-family:"Noto Sans JP","Yu Gothic","Meiryo",sans-serif; line-height:1.8; }
+    a { color:inherit; }
+    .site-header { background:var(--blue-deep); color:var(--white); }
+    .header-inner { width:min(1100px,calc(100% - 40px)); margin:0 auto; padding:16px 0; display:flex; align-items:center; justify-content:space-between; gap:20px; }
+    .header-logo { font-weight:800; letter-spacing:.04em; }
+    .back-link { font-size:14px; color:#f6d98a; text-underline-offset:4px; }
+    .container { width:min(980px,calc(100% - 40px)); margin:0 auto; }
+    .hero { padding:72px 0 38px; background:radial-gradient(circle at top right,rgba(200,155,60,.24),transparent 38%),linear-gradient(180deg,#fffdf8 0%,var(--gold-pale) 100%); }
+    .eyebrow { margin-bottom:14px; color:var(--blue-mid); font-size:13px; font-weight:800; letter-spacing:.16em; text-transform:uppercase; }
+    h1 { color:var(--blue-deep); font-size:clamp(30px,5vw,52px); line-height:1.35; }
+    .hero-lead { margin-top:22px; max-width:760px; color:var(--gray-700); font-size:clamp(16px,2.5vw,19px); }
+    .content { padding:36px 0 72px; }
+    .explanation { padding:34px; border-left:5px solid var(--gold); border-radius:var(--radius); background:var(--white); box-shadow:var(--shadow); color:var(--gray-700); }
+    .explanation p + p { margin-top:15px; }
+    .explanation strong { color:var(--blue-deep); }
+    .form-heading { margin-top:54px; text-align:center; }
+    .form-heading h2 { color:var(--blue-deep); font-size:clamp(26px,4vw,38px); line-height:1.45; }
+    .form-heading p { margin-top:12px; color:var(--gray-700); }
+    .status { display:none; margin:28px 0 0; padding:16px 18px; border:1px solid; border-radius:10px; font-weight:700; }
+    .status.is-visible { display:block; }
+    .status.is-success { color:#185b32; background:#edf8f1; border-color:#8bc5a0; }
+    .status.is-warning { color:#714d00; background:#fff8df; border-color:#d8b850; }
+    .status.is-error { color:#8a2525; background:#fff1f1; border-color:#d99a9a; }
+    .application-form { margin-top:30px; padding:40px; border:1px solid var(--gray-200); border-radius:var(--radius); background:var(--white); box-shadow:var(--shadow); }
+    .form-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:20px; }
+    .field { display:flex; flex-direction:column; gap:8px; }
+    .field.full { grid-column:1/-1; }
+    label { color:var(--blue-deep); font-size:14px; font-weight:800; }
+    input,select,textarea { width:100%; padding:13px 14px; border:1px solid var(--gray-200); border-radius:8px; background:var(--white); color:var(--gray-900); font:inherit; }
+    textarea { min-height:120px; resize:vertical; }
+    input:focus,select:focus,textarea:focus { outline:3px solid rgba(31,95,153,.14); border-color:var(--blue-mid); }
+    .form-note { margin-top:20px; color:var(--gray-700); font-size:13px; }
+    .submit-wrap { margin-top:30px; text-align:center; }
+    .submit-button { width:min(100%,560px); padding:17px 24px; border:0; border-radius:10px; background:var(--blue-deep); color:var(--white); font:inherit; font-size:17px; font-weight:800; cursor:pointer; box-shadow:0 10px 24px rgba(16,42,67,.22); }
+    .submit-button:hover { background:var(--blue-mid); }
+    .submit-button:disabled { cursor:wait; opacity:.7; }
+    .site-footer { padding:24px 20px; background:var(--blue-deep); color:rgba(255,255,255,.75); text-align:center; font-size:13px; }
+    @media (max-width:720px) { .header-inner,.container { width:min(100% - 28px,980px); } .header-inner { align-items:flex-start; flex-direction:column; gap:6px; } .hero { padding-top:48px; } .explanation,.application-form { padding:25px 20px; } .form-grid { grid-template-columns:1fr; } .field.full { grid-column:auto; } }
+  </style>
+</head>
+<body>
+  <header class="site-header"><div class="header-inner"><div class="header-logo">中小企業向けAI業務改善パック</div><a class="back-link" href="./">中小企業向けLPへ戻る</a></div></header>
+  <main>
+    <section class="hero"><div class="container"><p class="eyebrow">Direct Application</p><h1>AI業務診断＋<br />デモ構築について</h1><p class="hero-lead">無料チェックシートを待たずに、すぐ具体的に進めたい方向けの有料診断です。</p></div></section>
+    <section class="content"><div class="container">
+      <div class="explanation">
+        <p>御社の業務内容をヒアリングし、AIで効率化・仕組み化しやすい業務を整理します。</p>
+        <p>そのうえで、実際の業務に近い形の簡易デモを作成し、「AIをどう使えるのか」を確認していただきます。</p>
+        <p><strong>費用は5万円です。</strong></p>
+        <p><strong>この金額には、事前ヒアリング、業務整理、AI化優先順位の整理、簡易デモ構築、診断レポートの作成が含まれます。</strong></p>
+        <p>ヒアリングでは、現在の業務フロー、時間がかかっている作業、属人化している業務、社内でよく発生する問い合わせ、既存のマニュアルや資料の有無などを確認します。</p>
+        <p><strong>納品物は、AI化できる業務の整理、最初に着手すべき業務の提案、簡易デモシステム、診断レポート、今後の改善ロードマップです。</strong></p>
+        <p>期間は、ヒアリング完了後からおおむね1〜2週間を目安としています。内容や資料の共有状況によって、前後する場合があります。</p>
+        <p>なお、本格的なシステム構築、社内データの整備、継続的な運用サポートは別料金です。必要な場合のみ、診断後に別途ご提案します。</p>
+        <p>まずは御社の業務にAIをどう活用できるのか、小さく確認するところから始めます。</p>
+      </div>
+      <div class="form-heading" id="application-form"><h2>AI業務診断＋<br />デモ構築を申し込む</h2><p>お申し込み後、内容を確認して日程と今後の進め方をご案内します。</p></div>
+      <div class="status" id="form-status" role="status" aria-live="polite"></div>
+      <form class="application-form" action="https://script.google.com/macros/s/AKfycbyW09_ZQ8iSB1UcvrYXmJ3aiX9WlGUCO_UlzRXanzxMxgJHEiq_auS_E6yqoNZpS6MC/exec" method="post" aria-label="AI業務診断＋デモ構築申し込みフォーム">
+        <input type="hidden" name="api_token" value="448c7683726e479da0076316ddbc22ff9fc69104a2694750813ccdec39c3ad5b" />
+        <input type="hidden" name="source" value="company_lp_paid" />
+        <input type="hidden" name="application_type" value="paid_diagnosis" />
+        <input type="hidden" name="response_mode" value="redirect" />
+        <input type="text" name="website" value="" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;" />
+        <div class="form-grid">
+          <div class="field"><label for="company">会社名</label><input type="text" id="company" name="company" placeholder="株式会社〇〇" required /></div>
+          <div class="field"><label for="name">お名前</label><input type="text" id="name" name="name" placeholder="山田 太郎" required /></div>
+          <div class="field"><label for="email">メールアドレス</label><input type="email" id="email" name="email" placeholder="sample@example.com" required /></div>
+          <div class="field"><label for="industry">業種</label><input type="text" id="industry" name="industry" placeholder="製造業、士業、店舗運営など" /></div>
+          <div class="field"><label for="employees">従業員数</label><select id="employees" name="employees"><option value="">選択してください</option><option>1〜5名</option><option>6〜20名</option><option>21〜50名</option><option>51〜100名</option><option>101名以上</option></select></div>
+          <div class="field"><label for="role">お立場</label><input type="text" id="role" name="role" placeholder="経営者、総務、現場責任者など" /></div>
+          <div class="field full"><label for="demo-business">デモ化したい業務</label><textarea id="demo-business" name="demo_business" placeholder="例：問い合わせメールの一次返信、クレーム対応、日報の集計など" required></textarea></div>
+          <div class="field full"><label for="existing-materials">現在ある資料</label><textarea id="existing-materials" name="existing_materials" placeholder="例：Excel、マニュアル、過去のメール文面、社内ルールなど"></textarea></div>
+          <div class="field full"><label for="desired-timing">希望する進め方・時期</label><select id="desired-timing" name="desired_timing" required><option value="">選択してください</option><option>できるだけ早く</option><option>今月中</option><option>来月以降</option><option>時期は未定</option></select></div>
+        </div>
+        <p class="form-note">ご入力いただいた情報は、AI業務診断、簡易デモ作成、日程調整、お支払い案内に使用します。<br />送信後、入力いただいたメールアドレスへ受付メールをお送りします。</p>
+        <div class="submit-wrap"><button type="submit" class="submit-button">AI業務診断＋デモ構築を申し込む</button></div>
+      </form>
+    </div></section>
+  </main>
+  <footer class="site-footer"><p>© 2026 中小企業向けAI業務改善パック ／ 小室秀治</p></footer>
+  <script>
+    var form=document.querySelector('.application-form'); var statusBox=document.getElementById('form-status'); var params=new URLSearchParams(window.location.search); var result=params.get('form_status'); var message=params.get('form_message');
+    if(statusBox&&result&&message){var allowedResults=['success','warning','error'];var safeResult=allowedResults.indexOf(result)>=0?result:'error';statusBox.textContent=message;statusBox.classList.add('is-visible','is-'+safeResult);statusBox.scrollIntoView({behavior:'smooth',block:'center'});params.delete('form_status');params.delete('form_message');params.delete('form_target');var cleanUrl=window.location.pathname+(params.toString()?'?'+params.toString():'')+window.location.hash;window.history.replaceState({},document.title,cleanUrl);}
+    if(form){form.addEventListener('submit',function(){var submitButton=form.querySelector('button[type="submit"]');submitButton.disabled=true;submitButton.textContent='送信中...';});}
+  </script>
+</body>
+</html>
