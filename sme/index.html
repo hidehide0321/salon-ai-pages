@@ -1000,7 +1000,7 @@
             メールアドレス登録後、チェックシートの案内をお送りします。<br />
             売り込みではなく、まずは御社の業務課題を整理するための無料シートです。
           </div>
-          <a href="mailto:info@hide-ai-lab.com?subject=AI業務診断＋デモ構築の相談" class="paid-link">
+          <a href="https://hide-ai-lab.com/sme/paid-diagnosis.html" class="paid-link">
             すぐに5万円のAI業務診断＋デモ構築を申し込みはこちら
           </a>
         </div>
@@ -1156,7 +1156,7 @@
           <span aria-hidden="true">→</span>
         </a>
         <br />
-        <a href="mailto:info@hide-ai-lab.com?subject=AI業務診断＋デモ構築の相談" class="paid-link">
+        <a href="https://hide-ai-lab.com/sme/paid-diagnosis.html" class="paid-link">
           すぐに5万円のAI業務診断＋デモ構築を申し込みはこちら
         </a>
       </div>
@@ -1486,7 +1486,7 @@
         </a>
         <p class="final-price-note">無料チェックシートから開始・必要な方のみ有料診断をご案内</p>
         <br />
-        <a href="mailto:info@hide-ai-lab.com?subject=AI業務診断＋デモ構築の相談" class="paid-link">
+        <a href="https://hide-ai-lab.com/sme/paid-diagnosis.html" class="paid-link">
           すぐに5万円のAI業務診断＋デモ構築を申し込みはこちら
         </a>
       </div>
@@ -1560,7 +1560,7 @@
             <span aria-hidden="true">→</span>
           </button>
           <br />
-          <a href="mailto:info@hide-ai-lab.com?subject=AI業務診断＋デモ構築の相談" class="paid-link">
+          <a href="https://hide-ai-lab.com/sme/paid-diagnosis.html" class="paid-link">
             すぐに5万円のAI業務診断＋デモ構築を申し込みはこちら
           </a>
         </div>
@@ -1639,10 +1639,10 @@
 
     /* ---------- GASフォーム送信結果 ---------- */
     var leadForm = document.querySelector('.lead-form-box');
-    var formStatus = document.getElementById('lead-form-status');
     var formParams = new URLSearchParams(window.location.search);
     var formResult = formParams.get('form_status');
     var formMessage = formParams.get('form_message');
+    var formStatus = document.getElementById('lead-form-status');
 
     if (formStatus && formResult && formMessage) {
       var allowedResults = ['success', 'warning', 'error'];
