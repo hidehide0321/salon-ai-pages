@@ -707,6 +707,33 @@
       color: var(--gray-700);
       line-height: 1.8;
     }
+    .lead-form-status {
+      display: none;
+      margin-top: 28px;
+      padding: 16px 18px;
+      border: 1px solid;
+      border-radius: var(--radius-sm);
+      font-weight: 700;
+      line-height: 1.7;
+    }
+    .lead-form-status.is-visible {
+      display: block;
+    }
+    .lead-form-status.is-success {
+      color: #185b32;
+      background: #edf8f1;
+      border-color: #8bc5a0;
+    }
+    .lead-form-status.is-warning {
+      color: #714d00;
+      background: #fff8df;
+      border-color: #d8b850;
+    }
+    .lead-form-status.is-error {
+      color: #8a2525;
+      background: #fff1f1;
+      border-color: #d99a9a;
+    }
     .lead-form-actions {
       margin-top: 28px;
       text-align: center;
@@ -1479,19 +1506,21 @@
       <p class="section-lead reveal">
         入力いただいたメールアドレスに、チェックシートの案内をお送りします。
       </p>
+      <div class="lead-form-status" id="lead-form-status" role="status" aria-live="polite"></div>
 
       <form class="lead-form-box reveal" action="https://script.google.com/macros/s/AKfycbyW09_ZQ8iSB1UcvrYXmJ3aiX9WlGUCO_UlzRXanzxMxgJHEiq_auS_E6yqoNZpS6MC/exec" method="post" aria-label="AI化優先順位チェックシート登録フォーム">
         <input type="hidden" name="api_token" value="448c7683726e479da0076316ddbc22ff9fc69104a2694750813ccdec39c3ad5b" />
         <input type="hidden" name="source" value="company_lp" />
+        <input type="hidden" name="response_mode" value="redirect" />
         <input type="text" name="website" value="" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;" />
         <div class="lead-form-grid">
           <div class="lead-form-field">
             <label for="company">会社名</label>
-            <input type="text" id="company" name="company" placeholder="株式会社〇〇" />
+            <input type="text" id="company" name="company" placeholder="株式会社〇〇" required />
           </div>
           <div class="lead-form-field">
             <label for="name">お名前</label>
-            <input type="text" id="name" name="name" placeholder="山田 太郎" />
+            <input type="text" id="name" name="name" placeholder="山田 太郎" required />
           </div>
           <div class="lead-form-field">
             <label for="email">メールアドレス</label>
@@ -1608,29 +1637,33 @@
     });
 
 
-    /* ---------- GASフォーム送信 ---------- */
+    /* ---------- GASフォーム送信結果 ---------- */
     var leadForm = document.querySelector('.lead-form-box');
+    var formStatus = document.getElementById('lead-form-status');
+    var formParams = new URLSearchParams(window.location.search);
+    var formResult = formParams.get('form_status');
+    var formMessage = formParams.get('form_message');
+
+    if (formStatus && formResult && formMessage) {
+      var allowedResults = ['success', 'warning', 'error'];
+      var safeResult = allowedResults.indexOf(formResult) >= 0 ? formResult : 'error';
+      formStatus.textContent = formMessage;
+      formStatus.classList.add('is-visible', 'is-' + safeResult);
+      formStatus.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+      formParams.delete('form_status');
+      formParams.delete('form_message');
+      var cleanUrl = window.location.pathname +
+        (formParams.toString() ? '?' + formParams.toString() : '') +
+        window.location.hash;
+      window.history.replaceState({}, document.title, cleanUrl);
+    }
+
     if (leadForm) {
-      leadForm.addEventListener('submit', function (e) {
-        e.preventDefault();
+      leadForm.addEventListener('submit', function () {
         var submitButton = leadForm.querySelector('button[type="submit"]');
-        var originalHtml = submitButton.innerHTML;
         submitButton.disabled = true;
         submitButton.textContent = '送信中...';
-
-        fetch(leadForm.action, {
-          method: 'POST',
-          mode: 'no-cors',
-          body: new FormData(leadForm)
-        }).then(function () {
-          alert('お申し込みを受け付けました。ご入力いただいたメールアドレスをご確認ください。');
-          leadForm.reset();
-        }).catch(function () {
-          alert('送信できませんでした。時間を空けて、もう一度お試しください。');
-        }).finally(function () {
-          submitButton.disabled = false;
-          submitButton.innerHTML = originalHtml;
-        });
       });
     }
 
