@@ -357,6 +357,31 @@
       text-align: center;
     }
 
+    .thanks-card {
+      display: none;
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 34px;
+      text-align: center;
+      box-shadow: 0 18px 52px rgba(11, 30, 47, 0.08);
+    }
+
+    .thanks-card.visible {
+      display: block;
+    }
+
+    .thanks-card h2 {
+      margin: 0 0 14px;
+      color: var(--navy);
+      font-size: clamp(1.7rem, 4vw, 2.3rem);
+    }
+
+    .thanks-card p {
+      margin: 0 0 14px;
+      color: var(--muted);
+    }
+
     .status {
       display: none;
       margin-top: 20px;
@@ -511,6 +536,13 @@
       </div>
 
       <div class="status error" id="form-error" role="alert"></div>
+
+      <div class="thanks-card" id="thanks-card" tabindex="-1">
+        <h2>送信が完了しました</h2>
+        <p>ご入力いただいたメールアドレス宛に、自動返信メールをお送りしました。</p>
+        <p>具体的なAI化優先順位と簡易デモを確認したい方は、5万円のAI業務診断＋デモ構築をご検討ください。</p>
+        <a class="button" href="https://hide-ai-lab.com/sme/paid-diagnosis.html">5万円のAI業務診断＋デモ構築を見る</a>
+      </div>
 
       <form id="diagnosis-form" action="https://script.google.com/macros/s/AKfycbwZxt7iDpC7geiusV1vS8n70fdqhGuBMQfJIVuHN4keWNlhOIStegfct8ihZbGy1uhI/exec" method="post">
         <input type="hidden" name="source" value="company_free_ai_diagnosis" />
@@ -707,6 +739,7 @@
       var errorBox = document.getElementById("form-error");
       var progressLabel = document.getElementById("progress-label");
       var progressBar = document.getElementById("progress-bar");
+      var thanksCard = document.getElementById("thanks-card");
       var storageKey = "companyFreeAiDiagnosisDraft";
       var questionTitles = {
         1: "基本情報",
@@ -871,8 +904,27 @@
         document.getElementById("notes").value = notes.join("\n\n");
       }
 
+      function showThanks() {
+        if (dialog.open) dialog.close();
+        form.style.display = "none";
+        thanksCard.classList.add("visible");
+        thanksCard.focus();
+        thanksCard.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+
+      function restoreSubmitButton(button) {
+        button.disabled = false;
+        button.textContent = "無料チェックシートを送信する";
+      }
+
       form.addEventListener("input", saveDraft);
       form.addEventListener("change", saveDraft);
+      form.addEventListener("submit", function (event) {
+        event.preventDefault();
+        if (!validateRequired()) return;
+        buildReview();
+        dialog.showModal();
+      });
 
       document.getElementById("review-button").addEventListener("click", function () {
         if (!validateRequired()) return;
@@ -885,15 +937,25 @@
       });
 
       document.getElementById("submit-button").addEventListener("click", function () {
+        var button = this;
         prepareSubmission();
-        this.disabled = true;
-        this.textContent = "送信中...";
+        button.disabled = true;
+        button.textContent = "送信中...";
         try {
           localStorage.removeItem(storageKey);
         } catch (err) {
           // 一時保存を消去できなくても送信は継続します。
         }
-        form.submit();
+        fetch(form.action, {
+          method: "POST",
+          mode: "no-cors",
+          body: new URLSearchParams(new FormData(form))
+        }).then(function () {
+          showThanks();
+        }).catch(function () {
+          restoreSubmitButton(button);
+          showError("送信できませんでした。時間を空けて、もう一度お試しください。", button);
+        });
       });
 
       document.getElementById("clear-button").addEventListener("click", function () {
