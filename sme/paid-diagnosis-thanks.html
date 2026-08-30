@@ -146,6 +146,15 @@
     .contact a {
       color: var(--blue-mid);
     }
+    .legal-links {
+      display: flex;
+      margin-top: 28px;
+      justify-content: center;
+      gap: 8px 16px;
+      flex-wrap: wrap;
+      font-size: 13px;
+    }
+    .legal-links a { color: var(--blue-mid); }
     @media (max-width: 600px) {
       main {
         padding: 40px 0;
@@ -196,6 +205,11 @@
         受付メールが届かない場合は、迷惑メールフォルダをご確認のうえ、
         <a href="mailto:info@hide-ai-lab.com">info@hide-ai-lab.com</a>へお問い合わせください。
       </p>
+      <nav class="legal-links" aria-label="法務情報">
+        <a href="./tokushoho.html">特定商取引法に基づく表記</a>
+        <a href="./cancellation-policy.html">キャンセル・返金</a>
+        <a href="./privacy-policy.html">プライバシーポリシー</a>
+      </nav>
     </section>
   </main>
 

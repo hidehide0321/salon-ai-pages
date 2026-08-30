@@ -226,6 +226,25 @@
       text-align: center;
       font-size: 13px;
     }
+    .site-footer a { color: rgba(255, 255, 255, 0.88); }
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 8px 18px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+    .consent-check {
+      display: flex;
+      max-width: 720px;
+      margin: 18px auto 0;
+      align-items: flex-start;
+      gap: 10px;
+      color: var(--gray-700);
+      font-size: 14px;
+      line-height: 1.7;
+    }
+    .consent-check input { width: 18px; height: 18px; margin-top: 3px; flex: 0 0 auto; }
     @media (max-width: 720px) {
       .header-inner,
       .container {
@@ -276,7 +295,7 @@
         <div class="explanation">
           <p>御社の業務内容をヒアリングし、AIで効率化・仕組み化しやすい業務を整理します。</p>
           <p>そのうえで、実際の業務に近い形の簡易デモを作成し、「AIをどう使えるのか」を確認していただきます。</p>
-          <p><strong>費用は5万円です。</strong></p>
+          <p><strong>費用は5万円（税別）です。</strong></p>
           <p><strong>この金額には、事前ヒアリング、業務整理、AI化優先順位の整理、簡易デモ構築、診断レポートの作成が含まれます。</strong></p>
           <p>ヒアリングでは、現在の業務フロー、時間がかかっている作業、属人化している業務、社内でよく発生する問い合わせ、既存のマニュアルや資料の有無などを確認します。</p>
           <p><strong>納品物は、AI化できる業務の整理、最初に着手すべき業務の提案、簡易デモシステム、診断レポート、今後の改善ロードマップです。</strong></p>
@@ -353,6 +372,10 @@
             ご入力いただいた情報は、AI業務診断、簡易デモ作成、日程調整、お支払い案内に使用します。<br />
             送信後、入力いただいたメールアドレスへ日程調整URL付きの受付メールをお送りします。この時点ではお支払いは発生しません。
           </p>
+          <label class="consent-check">
+            <input type="checkbox" name="privacy_consent" value="agreed" required />
+            <span><a href="./privacy-policy.html">プライバシーポリシー</a>を確認し、個人情報の取り扱いに同意します。申込み条件は<a href="./tokushoho.html">特定商取引法に基づく表記</a>および<a href="./cancellation-policy.html">キャンセル・返金ポリシー</a>で確認できます。</span>
+          </label>
           <div class="submit-wrap">
             <button type="submit" class="submit-button">AI業務診断＋デモ構築を申し込む</button>
           </div>
@@ -362,6 +385,11 @@
   </main>
 
   <footer class="site-footer">
+    <nav class="footer-links" aria-label="法務情報">
+      <a href="./tokushoho.html">特定商取引法に基づく表記</a>
+      <a href="./cancellation-policy.html">キャンセル・返金</a>
+      <a href="./privacy-policy.html">プライバシーポリシー</a>
+    </nav>
     <p>© 2026 中小企業向けAI業務改善パック ／ 小室秀治</p>
   </footer>
 
