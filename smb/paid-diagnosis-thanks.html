@@ -1,0 +1,243 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>お申し込みありがとうございます｜AI業務診断＋デモ構築</title>
+  <meta name="description" content="AI業務診断＋デモ構築のお申し込み受付完了ページです。" />
+  <link rel="icon" href="./icons/favicon.ico" sizes="16x16 32x32 48x48" />
+  <link rel="icon" type="image/png" href="./icons/favicon-32.png" sizes="32x32" />
+  <link rel="icon" type="image/png" href="./icons/favicon-48.png" sizes="48x48" />
+  <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png" sizes="180x180" />
+  <meta name="theme-color" content="#0D2B55" />
+  <style>
+    :root {
+      --blue-deep: #102a43;
+      --blue-mid: #1f5f99;
+      --gold: #c89b3c;
+      --gold-pale: #fbf6e9;
+      --gray-900: #1f2933;
+      --gray-700: #52606d;
+      --white: #ffffff;
+      --green: #247a45;
+      --green-pale: #edf8f1;
+      --yellow: #805a00;
+      --yellow-pale: #fff8df;
+      --red: #8a2525;
+      --red-pale: #fff1f1;
+      --shadow: 0 18px 45px rgba(16, 42, 67, 0.14);
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      min-height: 100vh;
+      color: var(--gray-900);
+      background:
+        radial-gradient(circle at top right, rgba(200, 155, 60, 0.25), transparent 38%),
+        var(--gold-pale);
+      font-family: "Noto Sans JP", "Yu Gothic", "Meiryo", sans-serif;
+      line-height: 1.8;
+    }
+    .site-header {
+      padding: 16px 20px;
+      background: var(--blue-deep);
+      color: var(--white);
+    }
+    .header-inner {
+      width: min(980px, 100%);
+      margin: 0 auto;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+    }
+    main {
+      width: min(760px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 70px 0;
+    }
+    .card {
+      padding: 48px 42px;
+      border-top: 6px solid var(--gold);
+      border-radius: 18px;
+      background: var(--white);
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+    .icon {
+      display: grid;
+      width: 72px;
+      height: 72px;
+      margin: 0 auto 24px;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--green-pale);
+      color: var(--green);
+      font-size: 38px;
+      font-weight: 900;
+    }
+    h1 {
+      color: var(--blue-deep);
+      font-size: clamp(28px, 5vw, 42px);
+      line-height: 1.4;
+    }
+    .lead {
+      margin-top: 18px;
+      color: var(--gray-700);
+      font-size: 17px;
+    }
+    .status {
+      margin-top: 28px;
+      padding: 18px;
+      border: 1px solid #8bc5a0;
+      border-radius: 10px;
+      background: var(--green-pale);
+      color: var(--green);
+      font-weight: 800;
+    }
+    .status.is-warning {
+      border-color: #d8b850;
+      background: var(--yellow-pale);
+      color: var(--yellow);
+    }
+    .status.is-error {
+      border-color: #d99a9a;
+      background: var(--red-pale);
+      color: var(--red);
+    }
+    .next {
+      margin-top: 34px;
+      padding: 24px;
+      border-radius: 12px;
+      background: #f5f8fb;
+      text-align: left;
+    }
+    .next h2 {
+      color: var(--blue-deep);
+      font-size: 19px;
+    }
+    .next ol {
+      margin: 12px 0 0 1.4em;
+      color: var(--gray-700);
+    }
+    .buttons {
+      display: flex;
+      margin-top: 32px;
+      justify-content: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+    .button {
+      display: inline-block;
+      min-width: 220px;
+      padding: 14px 22px;
+      border-radius: 9px;
+      background: var(--blue-deep);
+      color: var(--white);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .button.secondary {
+      border: 1px solid var(--blue-deep);
+      background: var(--white);
+      color: var(--blue-deep);
+    }
+    .contact {
+      margin-top: 28px;
+      color: var(--gray-700);
+      font-size: 14px;
+    }
+    .contact a {
+      color: var(--blue-mid);
+    }
+    .legal-links {
+      display: flex;
+      margin-top: 28px;
+      justify-content: center;
+      gap: 8px 16px;
+      flex-wrap: wrap;
+      font-size: 13px;
+    }
+    .legal-links a { color: var(--blue-mid); }
+    @media (max-width: 600px) {
+      main {
+        padding: 40px 0;
+      }
+      .card {
+        padding: 36px 22px;
+      }
+      .button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">中小企業向けAI業務改善パック</div>
+  </header>
+
+  <main>
+    <section class="card">
+      <div class="icon" id="status-icon" aria-hidden="true">✓</div>
+      <h1 id="page-heading">お申し込み<br />ありがとうございます</h1>
+      <p class="lead">
+        AI業務診断＋デモ構築のお申し込みを受け付けました。
+      </p>
+
+      <div class="status" id="form-status" role="status" aria-live="polite">
+        受付メールを送信しました。入力したメールアドレスをご確認ください。
+      </div>
+
+      <div class="next">
+        <h2>今後の流れ</h2>
+        <ol>
+          <li>お申し込み内容を確認します。</li>
+          <li>受付メールに記載された日程調整URLから、事前ヒアリングの日程をお選びください。</li>
+          <li>事前ヒアリング後、進行内容とお支払い方法をご案内します。</li>
+          <li>正式に進行する場合のみ、AI業務診断と簡易デモ作成を進めます。</li>
+        </ol>
+      </div>
+
+      <div class="buttons">
+        <a class="button" href="https://calendar.app.google/Y7RtiYy8UHFE7HPE6">日程調整カレンダーを開く</a>
+        <a class="button" href="./">中小企業向けLPへ戻る</a>
+        <a class="button secondary" href="./paid-diagnosis.html">申込内容を確認する</a>
+      </div>
+
+      <p class="contact">
+        受付メールが届かない場合は、迷惑メールフォルダをご確認のうえ、
+        <a href="mailto:info@hide-ai-lab.com">info@hide-ai-lab.com</a>へお問い合わせください。
+      </p>
+      <nav class="legal-links" aria-label="法務情報">
+        <a href="./tokushoho.html">特定商取引法に基づく表記</a>
+        <a href="./cancellation-policy.html">キャンセル・返金</a>
+        <a href="./privacy-policy.html">プライバシーポリシー</a>
+      </nav>
+    </section>
+  </main>
+
+  <script>
+    var params = new URLSearchParams(window.location.search);
+    var result = params.get('form_status') || 'success';
+    var message = params.get('form_message');
+    var statusBox = document.getElementById('form-status');
+    var statusIcon = document.getElementById('status-icon');
+    var heading = document.getElementById('page-heading');
+
+    if (message) {
+      statusBox.textContent = message;
+    }
+    if (result === 'warning') {
+      statusBox.classList.add('is-warning');
+      statusIcon.textContent = '!';
+      heading.innerHTML = 'お申し込みを<br />受け付けました';
+    } else if (result === 'error') {
+      statusBox.classList.add('is-error');
+      statusIcon.textContent = '×';
+      heading.innerHTML = '送信を<br />完了できませんでした';
+    }
+  </script>
+</body>
+</html>

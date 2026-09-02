@@ -1,0 +1,57 @@
+:root {
+  --navy: #0a1f3e;
+  --blue: #174f82;
+  --gold: #c9a84c;
+  --cream: #fbf7ed;
+  --ink: #263442;
+  --muted: #607080;
+  --line: #dce3e9;
+  --white: #fff;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  color: var(--ink);
+  background: var(--cream);
+  font-family: "Noto Sans JP", "Yu Gothic", Meiryo, sans-serif;
+  line-height: 1.85;
+}
+a { color: var(--blue); }
+.legal-header {
+  padding: 20px 24px;
+  background: var(--navy);
+  color: var(--white);
+}
+.legal-header-inner, .legal-main, .legal-footer-inner {
+  width: min(920px, calc(100% - 40px));
+  margin: 0 auto;
+}
+.legal-header a { color: var(--white); text-decoration: none; font-weight: 800; }
+.legal-main { padding: 56px 0 72px; }
+.legal-card {
+  padding: clamp(28px, 5vw, 54px);
+  border-top: 6px solid var(--gold);
+  border-radius: 16px;
+  background: var(--white);
+  box-shadow: 0 14px 38px rgba(10, 31, 62, 0.1);
+}
+h1 { margin: 0 0 14px; color: var(--navy); font-size: clamp(27px, 5vw, 40px); line-height: 1.45; }
+h2 { margin: 36px 0 10px; color: var(--navy); font-size: 20px; }
+p { margin: 10px 0; }
+.intro, .updated { color: var(--muted); }
+.updated { margin-bottom: 28px; font-size: 14px; }
+.legal-table { width: 100%; border-collapse: collapse; }
+.legal-table th, .legal-table td { padding: 16px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+.legal-table th { width: 30%; color: var(--navy); background: #f4f7fa; }
+.policy-list { padding-left: 1.4em; }
+.notice { margin-top: 30px; padding: 18px 20px; border-left: 4px solid var(--gold); background: #fffaf0; }
+.legal-nav { display: flex; margin-top: 42px; gap: 12px 20px; flex-wrap: wrap; }
+.legal-footer { padding: 28px 20px; background: var(--navy); color: rgba(255,255,255,.72); font-size: 13px; text-align: center; }
+.legal-footer a { color: rgba(255,255,255,.88); }
+.legal-footer-links { display: flex; justify-content: center; gap: 10px 18px; flex-wrap: wrap; margin-bottom: 10px; }
+@media (max-width: 640px) {
+  .legal-main { padding: 32px 0 48px; }
+  .legal-table, .legal-table tbody, .legal-table tr, .legal-table th, .legal-table td { display: block; width: 100%; }
+  .legal-table th { padding-bottom: 6px; border-bottom: 0; }
+  .legal-table td { padding-top: 6px; }
+}
