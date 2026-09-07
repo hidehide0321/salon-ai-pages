@@ -214,7 +214,7 @@
     =========================== */
     .hero {
       padding-top: 72px; /* ヘッダー分 */
-      background: var(--blue-deep);
+      background: #f7fbff;
       position: relative;
       overflow: hidden;
     }
@@ -222,49 +222,41 @@
       content: '';
       position: absolute;
       inset: 0;
-      background: linear-gradient(135deg, rgba(26,74,138,0.4) 0%, rgba(13,43,85,0.2) 100%);
+      background:
+        radial-gradient(circle at 14% 45%, rgba(216,236,255,0.72), transparent 34%),
+        linear-gradient(135deg, rgba(255,255,255,0.96) 0%, rgba(235,246,255,0.7) 100%);
       pointer-events: none;
-    }
-    .hero-image-wrap {
-      position: relative;
-      background: var(--blue-deep);
-    }
-    .hero-image-wrap img {
-      width: 100%;
-      max-height: none;
-      object-fit: contain;
-      display: block;
-    }
-    .hero-overlay {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 15%;
-      background: linear-gradient(to top, var(--blue-deep) 0%, rgba(13, 43, 85, 0.8) 50%, transparent 100%);
     }
     .hero-content {
       position: relative;
       padding: 56px 0 72px;
-      text-align: center;
+    }
+    .hero-main {
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(460px, 0.95fr);
+      gap: 40px;
+      align-items: center;
+    }
+    .hero-main-copy {
+      min-width: 0;
     }
     .hero-badge {
       display: inline-block;
-      background: rgba(201,168,76,0.15);
-      border: 1px solid var(--gold);
-      color: var(--gold-light);
-      font-size: 12px;
+      background: linear-gradient(110deg, #f8e8ad 0%, #d9ad43 100%);
+      color: var(--blue-deep);
+      font-size: 14px;
       font-weight: 700;
-      letter-spacing: 0.14em;
-      padding: 6px 20px;
-      border-radius: 50px;
-      margin-bottom: 28px;
+      line-height: 1.65;
+      letter-spacing: 0.06em;
+      padding: 12px 48px 12px 22px;
+      margin-bottom: 26px;
+      clip-path: polygon(0 0, 100% 0, calc(100% - 26px) 100%, 0 100%);
     }
     .hero-title {
       font-family: var(--font-serif);
       font-size: clamp(26px, 4vw, 46px);
       font-weight: 700;
-      color: var(--white);
+      color: var(--blue-deep);
       line-height: 1.5;
       margin-bottom: 20px;
     }
@@ -272,16 +264,37 @@
       font-style: normal;
       color: var(--gold-light);
     }
+    .hero-title-line {
+      white-space: nowrap;
+    }
     .hero-sub {
       font-size: clamp(15px, 2vw, 18px);
-      color: rgba(255,255,255,0.80);
-      margin-bottom: 44px;
+      color: var(--gray-700);
+      margin-bottom: 32px;
       line-height: 1.9;
+    }
+    .hero-sub em {
+      color: #b47a05;
+      font-style: normal;
+      font-weight: 700;
+    }
+    .hero-main-visual {
+      margin: 0;
+      overflow: hidden;
+      border: 1px solid rgba(46,109,180,0.16);
+      border-radius: 24px;
+      background: var(--white);
+      box-shadow: 0 18px 48px rgba(13,43,85,0.14);
+    }
+    .hero-main-visual img {
+      display: block;
+      width: 100%;
+      height: auto;
     }
     /* AI活用注記バナー */
     .hero-notice {
-      background: rgba(46, 109, 180, 0.25);
-      border: 1px solid rgba(46,109,180,0.5);
+      background: rgba(232,244,255,0.9);
+      border: 1px solid rgba(46,109,180,0.24);
       border-radius: var(--radius-md);
       padding: 20px 32px;
       margin-top: 48px;
@@ -294,17 +307,31 @@
       gap: 16px;
     }
     .hero-notice-icon {
-      font-size: 22px;
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--gold-light);
       flex-shrink: 0;
       margin-top: 2px;
     }
+    .hero-notice-icon svg {
+      width: 24px;
+      height: 24px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
     .hero-notice-text {
       font-size: 13px;
-      color: rgba(255,255,255,0.75);
+      color: var(--gray-700);
       line-height: 1.85;
     }
     .hero-notice-text strong {
-      color: var(--gold-light);
+      color: var(--blue-mid);
       font-weight: 700;
       display: block;
       margin-bottom: 4px;
@@ -598,31 +625,32 @@
       margin: 40px auto 0;
     }
     .hero-proof-card {
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(201,168,76,0.28);
+      background: rgba(255,255,255,0.92);
+      border: 1px solid rgba(46,109,180,0.18);
       border-radius: var(--radius-md);
       padding: 18px 16px;
-      color: rgba(255,255,255,0.86);
+      color: var(--gray-700);
       font-size: 14px;
       line-height: 1.7;
+      box-shadow: 0 8px 24px rgba(13,43,85,0.08);
     }
     .hero-proof-card strong {
       display: block;
-      color: var(--gold-light);
+      color: var(--blue-deep);
       font-size: 15px;
       margin-bottom: 4px;
     }
     .cta-support-text {
       margin-top: 16px;
       font-size: 13px;
-      color: rgba(255,255,255,0.72);
+      color: var(--gray-600);
       line-height: 1.8;
     }
     .paid-link {
       display: inline-block;
       margin-top: 12px;
       font-size: 13px;
-      color: var(--gold-light);
+      color: var(--blue-mid);
       text-decoration: underline;
       text-underline-offset: 4px;
     }
@@ -956,6 +984,13 @@
         grid-column: 1;
       }
       .hero-content { padding: 44px 0 56px; }
+      .hero-main {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+      .hero-main-copy { text-align: center; }
+      .hero-badge { padding-left: 18px; padding-right: 38px; }
+      .hero-title-line { white-space: normal; }
       .btn-cta { font-size: 15px; padding: 18px 32px; }
       .btn-cta-large { font-size: 16px; padding: 20px 36px; }
       .problem-conclusion { padding: 24px 28px; }
@@ -982,6 +1017,20 @@
       .section-title { font-size: 22px; }
       .hero-title { font-size: 24px; }
     }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+      .reveal {
+        opacity: 1;
+        transform: none;
+      }
+    }
   </style>
 </head>
 <body>
@@ -1000,37 +1049,40 @@
        1. ファーストビュー
   =========================== -->
   <section class="hero" id="hero" aria-label="ファーストビュー">
-<div class="hero-image-wrap">
-      <img
-        src="./images/小室秀治_ビジネスAI_1.png?v=20260612"
-        alt="AI研修ではなく、AIで業務を仕組み化するサービス"
-        loading="eager"
-      />
-      <div class="hero-overlay" aria-hidden="true"></div>
-    </div>
     <div class="hero-content">
       <div class="container">
-        <p class="hero-badge fade-in-up">中小企業向けAI業務改善パック</p>
-        <h1 class="hero-title fade-in-up delay-1">
-          AI研修ではなく、<br />AIで業務を<em>仕組み化</em>するサービスです。
-        </h1>
-        <p class="hero-sub fade-in-up delay-2">
-          まずは無料で、御社のどの業務からAI化すべきか確認しませんか。<br />
-          「AI化優先順位チェックシート」をお送りします。<br />
-          回答いただいた内容をもとに、必要な方には5万円のAI業務診断＋デモ構築をご案内します。
-        </p>
-        <div class="fade-in-up delay-3">
-          <a href="#checksheet-form" class="btn-cta" id="hero-cta">
-            <span>まずは<span class="price-accent">無料</span>でAI化優先順位チェックシートを受け取る</span>
-            <span aria-hidden="true">→</span>
-          </a>
-          <div class="cta-support-text">
-            メールアドレス登録後、チェックシートの案内をお送りします。<br />
-            売り込みではなく、まずは御社の業務課題を整理するための無料シートです。
+        <div class="hero-main">
+          <div class="hero-main-copy">
+            <p class="hero-badge fade-in-up">中小企業の業務効率化と<br />仕組み化を支援する実装パートナー</p>
+            <h1 class="hero-title fade-in-up delay-1">
+              AI研修ではなく、<br /><span class="hero-title-line">AIで業務を<em>仕組み化</em>する</span><br />サービスです。
+            </h1>
+            <p class="hero-sub fade-in-up delay-2">
+              AIを学ぶだけで終わらせません。<br />
+              御社の業務に使える<em>仕組み</em>として納品します。
+            </p>
+            <div class="fade-in-up delay-3">
+              <a href="#checksheet-form" class="btn-cta" id="hero-cta">
+                <span>まずは<span class="price-accent">無料</span>でAI化優先順位チェックシートを受け取る</span>
+                <span aria-hidden="true">→</span>
+              </a>
+              <div class="cta-support-text">
+                メールアドレス登録後、チェックシートの案内をお送りします。<br />
+                売り込みではなく、まずは御社の業務課題を整理するための無料シートです。
+              </div>
+              <a href="https://hide-ai-lab.com/smb/paid-diagnosis.html" class="paid-link">
+                すぐに5万円のAI業務診断＋デモ構築を申し込みはこちら
+              </a>
+            </div>
           </div>
-          <a href="https://hide-ai-lab.com/smb/paid-diagnosis.html" class="paid-link">
-            すぐに5万円のAI業務診断＋デモ構築を申し込みはこちら
-          </a>
+          <figure class="hero-main-visual fade-in-up delay-2">
+            <img
+              src="./images/hero-workflow.png"
+              alt="属人化した業務をAIで整理し、会社に残る仕組みにする流れ"
+              width="1920"
+              height="1024"
+            />
+          </figure>
         </div>
 
         <div class="hero-proof-grid fade-in-up delay-3" aria-label="無料チェックシートで確認できること">
@@ -1050,7 +1102,13 @@
 
         <!-- AI活用注記 -->
         <div class="hero-notice fade-in-up delay-3" role="note" aria-label="AIを活用した制作注記">
-          <div class="hero-notice-icon" aria-hidden="true">💡</div>
+          <div class="hero-notice-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" focusable="false">
+              <path d="M9 18h6" />
+              <path d="M10 22h4" />
+              <path d="M8.2 14.5A6 6 0 1 1 15.8 14.5C14.7 15.3 14.2 16.2 14 18h-4c-.2-1.8-.7-2.7-1.8-3.5Z" />
+            </svg>
+          </div>
           <div class="hero-notice-text">
             <strong>このページ自体が、AIを実務で使った成果物です。</strong>
             このLPの構成・文章・図解・画像は、AIを活用して制作しています。
@@ -1536,7 +1594,7 @@
       </p>
       <div class="lead-form-status" id="lead-form-status" role="status" aria-live="polite"></div>
 
-      <form class="lead-form-box reveal" action="https://script.google.com/macros/s/AKfycbwZxt7iDpC7geiusV1vS8n70fdqhGuBMQfJIVuHN4keWNlhOIStegfct8ihZbGy1uhI/exec" method="post" aria-label="AI化優先順位チェックシート登録フォーム">
+      <form class="lead-form-box reveal" data-gas-form method="post" aria-label="AI化優先順位チェックシート登録フォーム">
         <input type="hidden" name="source" value="company_lp" />
         <input type="hidden" name="response_mode" value="redirect" />
         <input type="text" name="website" value="" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;" />
@@ -1610,6 +1668,7 @@
   <!-- ===========================
        JavaScript（アコーディオン＋スクロールアニメーション）
   =========================== -->
+  <script src="./config.js"></script>
   <script>
     /* ---------- カード アコーディオン ---------- */
     document.querySelectorAll('.card-accordion-trigger').forEach(function (trigger) {
