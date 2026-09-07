@@ -1189,7 +1189,9 @@
         margin: 20px auto 18px;
       }
       .hero-action-closing {
-        font-size: 24px;
+        font-size: clamp(18px, 5.4vw, 22px);
+        letter-spacing: -0.02em;
+        white-space: nowrap;
       }
       .header-inner {
         gap: 8px;
@@ -1218,6 +1220,13 @@
       .cta-label-mobile {
         display: inline;
         line-height: 1.7;
+      }
+      .paid-link {
+        font-size: 12px;
+        line-height: 1.8;
+      }
+      .paid-link-tail {
+        white-space: nowrap;
       }
       .image-lightbox-close {
         top: 8px;
@@ -1306,7 +1315,7 @@
           売り込みではなく、まずは御社の業務課題を整理するための無料シートです。
         </div>
         <a href="https://hide-ai-lab.com/smb/paid-diagnosis.html" class="paid-link">
-          すぐに5万円のAI業務診断＋デモ構築を申し込みはこちら
+          すぐに5万円のAI業務診断＋デモ構築を<wbr /><span class="paid-link-tail">申し込みはこちら</span>
         </a>
       </div>
 
@@ -1474,7 +1483,7 @@
         </a>
         <br />
         <a href="https://hide-ai-lab.com/smb/paid-diagnosis.html" class="paid-link">
-          すぐに5万円のAI業務診断＋デモ構築を申し込みはこちら
+          すぐに5万円のAI業務診断＋デモ構築を<wbr /><span class="paid-link-tail">申し込みはこちら</span>
         </a>
       </div>
     </div>
@@ -1805,7 +1814,7 @@
         <p class="final-price-note">無料チェックシートから開始・必要な方のみ有料診断をご案内</p>
         <br />
         <a href="https://hide-ai-lab.com/smb/paid-diagnosis.html" class="paid-link">
-          すぐに5万円のAI業務診断＋デモ構築を申し込みはこちら
+          すぐに5万円のAI業務診断＋デモ構築を<wbr /><span class="paid-link-tail">申し込みはこちら</span>
         </a>
       </div>
     </div>
@@ -1879,7 +1888,7 @@
           </button>
           <br />
           <a href="https://hide-ai-lab.com/smb/paid-diagnosis.html" class="paid-link">
-            すぐに5万円のAI業務診断＋デモ構築を申し込みはこちら
+            すぐに5万円のAI業務診断＋デモ構築を<wbr /><span class="paid-link-tail">申し込みはこちら</span>
           </a>
         </div>
       </form>
