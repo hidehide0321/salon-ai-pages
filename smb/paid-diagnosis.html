@@ -332,7 +332,7 @@
         </div>
         <div class="status" id="form-status" role="status" aria-live="polite"></div>
 
-        <form class="application-form" action="https://script.google.com/macros/s/AKfycbwZxt7iDpC7geiusV1vS8n70fdqhGuBMQfJIVuHN4keWNlhOIStegfct8ihZbGy1uhI/exec" method="post" aria-label="AI業務診断＋デモ構築申し込みフォーム">
+        <form class="application-form" data-gas-form method="post" aria-label="AI業務診断＋デモ構築申し込みフォーム">
           <input type="hidden" name="source" value="company_lp_paid" />
           <input type="hidden" name="application_type" value="paid_diagnosis" />
           <input type="hidden" name="response_mode" value="redirect" />
@@ -415,6 +415,7 @@
     <p>© 2026 中小企業向けAI業務改善パック ／ 小室秀治</p>
   </footer>
 
+  <script src="./config.js"></script>
   <script>
     var form = document.querySelector('.application-form');
     var statusBox = document.getElementById('form-status');

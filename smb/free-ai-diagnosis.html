@@ -574,7 +574,7 @@
         <a class="button" href="https://hide-ai-lab.com/smb/paid-diagnosis.html">5万円のAI業務診断＋デモ構築を見る</a>
       </div>
 
-      <form id="diagnosis-form" action="https://script.google.com/macros/s/AKfycbwZxt7iDpC7geiusV1vS8n70fdqhGuBMQfJIVuHN4keWNlhOIStegfct8ihZbGy1uhI/exec" method="post">
+      <form id="diagnosis-form" data-gas-form method="post">
         <input type="hidden" name="source" value="company_free_ai_diagnosis" />
         <input type="hidden" name="scenario_id" value="company_ai_checksheet" />
         <input type="hidden" name="response_mode" value="redirect" />
@@ -766,6 +766,7 @@
     <p>© 2026 中小企業向けAI業務改善パック ／ 小室秀治</p>
   </footer>
 
+  <script src="./config.js"></script>
   <script>
     (function () {
       var form = document.getElementById("diagnosis-form");
