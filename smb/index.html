@@ -253,6 +253,7 @@
       margin-bottom: 26px;
       clip-path: polygon(0 0, 100% 0, calc(100% - 32px) 100%, 0 100%);
     }
+    .hero-badge-mobile { display: none; }
     .hero-title {
       font-family: var(--font-serif);
       font-size: clamp(26px, 4vw, 46px);
@@ -1143,7 +1144,9 @@
         gap: 32px;
       }
       .hero-main-copy { text-align: center; }
-      .hero-badge { padding: 14px 44px 14px 22px; }
+      .hero-badge { font-size: 15px; padding: 14px 30px 14px 16px; }
+      .hero-badge-desktop { display: none; }
+      .hero-badge-mobile { display: inline; }
       .hero-title-line { white-space: normal; }
       .btn-cta { font-size: 15px; padding: 18px 32px; }
       .btn-cta-large { font-size: 16px; padding: 20px 36px; }
@@ -1256,7 +1259,10 @@
       <div class="container">
         <div class="hero-main">
           <div class="hero-main-copy">
-            <p class="hero-badge fade-in-up">企業の業務効率化と<br />仕組み化を支援する実装パートナー</p>
+            <p class="hero-badge fade-in-up">
+              <span class="hero-badge-desktop">企業の業務効率化と<br />仕組み化を支援する実装パートナー</span>
+              <span class="hero-badge-mobile">企業の業務効率化と仕組み化を支援する<br />実装パートナー</span>
+            </p>
             <h1 class="hero-title fade-in-up delay-1">
               AI研修ではなく、<br /><span class="hero-title-line">AIで業務を<em>仕組み化</em>する</span><br />サービスです。
             </h1>
