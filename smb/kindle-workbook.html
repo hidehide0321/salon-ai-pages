@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>余白づくりワークブック｜『余白をつくるAI経営』読者特典</title>
+<style>
+  :root { --ink:#2b2420; --sub:#6b5d52; --brown:#5a3a22; --gold:#c9962b; --sky:#6fb3e6;
+    --cream:#fbf7ef; --line:#d8ccbb; --blue:#3d8fd6; --yellow:#d9a600; --red:#d9483b; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--cream); color:var(--ink);
+    font-family:"BIZ UDPGothic","Hiragino Sans","Yu Gothic","Meiryo",sans-serif; line-height:1.75; }
+  .wrap { max-width:720px; margin:0 auto; padding:0 16px 48px; }
+  header.hero { background:#fff url("./images/kindle-workbook-hero.jpg") center 92%/cover no-repeat; height:260px; position:relative; }
+  header.hero .t { position:absolute; left:0; right:0; top:0; padding:18px 16px 28px;
+    background:linear-gradient(180deg, rgba(251,247,239,.97) 55%, rgba(251,247,239,0)); }
+  .tag { display:inline-block; background:var(--brown); color:#fff; font-size:12px; padding:2px 10px; border-radius:99px; }
+  h1 { font-size:26px; margin:6px 0 2px; line-height:1.35; }
+  .lead { color:var(--sub); font-size:14px; margin:0; }
+  .card { background:#fff; border:1px solid var(--line); border-radius:14px; padding:18px 16px; margin:18px 0; }
+  .card h2 { font-size:19px; margin:4px 0 4px; }
+  .card .hint { color:var(--sub); font-size:13.5px; margin:0 0 12px; }
+  label { display:block; font-weight:bold; font-size:14.5px; margin:14px 0 4px; }
+  label .req { color:#fff; background:var(--red); font-size:11px; padding:1px 6px; border-radius:4px; margin-left:6px; font-weight:normal; }
+  label .opt { color:var(--sub); font-size:12px; font-weight:normal; margin-left:6px; }
+  input[type=text], input[type=email], select, textarea {
+    width:100%; font:inherit; font-size:16px; padding:10px 12px; border:1.5px solid var(--line); border-radius:10px; background:#fffdf9; }
+  textarea { min-height:76px; resize:vertical; }
+  input:focus, textarea:focus, select:focus { outline:none; border-color:var(--sky); box-shadow:0 0 0 3px rgba(111,179,230,.25); }
+  .row { display:grid; grid-template-columns:1fr 150px; gap:8px; margin-bottom:8px; }
+  .sig { border-left:6px solid; padding-left:10px; margin-top:14px; }
+  .sig.blue { border-color:var(--blue); } .sig.yellow { border-color:var(--yellow); } .sig.red { border-color:var(--red); }
+  .steps { display:flex; gap:6px; flex-wrap:wrap; margin:14px 0 0; padding:0; list-style:none; font-size:12.5px; }
+  .steps li { background:#fff; border:1px solid var(--line); border-radius:99px; padding:2px 10px; }
+  .steps li.done { background:var(--sky); color:#fff; border-color:var(--sky); }
+  .lock { opacity:.45; pointer-events:none; }
+  .lockmsg { background:#fff4c2; border-radius:10px; padding:8px 12px; font-size:14px; margin:12px 0 0; }
+  .finish { background:#fff; border:2px solid var(--brown); }
+  .ideas { list-style:none; margin:4px 0 0; padding:10px 12px; background:#f6f1e7; border-radius:10px; font-size:14px; }
+  .ideas li { margin:3px 0; } .ideas b { color:var(--brown); }
+  .check { display:flex; gap:10px; align-items:flex-start; font-weight:normal; }
+  .check input { width:22px; height:22px; margin-top:3px; flex:none; }
+  .btn { display:block; width:100%; font:inherit; font-size:17px; font-weight:bold; padding:15px; border-radius:12px; border:0; cursor:pointer; margin-top:12px; }
+  .btn.main { background:var(--brown); color:#fff; }
+  .btn.sub { background:#fff; color:var(--brown); border:2px solid var(--brown); }
+  .btn:disabled { opacity:.6; cursor:wait; }
+  .small { font-size:12.5px; color:var(--sub); }
+  .saved { position:fixed; right:12px; bottom:12px; background:var(--ink); color:#fff; font-size:12px; padding:4px 10px; border-radius:99px; opacity:0; transition:opacity .3s; }
+  .saved.on { opacity:.85; }
+  #thanks { display:none; }
+  .err { color:var(--red); font-size:14px; margin-top:8px; }
+  footer { text-align:center; font-size:12px; color:var(--sub); padding:24px 0; }
+  .hp { position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden; }
+  @media print {
+    @page { size:A4; margin:12mm; }
+    body { background:#fff; }
+    header.hero { height:auto; background:none; } header.hero .t { position:static; background:none; padding:0 0 6px; }
+    .noprint, .saved, .steps, .lockmsg { display:none !important; }
+    .card { break-inside:avoid; border-color:#bbb; margin:8px 0; padding:10px 12px; }
+    .lock { opacity:1; }
+    textarea, input { border:1px solid #bbb; background:#fff; }
+  }
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="t wrap">
+    <span class="tag">『余白をつくるAI経営』読者特典</span>
+    <h1>余白づくりワークブック</h1>
+    <p class="lead">スマホでもPCでも書けます。書いた内容は、この画面に自動で一時保存されます。</p>
+  </div>
+</header>
+
+<main class="wrap">
+<form id="wb-form" data-gas-form method="post" novalidate>
+  <input type="hidden" name="source" value="kindle2_workbook">
+  <input type="hidden" name="scenario_id" value="">
+  <input type="hidden" name="response_mode" value="redirect">
+  <input type="text" name="website" value="" tabindex="-1" autocomplete="off" aria-hidden="true" class="hp">
+
+  <ul class="steps noprint" id="steps">
+    <li data-s="0">はじめに</li><li data-s="1">①</li><li data-s="2">②</li><li data-s="3">③</li><li data-s="4">④</li><li data-s="5">⑤</li><li data-s="6">⑥</li><li data-s="7">送る</li>
+  </ul>
+
+  <!-- 0 基本情報 -->
+  <section class="card" id="sec-basic">
+    <span class="tag">はじめに</span>
+    <h2>あなたの会社のことを教えてください</h2>
+    <p class="hint">先にここを書くと、下のシートが開きます。書いた内容は最後にまとめてメールでお届けします。</p>
+    <label for="company">会社名・屋号<span class="req">必須</span></label>
+    <input type="text" id="company" name="company" autocomplete="organization" required>
+    <label for="name">お名前<span class="req">必須</span></label>
+    <input type="text" id="name" name="name" autocomplete="name" required>
+    <label for="role">役職<span class="opt">任意</span></label>
+    <input type="text" id="role" name="role" autocomplete="organization-title" placeholder="例：代表取締役／店長">
+    <label for="email">メールアドレス<span class="req">必須</span></label>
+    <input type="email" id="email" name="email" autocomplete="email" inputmode="email" required>
+    <label for="employees">スタッフの人数<span class="req">必須</span></label>
+    <select id="employees" name="employees" required>
+      <option value="">選んでください</option>
+      <option>1人（ひとりで経営）</option><option>2〜5人</option><option>6〜10人</option>
+      <option>11〜30人</option><option>31〜100人</option><option>101人以上</option>
+    </select>
+    <p class="lockmsg" id="lockmsg">必須の4つを書くと、シートが書けるようになります。</p>
+  </section>
+
+  <div id="sheets" class="lock">
+  <!-- ① -->
+  <section class="card">
+    <span class="tag">シート①　第1章</span>
+    <h2>くり返している仕事</h2>
+    <p class="hint">今週、2回以上くり返した仕事を書き出してください。全部を自動化しようとしなくて大丈夫です。</p>
+    <div class="row"><input type="text" name="w1_job1" placeholder="例：見積書を作る" aria-label="くり返した仕事1">
+      <select name="w1_ai1" aria-label="任せられそうなこと1"><option value="">AIに任せるなら</option><option>下書き</option><option>整理</option><option>探す</option><option>まだ分からない</option></select></div>
+    <div class="row"><input type="text" name="w1_job2" aria-label="くり返した仕事2">
+      <select name="w1_ai2" aria-label="任せられそうなこと2"><option value="">AIに任せるなら</option><option>下書き</option><option>整理</option><option>探す</option><option>まだ分からない</option></select></div>
+    <div class="row"><input type="text" name="w1_job3" aria-label="くり返した仕事3">
+      <select name="w1_ai3" aria-label="任せられそうなこと3"><option value="">AIに任せるなら</option><option>下書き</option><option>整理</option><option>探す</option><option>まだ分からない</option></select></div>
+    <label for="w1_talk">その時間が戻ったら、誰と話したいですか？</label>
+    <input type="text" id="w1_talk" name="w1_talk">
+  </section>
+
+  <!-- ② -->
+  <section class="card">
+    <span class="tag">シート②　第2章</span>
+    <h2>守る・変える・やめる</h2>
+    <p class="hint">2030年に向けて、いまの仕事を3つに分けます。</p>
+    <label for="w2_keep">守る<span class="opt">お客さまとの関係・会社の想い など</span></label>
+    <textarea id="w2_keep" name="w2_keep"></textarea>
+    <label for="w2_change">変える<span class="opt">くり返し・転記・探しもの など</span></label>
+    <textarea id="w2_change" name="w2_change"></textarea>
+    <label for="w2_stop">やめる<span class="opt">誰も読まない資料・形だけの作業 など</span></label>
+    <textarea id="w2_stop" name="w2_stop"></textarea>
+  </section>
+
+  <!-- ③ -->
+  <section class="card">
+    <span class="tag">シート③　第4章</span>
+    <h2>わが社のAI交通ルール</h2>
+    <p class="hint">これが、みなさんの会社の「交通ルール」になります。</p>
+    <div class="sig blue"><label for="w3_blue">青：入れていい<span class="opt">例：公開済みの情報・自分で書いた下書き</span></label>
+      <textarea id="w3_blue" name="w3_blue"></textarea></div>
+    <div class="sig yellow"><label for="w3_yellow">黄：人が確認<span class="opt">例：数字・約束・お客さまへ出す文章</span></label>
+      <textarea id="w3_yellow" name="w3_yellow"></textarea></div>
+    <div class="sig red"><label for="w3_red">赤：入れない<span class="opt">例：個人情報・取引先の秘密・パスワード</span></label>
+      <textarea id="w3_red" name="w3_red"></textarea></div>
+  </section>
+
+  <!-- ④ -->
+  <section class="card">
+    <span class="tag">シート④　第6章</span>
+    <h2>AIへの頼み方の型</h2>
+    <p class="hint">魔法の命令文より、目的を言葉に。よく頼む仕事を1つ選んで埋めてください。</p>
+    <label for="w4_job">頼みたい仕事</label><input type="text" id="w4_job" name="w4_job">
+    <label for="w4_who">誰のため？</label><input type="text" id="w4_who" name="w4_who">
+    <label for="w4_goal">何を実現したい？</label><input type="text" id="w4_goal" name="w4_goal">
+    <label for="w4_rule">守りたい条件は？</label><input type="text" id="w4_rule" name="w4_rule">
+  </section>
+
+  <!-- ⑤ -->
+  <section class="card">
+    <span class="tag">シート⑤　第12章</span>
+    <h2>余白の使い道</h2>
+    <p class="hint">AIで1時間を取り戻せたら、何に使うか先に決めます。また仕事で埋めると、元の忙しさに戻ります。</p>
+    <label for="w5_self">自分<span class="opt">休む・学ぶ・好きなこと</span></label><input type="text" id="w5_self" name="w5_self">
+    <label for="w5_family">家族</label><input type="text" id="w5_family" name="w5_family">
+    <label for="w5_customer">お客さま</label><input type="text" id="w5_customer" name="w5_customer">
+    <label for="w5_friends">仲間・新しい出会い</label><input type="text" id="w5_friends" name="w5_friends">
+    <label for="w5_local">地域</label><input type="text" id="w5_local" name="w5_local">
+    <label for="w5_happy">みなさんにとっての「みんなHappy!!」は、どんな景色でしょう？</label>
+    <textarea id="w5_happy" name="w5_happy"></textarea>
+  </section>
+
+  <!-- ⑥ 自由に -->
+  <section class="card">
+    <span class="tag">シート⑥　自由に</span>
+    <h2>あんなこと、できたらいいな</h2>
+    <p class="hint">この本は、教科書ではありません。考えて、気づくための本です。<br>
+    読みながら「自分の会社だったら、あんなことができたらいいな」「こんなこと、できるかな？」と浮かんだことを、自由に書いてください。<br>
+    まとまっていなくて大丈夫。思いつきの中に、いちばんのヒントが隠れていることがあります。</p>
+    <ul class="ideas">
+      <li><b>例1</b>　お客さまからの同じ質問に、夜でもAIが答えられたらいいな</li>
+      <li><b>例2</b>　配信しているメールを、自動配信にできたらいいな</li>
+      <li><b>例3</b>　〇〇の定型資料を、自動で作成できたらいいな</li>
+    </ul>
+    <label for="w6_idea">自分だったら……</label>
+    <textarea id="w6_idea" name="w6_idea" style="min-height:160px"></textarea>
+  </section>
+
+  <!-- 送る -->
+  <section class="card finish">
+    <span class="tag">書き終えたら</span>
+    <h2>回答をメールで受け取る</h2>
+    <p class="hint">送ると、書いた内容をまとめたメール（PDF付き）がすぐ届きます。全部埋まっていなくても大丈夫です。</p>
+    <label class="check"><input type="checkbox" name="wants_meeting" value="yes" checked>
+      <span>30分の無料ミーティング（オンライン）も希望する<br><span class="small">メールに日程を決めるリンクが入ります。ヒデが事前にこのシートを読んでから伺います。売り込みはしません。</span></span></label>
+    <label class="check"><input type="checkbox" id="agree" required>
+      <span><a href="./privacy-policy.html" target="_blank">プライバシーポリシー</a>に同意する</span></label>
+    <button type="button" class="btn main noprint" id="send">回答を送って、メールで受け取る</button>
+    <button type="button" class="btn sub noprint" id="print">印刷する／PDFで保存する</button>
+    <p class="err" id="err" role="alert"></p>
+  </section>
+  </div>
+</form>
+
+<section class="card" id="thanks">
+  <span class="tag">送信しました</span>
+  <h2>ありがとうございます！</h2>
+  <p>入力いただいたメールアドレスに、回答のまとめ（PDF付き）をお送りしました。<br>
+  ミーティングを希望された方には、同じメールに日程を決めるリンクが入っています。</p>
+  <p class="small">数分たっても届かないときは、迷惑メールのフォルダもご確認ください。</p>
+  <button type="button" class="btn sub noprint" onclick="window.print()">書いた内容を印刷する／PDFで保存する</button>
+</section>
+</main>
+<footer>ヒデ｜AIで経営に余白をつくる人　／　HIDE AI LAB</footer>
+<div class="saved" id="saved">一時保存しました</div>
+
+<script src="./config.js"></script>
+<script>
+(function () {
+  var form = document.getElementById("wb-form");
+  var key = "kindle2WorkbookDraft";
+  var req = ["company", "name", "email", "employees"];
+  var sheets = document.getElementById("sheets");
+  var savedTip = document.getElementById("saved"), t;
+
+  function fields() { return form.querySelectorAll("input[name]:not([type=hidden]):not([name=website]), textarea, select"); }
+  function save() {
+    var d = {};
+    fields().forEach(function (f) { d[f.name] = f.type === "checkbox" ? f.checked : f.value; });
+    try { localStorage.setItem(key, JSON.stringify(d)); savedTip.classList.add("on"); clearTimeout(t); t = setTimeout(function () { savedTip.classList.remove("on"); }, 1200); } catch (e) {}
+  }
+  function load() {
+    var d; try { d = JSON.parse(localStorage.getItem(key) || "null"); } catch (e) {}
+    if (!d) return;
+    fields().forEach(function (f) { if (!(f.name in d)) return; if (f.type === "checkbox") f.checked = !!d[f.name]; else f.value = d[f.name]; });
+  }
+  function basicOk() {
+    return req.every(function (id) { var el = document.getElementById(id); return el.value.trim() && (el.type !== "email" || /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(el.value.trim())); });
+  }
+  function refresh() {
+    var ok = basicOk();
+    sheets.classList.toggle("lock", !ok);
+    document.getElementById("lockmsg").style.display = ok ? "none" : "";
+    var secs = sheets.querySelectorAll("section.card");
+    var steps = document.querySelectorAll("#steps li");
+    steps[0].classList.toggle("done", ok);
+    secs.forEach(function (s, i) {
+      if (i >= 6) return;
+      var filled = Array.prototype.some.call(s.querySelectorAll("input,textarea,select"), function (f) { return f.value.trim(); });
+      steps[i + 1].classList.toggle("done", filled);
+    });
+  }
+  form.addEventListener("input", function () { save(); refresh(); });
+  form.addEventListener("change", function () { save(); refresh(); });
+  load(); refresh();
+
+  document.getElementById("print").addEventListener("click", function () { window.print(); });
+
+  document.getElementById("send").addEventListener("click", function () {
+    var err = document.getElementById("err"); err.textContent = "";
+    if (!basicOk()) { err.textContent = "はじめの4つ（会社名・お名前・メールアドレス・スタッフの人数）を書いてください。"; document.getElementById("sec-basic").scrollIntoView({ behavior: "smooth" }); return; }
+    if (!document.getElementById("agree").checked) { err.textContent = "プライバシーポリシーへの同意にチェックを入れてください。"; return; }
+    if (!form.action || form.action === location.href) { err.textContent = "（試作のため、送信先はまだつながっていません）"; return; }
+    var btn = this; btn.disabled = true; btn.textContent = "送信中...";
+    fetch(form.action, { method: "POST", mode: "no-cors", body: new URLSearchParams(new FormData(form)) })
+      .then(function () {
+        var th = document.getElementById("thanks");
+        form.parentNode.insertBefore(th, form); th.style.display = "block";
+        btn.textContent = "送信しました"; th.scrollIntoView({ behavior: "smooth" });
+      })
+      .catch(function () { btn.disabled = false; btn.textContent = "回答を送って、メールで受け取る"; err.textContent = "送信できませんでした。時間を空けて、もう一度お試しください。入力内容はこの画面に残っています。"; });
+  });
+})();
+</script>
+</body>
+</html>
