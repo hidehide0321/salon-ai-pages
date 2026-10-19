@@ -1,7 +1,7 @@
 (function () {
   'use strict';
 
-  var formEndpoint = 'https://script.google.com/macros/s/AKfycbwZxt7iDpC7geiusV1vS8n70fdqhGuBMQfJIVuHN4keWNlhOIStegfct8ihZbGy1uhI/exec';
+  var formEndpoint = 'https://haishin-test.angelia-ld.com/forms/aibiz-hp';
 
   window.HIDE_AI_SITE_CONFIG = Object.freeze({
     formEndpoint: formEndpoint
